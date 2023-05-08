@@ -41,6 +41,29 @@ class MemberValidatorTest {
     }
 
     @Test
+    @DisplayName("회원조회#아이디")
+    void findByLoginId() {
+        //given
+
+        //when
+        Member findMember = memberValidator.findByLoginId("ssafy1234");
+
+        //then
+        assertThat(findMember.getEmail()).isEqualTo("ssafy@ssafy.com");
+    }
+
+    @Test
+    @DisplayName("회원조회#아이디예외")
+    void findByLoginIdException() {
+        //given
+
+        //when
+        //then
+        assertThatThrownBy(() -> memberValidator.findByLoginId("tourmates1234"))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
     @DisplayName("회원조회#이메일")
     void findByEmail() {
         //given
