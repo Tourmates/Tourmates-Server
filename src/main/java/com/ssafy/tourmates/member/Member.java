@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
+
+import static com.ssafy.tourmates.member.Active.*;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -33,13 +37,13 @@ public class Member extends TimeBaseEntity {
     @Column(unique = true, nullable = false, length = 10)
     private String nickname;
     @Column(nullable = false)
-    private String nicknameLastModifiedDate;
+    private LocalDateTime nicknameLastModifiedDate;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Active active;
 
     @Builder
-    public Member(Long id, String loginId, String loginPw, String name, String email, String tel, String birth, Gender gender, String nickname, String nicknameLastModifiedDate, Active active) {
+    public Member(Long id, String loginId, String loginPw, String name, String email, String tel, String birth, Gender gender, String nickname) {
         this.id = id;
         this.loginId = loginId;
         this.loginPw = loginPw;
@@ -49,7 +53,7 @@ public class Member extends TimeBaseEntity {
         this.birth = birth;
         this.gender = gender;
         this.nickname = nickname;
-        this.nicknameLastModifiedDate = nicknameLastModifiedDate;
-        this.active = active;
+        this.nicknameLastModifiedDate = LocalDateTime.now();
+        this.active = ACTIVE;
     }
 }
