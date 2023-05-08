@@ -60,4 +60,28 @@ class MemberQueryServiceTest {
         //then
         assertThat(findLoginId).isEqualTo("ssafy1234");
     }
+
+    @Test
+    @DisplayName("이메일로 비밀번호 찾기")
+    void forgotLoginPwByEmail() {
+        //given
+
+        //when
+        String findLoginPw = memberQueryService.forgetLoginPwByEmail("ssafy1234", "ssafy@ssafy.com");
+
+        //then
+        assertThat(findLoginPw).isEqualTo("ssafy1234!");
+    }
+
+    @Test
+    @DisplayName("연락처로 비밀번호 찾기")
+    void forgotLoginPwByTel() {
+        //given
+
+        //when
+        String findLoginPw = memberQueryService.forgetLoginPwByTel("ssafy1234", "010-1234-1234");
+
+        //then
+        assertThat(findLoginPw).isEqualTo("ssafy1234!");
+    }
 }
