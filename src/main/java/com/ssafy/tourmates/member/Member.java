@@ -4,19 +4,27 @@ import com.ssafy.tourmates.common.domain.TimeBaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.ssafy.tourmates.member.Active.*;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Getter
-@NoArgsConstructor
-public class Member extends TimeBaseEntity {
+public class Member extends TimeBaseEntity implements UserDetails {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "member_id")
     private Long id;
     @Column(unique = true, nullable = false, updatable = false, length = 20)
@@ -41,9 +49,15 @@ public class Member extends TimeBaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Active active;
+    @ElementCollection(fetch = EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+    public Member() {
+    }
 
     @Builder
-    public Member(Long id, String loginId, String loginPw, String name, String email, String tel, String birth, Gender gender, String nickname) {
+    public Member(Long id, String loginId, String loginPw, String name, String email, String tel, String birth, Gender gender, String nickname, List<String> roles) {
         this.id = id;
         this.loginId = loginId;
         this.loginPw = loginPw;
@@ -55,5 +69,44 @@ public class Member extends TimeBaseEntity {
         this.nickname = nickname;
         this.nicknameLastModifiedDate = LocalDateTime.now();
         this.active = ACTIVE;
+        this.roles = roles;
+    }
+
+    //== 스프링 시큐리티 ==//
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return loginId;
+    }
+
+    @Override
+    public String getPassword() {
+        return loginPw;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
