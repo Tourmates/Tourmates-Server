@@ -19,7 +19,7 @@ public class HomeApiController {
 
     private final MemberService memberService;
 
-    @PostMapping
+    @PostMapping("/join")
     public int joinMember(@Valid @RequestBody JoinMemberRequest request) {
         JoinMemberDto dto = JoinMemberDto.builder()
                 .loginId(request.getLoginId())
