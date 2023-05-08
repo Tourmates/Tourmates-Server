@@ -13,6 +13,11 @@ public class MemberValidator {
 
     private final MemberRepository memberRepository;
 
+    public Member findByLoginId(String loginId) {
+        return memberRepository.findByLoginId(loginId)
+                .orElseThrow(NoSuchElementException::new);
+    }
+
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(NoSuchElementException::new);
