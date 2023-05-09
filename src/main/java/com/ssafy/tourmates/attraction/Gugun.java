@@ -16,7 +16,7 @@ public class Gugun {
 
     @Id
     @Column(name = "gugun_code")
-    private String code;
+    private Integer code;
     @Column(name = "gugun_name", unique = true, nullable = false, length = 30)
     private String name;
 
@@ -25,7 +25,7 @@ public class Gugun {
     private Sido sido;
 
     @Builder
-    public Gugun(String code, String name, Sido sido) {
+    public Gugun(Integer code, String name, Sido sido) {
         this.code = code;
         this.name = name;
         this.sido = sido;
