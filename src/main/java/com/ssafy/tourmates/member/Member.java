@@ -1,22 +1,21 @@
 package com.ssafy.tourmates.member;
 
 import com.ssafy.tourmates.common.domain.TimeBaseEntity;
+import com.ssafy.tourmates.common.exception.EditException;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ssafy.tourmates.member.Active.*;
+import static com.ssafy.tourmates.member.Active.ACTIVE;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
@@ -70,6 +69,31 @@ public class Member extends TimeBaseEntity implements UserDetails {
         this.nicknameLastModifiedDate = LocalDateTime.now();
         this.active = ACTIVE;
         this.roles = roles;
+    }
+
+    //== 비즈니스 로직 ==//
+    public void changeLoginPw(String currentLoginPw, String newLoginPw) {
+        if (!this.loginPw.equals(currentLoginPw)) {
+            throw new EditException();
+        }
+        this.loginPw = newLoginPw;
+    }
+
+    public void changeEmail(String email) {
+        this.email = email;
+    }
+
+    public void changeTel(String tel) {
+        this.tel = tel;
+    }
+
+    public void changeNickname(String nickname) {
+        LocalDateTime date = LocalDateTime.now().minusDays(30);
+        if (date.isBefore(this.nicknameLastModifiedDate)) {
+            throw new EditException();
+        }
+        this.nickname = nickname;
+        this.nicknameLastModifiedDate = LocalDateTime.now();
     }
 
     //== 스프링 시큐리티 ==//
