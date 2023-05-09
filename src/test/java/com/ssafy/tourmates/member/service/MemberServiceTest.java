@@ -156,4 +156,31 @@ class MemberServiceTest {
         assertThat(findMember).isPresent();
         assertThat(findMember.get().getEmail()).isEqualTo(newEmail);
     }
+
+    @Test
+    @DisplayName("이메일변경#이메일중복")
+    void editEmailDuplicate() {
+        //given
+        createMember();
+
+        //when
+        //then
+        assertThatThrownBy(() -> memberService.editEmail(savedMember.getLoginId(), "ssafy1@ssafy.com"))
+                .isInstanceOf(DuplicateException.class);
+    }
+
+    private void createMember() {
+        Member member = Member.builder()
+                .id(2L)
+                .loginId("ssafy5678")
+                .loginPw("ssafy1234!")
+                .name("김싸피")
+                .email("ssafy1@ssafy.com")
+                .tel("010-1111-2222")
+                .birth("2000.01.01")
+                .gender(MALE)
+                .nickname("ssafy1")
+                .build();
+        memberRepository.save(member);
+    }
 }
