@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -41,8 +44,11 @@ public class HotPlace extends TimeBaseEntity {
     @JoinColumn(name = "content_id")
     private AttractionInfo attractionInfo;
 
+    @OneToMany(mappedBy = "hotPlace", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HotPlaceImage> images = new ArrayList<>();
+
     @Builder
-    public HotPlace(Long id, ContentType tag, String title, String content, int hit, String visitedDate, Member member, AttractionInfo attractionInfo) {
+    public HotPlace(Long id, ContentType tag, String title, String content, int hit, String visitedDate, Member member, AttractionInfo attractionInfo, List<HotPlaceImage> images) {
         this.id = id;
         this.tag = tag;
         this.title = title;
@@ -51,5 +57,6 @@ public class HotPlace extends TimeBaseEntity {
         this.visitedDate = visitedDate;
         this.member = member;
         this.attractionInfo = attractionInfo;
+        this.images = images;
     }
 }
