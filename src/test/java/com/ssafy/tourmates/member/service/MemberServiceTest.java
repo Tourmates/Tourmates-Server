@@ -139,6 +139,21 @@ class MemberServiceTest {
         //then
         Optional<Member> findMember = memberRepository.findById(memberId);
         assertThat(findMember).isPresent();
-        assertThat(findMember.get().getLoginPw()).isEqualTo("ssafy5678@");
+        assertThat(findMember.get().getLoginPw()).isEqualTo(dto.getNewLoginPw());
+    }
+
+    @Test
+    @DisplayName("이메일변경")
+    void editEmail() {
+        //given
+        String newEmail = "newSsafy@ssafy.com";
+
+        //when
+        Long memberId = memberService.editEmail(savedMember.getLoginId(), newEmail);
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getEmail()).isEqualTo(newEmail);
     }
 }
