@@ -6,6 +6,8 @@ import com.ssafy.tourmates.controller.dto.member.request.*;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import com.ssafy.tourmates.member.service.MemberService;
 import com.ssafy.tourmates.member.service.dto.EditLoginPwDto;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,10 +22,12 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/my")
+@Api(tags = {"회원"})
 public class MemberController {
 
     private final MemberService memberService;
 
+    @ApiOperation(value = "비밀번호변경")
     @PostMapping("/loginPw")
     public int editLoginPw(@Valid @RequestBody EditLoginPwRequest request) {
         if (!request.getNewLoginPw().equals(request.getCheckedNewLoginPw())) {
@@ -45,6 +49,7 @@ public class MemberController {
         return 1;
     }
 
+    @ApiOperation(value = "이메일변경")
     @PostMapping("/email")
     public int editEmail(@Valid @RequestBody EditEmailRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
@@ -58,6 +63,7 @@ public class MemberController {
         return 1;
     }
 
+    @ApiOperation(value = "연락처변경")
     @PostMapping("/tel")
     public int editTel(@Valid @RequestBody EditTelRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
@@ -74,6 +80,7 @@ public class MemberController {
         return 1;
     }
 
+    @ApiOperation(value = "닉네임변경")
     @PostMapping("/nickname")
     public int editNickname(@Valid @RequestBody EditNicknameRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
@@ -90,6 +97,7 @@ public class MemberController {
         return 1;
     }
 
+    @ApiOperation(value = "회원탈퇴")
     @PostMapping("/withdrawal")
     public int withdrawal(@Valid @RequestBody WithdrawalRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
