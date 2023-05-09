@@ -4,7 +4,9 @@ import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.member.Member;
 import com.ssafy.tourmates.member.repository.MemberRepository;
 import com.ssafy.tourmates.member.service.MemberService;
+import com.ssafy.tourmates.member.service.dto.EditLoginPwDto;
 import com.ssafy.tourmates.member.service.dto.JoinMemberDto;
+import com.ssafy.tourmates.member.validator.MemberValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberValidator memberValidator;
 
     @Override
     public Long joinMember(JoinMemberDto dto) {
@@ -28,6 +31,13 @@ public class MemberServiceImpl implements MemberService {
 
         Member savedMember = memberRepository.save(member);
         return savedMember.getId();
+    }
+
+    @Override
+    public Long editLoginPw(String loginId, EditLoginPwDto dto) {
+        Member findMember = memberValidator.findByLoginId(loginId);
+        findMember.changeLoginPw(dto.getCurrentLoginPw(), dto.getNewLoginPw());
+        return findMember.getId();
     }
 
     private void duplicateLoginId(String loginId) {
