@@ -196,6 +196,33 @@ class MemberServiceTest {
                 .isInstanceOf(DuplicateException.class);
     }
 
+    @Test
+    @DisplayName("닉네임변경")
+    void editNickname() {
+        //given
+        String newNickname = "tourmates";
+
+        //when
+        Long memberId = memberService.editNickname(savedMember.getLoginId(), newNickname);
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getNickname()).isEqualTo(newNickname);
+    }
+    
+    @Test
+    @DisplayName("닉네임변경#닉네임중복")
+    void editNicknameDuplicate() {
+        //given
+        createMember();
+        
+        //when
+        //then
+        assertThatThrownBy(() -> memberService.editNickname(savedMember.getLoginId(), "ssafy1"))
+                .isInstanceOf(DuplicateException.class);
+    }
+
     private void createMember() {
         Member member = Member.builder()
                 .id(2L)
