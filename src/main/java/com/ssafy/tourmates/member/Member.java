@@ -83,7 +83,7 @@ public class Member extends TimeBaseEntity implements UserDetails {
         this.email = email;
     }
 
-    public void change(String tel) {
+    public void changeTel(String tel) {
         this.tel = tel;
     }
 
