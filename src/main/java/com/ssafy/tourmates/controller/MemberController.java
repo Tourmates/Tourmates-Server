@@ -1,6 +1,7 @@
 package com.ssafy.tourmates.controller;
 
 import com.ssafy.tourmates.common.exception.EditException;
+import com.ssafy.tourmates.controller.dto.member.request.EditEmailRequest;
 import com.ssafy.tourmates.controller.dto.member.request.EditLoginPwRequest;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import com.ssafy.tourmates.member.service.MemberService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +41,19 @@ public class MemberController {
             log.debug("memberId={}, currentLoginPw={}, newLoginPw={}", memberId, dto.getCurrentLoginPw(), dto.getNewLoginPw());
         } catch (EditException e) {
             return -1;
+        }
+        return 1;
+    }
+
+    @PostMapping("/email")
+    public int editEmail(@Valid @RequestBody EditEmailRequest request) {
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        try {
+            Long memberId = memberService.editEmail(loginId, request.getNewEmail());
+            log.debug("memberId={}, newEmail={}", memberId, request.getNewEmail());
+        } catch (NoSuchElementException e) {
+            return -2;
         }
         return 1;
     }
