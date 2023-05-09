@@ -67,7 +67,7 @@ class MemberQueryServiceTest {
         //given
 
         //when
-        String findLoginPw = memberQueryService.forgetLoginPwByEmail("ssafy1234", "ssafy@ssafy.com");
+        String findLoginPw = memberQueryService.forgotLoginPwByEmail("ssafy1234", "ssafy@ssafy.com");
 
         //then
         assertThat(findLoginPw).isEqualTo("ssafy1234!");
@@ -79,7 +79,7 @@ class MemberQueryServiceTest {
         //given
 
         //when
-        String findLoginPw = memberQueryService.forgetLoginPwByTel("ssafy1234", "010-1234-1234");
+        String findLoginPw = memberQueryService.forgotLoginPwByTel("ssafy1234", "010-1234-1234");
 
         //then
         assertThat(findLoginPw).isEqualTo("ssafy1234!");

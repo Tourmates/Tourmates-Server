@@ -9,7 +9,7 @@ public interface MemberQueryService {
 
     String forgotLoginIdByTel(String tel);
 
-    String forgetLoginPwByEmail(String loginId, String email);
+    String forgotLoginPwByEmail(String loginId, String email);
 
-    String forgetLoginPwByTel(String loginId, String tel);
+    String forgotLoginPwByTel(String loginId, String tel);
 }

@@ -27,7 +27,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     }
 
     @Override
-    public String forgetLoginPwByEmail(String loginId, String email) {
+    public String forgotLoginPwByEmail(String loginId, String email) {
         Member findMember = memberValidator.findByLoginId(loginId);
         if (!findMember.getEmail().equals(email)) {
             throw new NoSuchElementException();
@@ -36,7 +36,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     }
 
     @Override
-    public String forgetLoginPwByTel(String loginId, String tel) {
+    public String forgotLoginPwByTel(String loginId, String tel) {
         Member findMember = memberValidator.findByLoginId(loginId);
         if (!findMember.getTel().equals(tel)) {
             throw new NoSuchElementException();
