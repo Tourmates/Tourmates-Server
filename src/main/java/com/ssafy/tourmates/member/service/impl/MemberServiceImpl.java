@@ -48,6 +48,14 @@ public class MemberServiceImpl implements MemberService {
         return findMember.getId();
     }
 
+    @Override
+    public Long editTel(String loginId, String tel) {
+        Member findMember = memberValidator.findByLoginId(loginId);
+        duplicateTel(tel);
+        findMember.changeTel(tel);
+        return findMember.getId();
+    }
+
     private void duplicateLoginId(String loginId) {
         Optional<Member> findMember = memberRepository.findByLoginId(loginId);
         if (findMember.isPresent()) {
