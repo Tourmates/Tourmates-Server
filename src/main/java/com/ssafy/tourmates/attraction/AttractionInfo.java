@@ -16,7 +16,7 @@ public class AttractionInfo {
 
     @Id
     @Column(name = "content_id")
-    private String id;
+    private Integer id;
     @Column(length = 100)
     private String title;
     @Column(length = 100)
@@ -47,7 +47,7 @@ public class AttractionInfo {
     private Gugun gugun;
 
     @Builder
-    public AttractionInfo(String id, String title, String addr1, String addr2, String zipcode, String tel, String firstImage, String firstImage2, int readcount, double latitude, double longitude, String mlevel, Sido sido, Gugun gugun) {
+    public AttractionInfo(Integer id, String title, String addr1, String addr2, String zipcode, String tel, String firstImage, String firstImage2, int readcount, double latitude, double longitude, String mlevel, Sido sido, Gugun gugun) {
         this.id = id;
         this.title = title;
         this.addr1 = addr1;
