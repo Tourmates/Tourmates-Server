@@ -17,4 +17,6 @@ public interface MemberService {
     Long editTel(String loginId, String tel);
 
     Long editNickname(String loginId, String nickname);
+
+    Long withdrawal(String loginId, String loginPw);
 }

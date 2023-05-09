@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.ssafy.tourmates.member.Active.ACTIVE;
+import static com.ssafy.tourmates.member.Active.DEACTIVE;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
@@ -94,6 +95,13 @@ public class Member extends TimeBaseEntity implements UserDetails {
         }
         this.nickname = nickname;
         this.nicknameLastModifiedDate = LocalDateTime.now();
+    }
+
+    public void deActive(String loginPw) {
+        if (!this.loginPw.equals(loginPw)) {
+            throw new EditException();
+        }
+        this.active = DEACTIVE;
     }
 
     //== 스프링 시큐리티 ==//

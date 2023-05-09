@@ -2,10 +2,7 @@ package com.ssafy.tourmates.controller;
 
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.common.exception.EditException;
-import com.ssafy.tourmates.controller.dto.member.request.EditEmailRequest;
-import com.ssafy.tourmates.controller.dto.member.request.EditLoginPwRequest;
-import com.ssafy.tourmates.controller.dto.member.request.EditNicknameRequest;
-import com.ssafy.tourmates.controller.dto.member.request.EditTelRequest;
+import com.ssafy.tourmates.controller.dto.member.request.*;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import com.ssafy.tourmates.member.service.MemberService;
 import com.ssafy.tourmates.member.service.dto.EditLoginPwDto;
@@ -85,6 +82,22 @@ public class MemberController {
             Long memberId = memberService.editNickname(loginId, request.getNewNickname());
             log.debug("memberId={}, newNickname={}", memberId, request.getNewNickname());
         } catch (DuplicateException e) {
+            return -1;
+        } catch (NoSuchElementException e) {
+            return -2;
+        }
+
+        return 1;
+    }
+
+    @PostMapping("/withdrawal")
+    public int withdrawal(@Valid @RequestBody WithdrawalRequest request) {
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        try {
+            Long memberId = memberService.withdrawal(loginId, request.getLoginPw());
+            log.debug("memberId={}, loginPw={}", memberId, request.getLoginPw());
+        } catch (EditException e) {
             return -1;
         } catch (NoSuchElementException e) {
             return -2;

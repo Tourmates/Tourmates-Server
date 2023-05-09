@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
+import static com.ssafy.tourmates.member.Active.DEACTIVE;
 import static com.ssafy.tourmates.member.Gender.MALE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -221,6 +222,20 @@ class MemberServiceTest {
         //then
         assertThatThrownBy(() -> memberService.editNickname(savedMember.getLoginId(), "ssafy1"))
                 .isInstanceOf(DuplicateException.class);
+    }
+
+    @Test
+    @DisplayName("회원탈퇴")
+    void withdrawal() {
+        //given
+
+        //when
+        Long memberId = memberService.withdrawal(savedMember.getLoginId(), savedMember.getLoginPw());
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getActive()).isEqualTo(DEACTIVE);
     }
 
     private void createMember() {
