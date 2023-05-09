@@ -79,6 +79,10 @@ public class Member extends TimeBaseEntity implements UserDetails {
         this.loginPw = newLoginPw;
     }
 
+    public void changeEmail(String email) {
+        this.email = email;
+    }
+
     //== 스프링 시큐리티 ==//
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
