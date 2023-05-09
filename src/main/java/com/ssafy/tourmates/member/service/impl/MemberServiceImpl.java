@@ -56,6 +56,14 @@ public class MemberServiceImpl implements MemberService {
         return findMember.getId();
     }
 
+    @Override
+    public Long editNickname(String loginId, String nickname) {
+        Member findMember = memberValidator.findByLoginId(loginId);
+        duplicateNickname(nickname);
+        findMember.changeNickname(nickname);
+        return findMember.getId();
+    }
+
     private void duplicateLoginId(String loginId) {
         Optional<Member> findMember = memberRepository.findByLoginId(loginId);
         if (findMember.isPresent()) {
