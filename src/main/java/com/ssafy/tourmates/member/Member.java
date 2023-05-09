@@ -87,6 +87,15 @@ public class Member extends TimeBaseEntity implements UserDetails {
         this.tel = tel;
     }
 
+    public void changeNickname(String nickname) {
+        LocalDateTime date = LocalDateTime.now().minusDays(30);
+        if (date.isAfter(this.nicknameLastModifiedDate)) {
+            throw new EditException();
+        }
+        this.nickname = nickname;
+        this.nicknameLastModifiedDate = LocalDateTime.now();
+    }
+
     //== 스프링 시큐리티 ==//
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
