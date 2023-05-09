@@ -169,6 +169,33 @@ class MemberServiceTest {
                 .isInstanceOf(DuplicateException.class);
     }
 
+    @Test
+    @DisplayName("연락처변경")
+    void editTel() {
+        //given
+        String newTel = "010-5678-5678";
+        
+        //when
+        Long memberId = memberService.editTel(savedMember.getLoginId(), newTel);
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getTel()).isEqualTo(newTel);
+    }
+    
+    @Test
+    @DisplayName("연락처변경#연락처중복")
+    void editTelDuplicate() {
+        //given
+        createMember();
+        
+        //when
+        //then
+        assertThatThrownBy(() -> memberService.editTel(savedMember.getLoginId(), "010-1111-2222"))
+                .isInstanceOf(DuplicateException.class);
+    }
+
     private void createMember() {
         Member member = Member.builder()
                 .id(2L)
