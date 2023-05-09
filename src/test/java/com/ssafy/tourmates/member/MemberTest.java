@@ -36,4 +36,19 @@ class MemberTest {
         assertThatThrownBy(() -> member.changeLoginPw("ssafy1134!", "ssafy5678@"))
                 .isInstanceOf(EditException.class);
     }
+
+    @Test
+    @DisplayName("이메일 변경")
+    void changeEmail() {
+        //given
+        Member member = Member.builder()
+                .email("ssafy@ssfay.com")
+                .build();
+
+        //when
+        member.changeEmail("newSsafy@ssafy.com");
+
+        //then
+        assertThat(member.getEmail()).isEqualTo("newSsafy@ssafy.com");
+    }
 }

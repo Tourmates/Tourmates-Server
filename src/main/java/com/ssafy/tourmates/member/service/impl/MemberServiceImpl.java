@@ -40,6 +40,11 @@ public class MemberServiceImpl implements MemberService {
         return findMember.getId();
     }
 
+    @Override
+    public Long editEmail(String loginId, String email) {
+        return null;
+    }
+
     private void duplicateLoginId(String loginId) {
         Optional<Member> findMember = memberRepository.findByLoginId(loginId);
         if (findMember.isPresent()) {

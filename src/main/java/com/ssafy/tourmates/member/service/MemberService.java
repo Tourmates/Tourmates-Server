@@ -11,4 +11,6 @@ public interface MemberService {
     Long joinMember(JoinMemberDto dto);
 
     Long editLoginPw(String loginId, EditLoginPwDto dto);
+
+    Long editEmail(String loginId, String email);
 }
