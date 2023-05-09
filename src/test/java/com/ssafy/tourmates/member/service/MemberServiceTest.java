@@ -3,6 +3,7 @@ package com.ssafy.tourmates.member.service;
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.member.Member;
 import com.ssafy.tourmates.member.repository.MemberRepository;
+import com.ssafy.tourmates.member.service.dto.EditLoginPwDto;
 import com.ssafy.tourmates.member.service.dto.JoinMemberDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,8 @@ class MemberServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    private Member savedMember;
+
     @BeforeEach
     void beforeEach() {
         Member member = Member.builder()
@@ -39,7 +42,7 @@ class MemberServiceTest {
                 .gender(MALE)
                 .nickname("ssafy")
                 .build();
-        memberRepository.save(member);
+        savedMember = memberRepository.save(member);
     }
 
     @Test
@@ -119,5 +122,23 @@ class MemberServiceTest {
         //then
         assertThatThrownBy(() -> memberService.joinMember(dto))
                 .isInstanceOf(DuplicateException.class);
+    }
+
+    @Test
+    @DisplayName("비밀번호변경")
+    void editLoginPw() {
+        //given
+        EditLoginPwDto dto = EditLoginPwDto.builder()
+                .currentLoginPw("ssafy1234!")
+                .newLoginPw("ssafy5678@")
+                .build();
+
+        //when
+        Long memberId = memberService.editLoginPw(savedMember.getLoginId(), dto);
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getLoginPw()).isEqualTo("ssafy5678@");
     }
 }
