@@ -7,6 +7,8 @@ import com.ssafy.tourmates.controller.dto.member.request.JoinMemberRequest;
 import com.ssafy.tourmates.member.service.MemberQueryService;
 import com.ssafy.tourmates.member.service.MemberService;
 import com.ssafy.tourmates.member.service.dto.JoinMemberDto;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,11 +20,13 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@Api(tags = {"계정"})
 public class HomeApiController {
 
     private final MemberService memberService;
     private final MemberQueryService memberQueryService;
 
+    @ApiOperation(value = "회원가입")
     @PostMapping("/join")
     public int joinMember(@Valid @RequestBody JoinMemberRequest request) {
         JoinMemberDto dto = JoinMemberDto.builder()
@@ -45,6 +49,7 @@ public class HomeApiController {
         return 1;
     }
 
+    @ApiOperation(value = "아이디찾기")
     @PostMapping("/forgot/loginId")
     public String forgotLoginId(@Valid @RequestBody ForgotLoginIdRequest request) {
         if (request.getEmail() == null || request.getEmail().trim().length() == 0) {
@@ -54,6 +59,7 @@ public class HomeApiController {
         }
     }
 
+    @ApiOperation(value = "비밀번호찾기")
     @PostMapping("/forgot/loginPw")
     public String forgotLoginPw(@Valid @RequestBody ForgotLoginPwRequest request) {
         if (request.getEmail() == null || request.getEmail().trim().length() == 0) {
