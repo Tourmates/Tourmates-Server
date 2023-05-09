@@ -42,7 +42,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long editEmail(String loginId, String email) {
-        return null;
+        Member findMember = memberValidator.findByLoginId(loginId);
+        findMember.changeEmail(email);
+        return findMember.getId();
     }
 
     private void duplicateLoginId(String loginId) {
