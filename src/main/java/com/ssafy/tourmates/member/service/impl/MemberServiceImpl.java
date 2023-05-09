@@ -43,6 +43,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Long editEmail(String loginId, String email) {
         Member findMember = memberValidator.findByLoginId(loginId);
+        duplicateEmail(email);
         findMember.changeEmail(email);
         return findMember.getId();
     }
