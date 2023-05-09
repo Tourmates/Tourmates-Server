@@ -67,4 +67,18 @@ class MemberTest {
         //then
         assertThat(member.getTel()).isEqualTo(newTel);
     }
+
+    @Test
+    @DisplayName("닉네임 변경 예외")
+    void changeNickname() {
+        //given
+        String newNickname = "tourmates";
+        Member member = Member.builder()
+                .nickname("ssafy")
+                .build();
+        //when
+        //then
+        assertThatThrownBy(() -> member.changeNickname(newNickname))
+                .isInstanceOf(EditException.class);
+    }
 }

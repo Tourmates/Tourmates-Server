@@ -89,7 +89,7 @@ public class Member extends TimeBaseEntity implements UserDetails {
 
     public void changeNickname(String nickname) {
         LocalDateTime date = LocalDateTime.now().minusDays(30);
-        if (date.isAfter(this.nicknameLastModifiedDate)) {
+        if (date.isBefore(this.nicknameLastModifiedDate)) {
             throw new EditException();
         }
         this.nickname = nickname;
