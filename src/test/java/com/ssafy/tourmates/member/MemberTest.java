@@ -4,6 +4,7 @@ import com.ssafy.tourmates.common.exception.EditException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.ssafy.tourmates.member.Active.*;
 import static org.assertj.core.api.Assertions.*;
 
 class MemberTest {
@@ -79,6 +80,35 @@ class MemberTest {
         //when
         //then
         assertThatThrownBy(() -> member.changeNickname(newNickname))
+                .isInstanceOf(EditException.class);
+    }
+
+    @Test
+    @DisplayName("회원탈퇴")
+    void deActive() {
+        //given
+        Member member = Member.builder()
+                .loginPw("ssafy1234!")
+                .build();
+
+        //when
+        member.deActive("ssafy1234!");
+
+        //then
+        assertThat(member.getActive()).isEqualTo(DEACTIVE);
+    }
+    
+    @Test
+    @DisplayName("회원탈퇴 예외")
+    void deActiveException() {
+        //given
+        Member member = Member.builder()
+                .loginPw("ssafy1234!")
+                .build();
+        
+        //when
+        //then
+        assertThatThrownBy(() -> member.deActive("ssafy5678@"))
                 .isInstanceOf(EditException.class);
     }
 }
