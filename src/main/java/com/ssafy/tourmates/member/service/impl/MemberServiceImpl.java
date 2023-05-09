@@ -64,6 +64,13 @@ public class MemberServiceImpl implements MemberService {
         return findMember.getId();
     }
 
+    @Override
+    public Long withdrawal(String loginId, String loginPw) {
+        Member findMember = memberValidator.findByLoginId(loginId);
+        findMember.deActive(loginPw);
+        return findMember.getId();
+    }
+
     private void duplicateLoginId(String loginId) {
         Optional<Member> findMember = memberRepository.findByLoginId(loginId);
         if (findMember.isPresent()) {
