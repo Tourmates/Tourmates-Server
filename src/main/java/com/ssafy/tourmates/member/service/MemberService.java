@@ -2,7 +2,7 @@ package com.ssafy.tourmates.member.service;
 
 import com.ssafy.tourmates.member.service.dto.JoinMemberDto;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public interface MemberService {

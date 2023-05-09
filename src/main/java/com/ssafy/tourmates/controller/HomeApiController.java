@@ -1,7 +1,10 @@
 package com.ssafy.tourmates.controller;
 
 import com.ssafy.tourmates.common.exception.DuplicateException;
+import com.ssafy.tourmates.controller.dto.member.request.ForgotLoginIdRequest;
+import com.ssafy.tourmates.controller.dto.member.request.ForgotLoginPwRequest;
 import com.ssafy.tourmates.controller.dto.member.request.JoinMemberRequest;
+import com.ssafy.tourmates.member.service.MemberQueryService;
 import com.ssafy.tourmates.member.service.MemberService;
 import com.ssafy.tourmates.member.service.dto.JoinMemberDto;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +21,9 @@ import javax.validation.Valid;
 public class HomeApiController {
 
     private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
 
-    @PostMapping
+    @PostMapping("/join")
     public int joinMember(@Valid @RequestBody JoinMemberRequest request) {
         JoinMemberDto dto = JoinMemberDto.builder()
                 .loginId(request.getLoginId())
@@ -39,5 +43,23 @@ public class HomeApiController {
             return -1;
         }
         return 1;
+    }
+
+    @PostMapping("/forgot/loginId")
+    public String forgotLoginId(@Valid @RequestBody ForgotLoginIdRequest request) {
+        if (request.getEmail() == null || request.getEmail().trim().length() == 0) {
+            return memberQueryService.forgotLoginIdByTel(request.getTel());
+        } else {
+            return memberQueryService.forgotLoginIdByEmail(request.getEmail());
+        }
+    }
+
+    @PostMapping("/forgot/loginPw")
+    public String forgotLoginPw(@Valid @RequestBody ForgotLoginPwRequest request) {
+        if (request.getEmail() == null || request.getEmail().trim().length() == 0) {
+            return memberQueryService.forgotLoginPwByTel(request.getLoginId(), request.getTel());
+        } else {
+            return memberQueryService.forgotLoginPwByEmail(request.getLoginId(), request.getEmail());
+        }
     }
 }
