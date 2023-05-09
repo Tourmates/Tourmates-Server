@@ -83,6 +83,10 @@ public class Member extends TimeBaseEntity implements UserDetails {
         this.email = email;
     }
 
+    public void change(String tel) {
+        this.tel = tel;
+    }
+
     //== 스프링 시큐리티 ==//
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
