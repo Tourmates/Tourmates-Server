@@ -1,8 +1,10 @@
 package com.ssafy.tourmates.controller;
 
+import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.common.exception.EditException;
 import com.ssafy.tourmates.controller.dto.member.request.EditEmailRequest;
 import com.ssafy.tourmates.controller.dto.member.request.EditLoginPwRequest;
+import com.ssafy.tourmates.controller.dto.member.request.EditTelRequest;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import com.ssafy.tourmates.member.service.MemberService;
 import com.ssafy.tourmates.member.service.dto.EditLoginPwDto;
@@ -55,6 +57,22 @@ public class MemberController {
         } catch (NoSuchElementException e) {
             return -2;
         }
+        return 1;
+    }
+
+    @PostMapping("/tel")
+    public int editTel(@Valid @RequestBody EditTelRequest request) {
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        try {
+            Long memberId = memberService.editTel(loginId, request.getNewTel());
+            log.debug("memberId={}, newTel={}", memberId, request.getNewTel());
+        } catch (DuplicateException e) {
+            return -1;
+        } catch (NoSuchElementException e) {
+            return -2;
+        }
+
         return 1;
     }
 }
