@@ -7,8 +7,6 @@ import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.controller.dto.hotplace.response.HotPlaceResponse;
 import com.ssafy.tourmates.hotplace.HotPlace;
 import com.ssafy.tourmates.hotplace.repository.dto.HotPlaceSearchCondition;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -17,8 +15,10 @@ import javax.persistence.EntityManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.ssafy.tourmates.hotplace.QHotPlace.*;
+import static com.ssafy.tourmates.member.QMember.*;
 import static org.springframework.util.StringUtils.*;
 
 @Repository
@@ -62,6 +62,15 @@ public class HotPlaceQueryRepository {
                 .where(hotPlace.id.in(ids))
                 .orderBy(hotPlace.createdDate.desc())
                 .fetch();
+    }
+
+    public HotPlace searchById(Long hotPlaceId) {
+        return queryFactory
+                .select(hotPlace)
+                .from(hotPlace)
+                .join(hotPlace.member, member).fetchJoin()
+                .where(hotPlace.id.eq(hotPlaceId))
+                .fetchOne();
     }
 
     private BooleanExpression isTag(ContentType tag) {
