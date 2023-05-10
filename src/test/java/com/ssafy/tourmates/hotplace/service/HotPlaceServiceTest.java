@@ -6,6 +6,7 @@ import com.ssafy.tourmates.hotplace.HotPlace;
 import com.ssafy.tourmates.hotplace.repository.HotPlaceRepository;
 import com.ssafy.tourmates.hotplace.service.dto.AddHotPlaceDto;
 import com.ssafy.tourmates.hotplace.service.dto.EditHotPlaceDto;
+import com.ssafy.tourmates.member.Active;
 import com.ssafy.tourmates.member.Member;
 import com.ssafy.tourmates.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static com.ssafy.tourmates.common.domain.ContentType.ATTRACTION;
+import static com.ssafy.tourmates.member.Active.*;
 import static com.ssafy.tourmates.member.Gender.MALE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -96,11 +98,11 @@ class HotPlaceServiceTest {
 
     private void createHotPlace() {
         HotPlace hotPlace = HotPlace.builder()
-                .id(3L)
                 .tag(ATTRACTION)
                 .title("나만의 핫플레이스")
                 .content("나만의 핫플레이스입니다.")
                 .visitedDate("2020-01-01")
+                .active(ACTIVE)
                 .build();
         savedHotPlace = hotPlaceRepository.save(hotPlace);
     }

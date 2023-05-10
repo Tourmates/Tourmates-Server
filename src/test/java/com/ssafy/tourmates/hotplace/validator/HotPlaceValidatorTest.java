@@ -3,12 +3,14 @@ package com.ssafy.tourmates.hotplace.validator;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.hotplace.HotPlace;
 import com.ssafy.tourmates.hotplace.repository.HotPlaceRepository;
+import com.ssafy.tourmates.member.Active;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static com.ssafy.tourmates.member.Active.*;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
@@ -29,6 +31,7 @@ class HotPlaceValidatorTest {
                 .title("나만의 핫플레이스")
                 .content("재밌습니다")
                 .visitedDate("2020-01-01")
+                .active(ACTIVE)
                 .build();
         savedHotPlace = hotPlaceRepository.save(hotPlace);
     }
