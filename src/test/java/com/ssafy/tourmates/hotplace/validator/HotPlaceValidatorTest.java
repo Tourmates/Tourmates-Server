@@ -19,6 +19,8 @@ class HotPlaceValidatorTest {
     @Autowired
     private HotPlaceRepository hotPlaceRepository;
 
+    private HotPlace savedHotPlace;
+
     @BeforeEach
     void beforeEach() {
         HotPlace hotPlace = HotPlace.builder()
@@ -28,7 +30,7 @@ class HotPlaceValidatorTest {
                 .content("재밌습니다")
                 .visitedDate("2020-01-01")
                 .build();
-        hotPlaceRepository.save(hotPlace);
+        savedHotPlace = hotPlaceRepository.save(hotPlace);
     }
 
     @Test
@@ -37,9 +39,9 @@ class HotPlaceValidatorTest {
         //given
 
         //when
-        HotPlace findHotPlace = hotPlaceValidator.findById(1L);
+        HotPlace findHotPlace = hotPlaceValidator.findById(savedHotPlace.getId());
 
         //then
-        assertThat(findHotPlace.getId()).isEqualTo(1L);
+        assertThat(findHotPlace.getId()).isEqualTo(savedHotPlace.getId());
     }
 }
