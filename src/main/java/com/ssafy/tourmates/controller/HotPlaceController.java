@@ -4,6 +4,7 @@ import com.ssafy.tourmates.common.FileStore;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.UploadFile;
 import com.ssafy.tourmates.controller.dto.hotplace.request.AddHotPlaceRequest;
+import com.ssafy.tourmates.controller.dto.hotplace.response.DetailHotPlaceResponse;
 import com.ssafy.tourmates.controller.dto.hotplace.response.HotPlaceResponse;
 import com.ssafy.tourmates.hotplace.repository.dto.HotPlaceSearchCondition;
 import com.ssafy.tourmates.hotplace.service.HotPlaceQueryService;
@@ -69,6 +70,12 @@ public class HotPlaceController {
         PageRequest pageRequest = PageRequest.of(pageNumber, 10);
         List<HotPlaceResponse> responses = hotPlaceQueryService.searchByCondition(condition, pageRequest);
         return new ResultPage<>(responses, pageNumber, 10);
+    }
+
+    @GetMapping("/{hotPlaceId}")
+    public DetailHotPlaceResponse searchHotPlace(@PathVariable Long hotPlaceId) {
+        DetailHotPlaceResponse response = hotPlaceQueryService.searchById(hotPlaceId);
+        return response;
     }
 
     @Data
