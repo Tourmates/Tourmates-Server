@@ -55,4 +55,11 @@ public class HotPlaceServiceImpl implements HotPlaceService {
         findHotPlace.changeHotPlace(dto.getTag(), dto.getTitle(), dto.getContent(), dto.getVisitedDate(), files);
         return findHotPlace.getId();
     }
+
+    @Override
+    public Long removeHotPlace(Long hotPlaceId) {
+        HotPlace findHotPlace = hotPlaceValidator.findById(hotPlaceId);
+        findHotPlace.deActive();
+        return findHotPlace.getId();
+    }
 }

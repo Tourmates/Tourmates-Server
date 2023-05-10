@@ -10,4 +10,6 @@ public interface HotPlaceService {
     Long registerHotPlace(String loginId, AddHotPlaceDto dto);
 
     Long editHotPlace(Long hotPlaceId, EditHotPlaceDto dto);
+
+    Long removeHotPlace(Long hotPlaceId);
 }
