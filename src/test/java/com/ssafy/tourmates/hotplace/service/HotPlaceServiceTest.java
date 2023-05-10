@@ -1,12 +1,10 @@
 package com.ssafy.tourmates.hotplace.service;
 
-import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.UploadFile;
 import com.ssafy.tourmates.hotplace.HotPlace;
 import com.ssafy.tourmates.hotplace.repository.HotPlaceRepository;
 import com.ssafy.tourmates.hotplace.service.dto.AddHotPlaceDto;
 import com.ssafy.tourmates.hotplace.service.dto.EditHotPlaceDto;
-import com.ssafy.tourmates.member.Active;
 import com.ssafy.tourmates.member.Member;
 import com.ssafy.tourmates.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,6 +92,21 @@ class HotPlaceServiceTest {
         Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlaceId);
         assertThat(findHotPlace).isPresent();
         assertThat(findHotPlace.get().getTitle()).isEqualTo(dto.getTitle());
+    }
+
+    @Test
+    @DisplayName("핫플레이스 삭제")
+    void removeHotPlace() {
+        //given
+        createHotPlace();
+
+        //when
+        Long hotPlaceId = hotPlaceService.removeHotPlace(savedHotPlace.getId());
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlaceId);
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getActive()).isEqualTo(DEACTIVE);
     }
 
     private void createHotPlace() {
