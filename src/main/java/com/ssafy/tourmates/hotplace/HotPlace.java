@@ -59,4 +59,13 @@ public class HotPlace extends TimeBaseEntity {
         this.attractionInfo = attractionInfo;
         this.images = images;
     }
+
+    //== 비즈니스 로직 ==//
+    public void changeHotPlace(ContentType tag, String title, String content, String visitedDate, List<HotPlaceImage> images) {
+        this.tag = tag;
+        this.title = title;
+        this.content = content;
+        this.visitedDate = visitedDate;
+        this.images = images;
+    }
 }
