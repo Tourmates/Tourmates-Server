@@ -4,12 +4,14 @@ import com.ssafy.tourmates.common.FileStore;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.UploadFile;
 import com.ssafy.tourmates.controller.dto.hotplace.request.AddHotPlaceRequest;
+import com.ssafy.tourmates.controller.dto.hotplace.request.EditHotPlaceRequest;
 import com.ssafy.tourmates.controller.dto.hotplace.response.DetailHotPlaceResponse;
 import com.ssafy.tourmates.controller.dto.hotplace.response.HotPlaceResponse;
 import com.ssafy.tourmates.hotplace.repository.dto.HotPlaceSearchCondition;
 import com.ssafy.tourmates.hotplace.service.HotPlaceQueryService;
 import com.ssafy.tourmates.hotplace.service.HotPlaceService;
 import com.ssafy.tourmates.hotplace.service.dto.AddHotPlaceDto;
+import com.ssafy.tourmates.hotplace.service.dto.EditHotPlaceDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,6 +57,7 @@ public class HotPlaceController {
         return hotPlaceId;
     }
 
+    @ApiOperation(value = "핫플레이스 조회")
     @GetMapping
     public ResultPage<List<HotPlaceResponse>> searchHotPlaces(
             @RequestParam(defaultValue = "") ContentType tag,
@@ -72,10 +75,38 @@ public class HotPlaceController {
         return new ResultPage<>(responses, pageNumber, 10);
     }
 
+    @ApiOperation(value = "핫플레이스 상세조회")
     @GetMapping("/{hotPlaceId}")
     public DetailHotPlaceResponse searchHotPlace(@PathVariable Long hotPlaceId) {
         DetailHotPlaceResponse response = hotPlaceQueryService.searchById(hotPlaceId);
         return response;
+    }
+
+    @ApiOperation(value = "핫플레이스 수정")
+    @PostMapping("/{hotPlaceId}/edit")
+    public Long editHotPlace(@PathVariable Long hotPlaceId, EditHotPlaceRequest request) throws IOException {
+        List<UploadFile> files = fileStore.storeFiles(request.getFiles());
+
+        EditHotPlaceDto dto = EditHotPlaceDto.builder()
+                .tag(request.getTag())
+                .title(request.getTitle())
+                .content(request.getContent())
+                .visitedDate(request.getVisitedDate())
+                .uploadFiles(files)
+                .build();
+
+        Long editHotPlaceId = hotPlaceService.editHotPlace(hotPlaceId, dto);
+        log.debug("request={}", request);
+        log.debug("editHotPlaceId={}", editHotPlaceId);
+        return editHotPlaceId;
+    }
+
+    @ApiOperation(value = "핫플레이스 삭제")
+    @PostMapping("/{hotPlaceId}/remove")
+    public int removeHotPlace(@PathVariable Long hotPlaceId) {
+        Long removeHotPlaceId = hotPlaceService.removeHotPlace(hotPlaceId);
+        log.debug("removeHotPlaceId={}", removeHotPlaceId);
+        return 1;
     }
 
     @Data

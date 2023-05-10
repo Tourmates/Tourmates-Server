@@ -3,6 +3,7 @@ package com.ssafy.tourmates.hotplace;
 import com.ssafy.tourmates.attraction.AttractionInfo;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.TimeBaseEntity;
+import com.ssafy.tourmates.member.Active;
 import com.ssafy.tourmates.member.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ssafy.tourmates.member.Active.DEACTIVE;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -36,6 +38,9 @@ public class HotPlace extends TimeBaseEntity {
     private int hit;
     @Column(nullable = false, length = 10)
     private String visitedDate;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Active active;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -48,13 +53,14 @@ public class HotPlace extends TimeBaseEntity {
     private List<HotPlaceImage> images = new ArrayList<>();
 
     @Builder
-    public HotPlace(Long id, ContentType tag, String title, String content, int hit, String visitedDate, Member member, AttractionInfo attractionInfo, List<HotPlaceImage> images) {
+    public HotPlace(Long id, ContentType tag, String title, String content, int hit, String visitedDate, Active active, Member member, AttractionInfo attractionInfo, List<HotPlaceImage> images) {
         this.id = id;
         this.tag = tag;
         this.title = title;
         this.content = content;
         this.hit = hit;
         this.visitedDate = visitedDate;
+        this.active = active;
         this.member = member;
         this.attractionInfo = attractionInfo;
         this.images = images;
@@ -67,5 +73,9 @@ public class HotPlace extends TimeBaseEntity {
         this.content = content;
         this.visitedDate = visitedDate;
         this.images = images;
+    }
+
+    public void deActive() {
+        this.active = DEACTIVE;
     }
 }

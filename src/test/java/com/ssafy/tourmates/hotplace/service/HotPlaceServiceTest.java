@@ -1,6 +1,5 @@
 package com.ssafy.tourmates.hotplace.service;
 
-import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.UploadFile;
 import com.ssafy.tourmates.hotplace.HotPlace;
 import com.ssafy.tourmates.hotplace.repository.HotPlaceRepository;
@@ -19,6 +18,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static com.ssafy.tourmates.common.domain.ContentType.ATTRACTION;
+import static com.ssafy.tourmates.member.Active.*;
 import static com.ssafy.tourmates.member.Gender.MALE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -94,13 +94,28 @@ class HotPlaceServiceTest {
         assertThat(findHotPlace.get().getTitle()).isEqualTo(dto.getTitle());
     }
 
+    @Test
+    @DisplayName("핫플레이스 삭제")
+    void removeHotPlace() {
+        //given
+        createHotPlace();
+
+        //when
+        Long hotPlaceId = hotPlaceService.removeHotPlace(savedHotPlace.getId());
+
+        //then
+        Optional<HotPlace> findHotPlace = hotPlaceRepository.findById(hotPlaceId);
+        assertThat(findHotPlace).isPresent();
+        assertThat(findHotPlace.get().getActive()).isEqualTo(DEACTIVE);
+    }
+
     private void createHotPlace() {
         HotPlace hotPlace = HotPlace.builder()
-                .id(3L)
                 .tag(ATTRACTION)
                 .title("나만의 핫플레이스")
                 .content("나만의 핫플레이스입니다.")
                 .visitedDate("2020-01-01")
+                .active(ACTIVE)
                 .build();
         savedHotPlace = hotPlaceRepository.save(hotPlace);
     }
