@@ -3,6 +3,7 @@ package com.ssafy.tourmates.notice.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.tourmates.controller.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.controller.dto.notice.response.NoticeResponse;
 import com.ssafy.tourmates.notice.repository.dto.NoticeSearchCondition;
 import org.springframework.data.domain.Pageable;
@@ -64,6 +65,18 @@ public class NoticeQueryRepository {
                 .where(notice.pin.eq("1"))
                 .orderBy(notice.createdDate.desc())
                 .fetch();
+    }
+
+    public DetailNoticeResponse searchNotice(Long noticeId) {
+        return queryFactory
+                .select(Projections.fields(DetailNoticeResponse.class,
+                        notice.id.as("noticeId"),
+                        notice.title,
+                        notice.content,
+                        notice.createdDate))
+                .from(notice)
+                .where(notice.id.eq(noticeId))
+                .fetchOne();
     }
 
     private BooleanExpression isKeyword(String keyword) {

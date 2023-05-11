@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.notice.service;
 
+import com.ssafy.tourmates.controller.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.controller.dto.notice.response.NoticeResponse;
 import com.ssafy.tourmates.notice.repository.dto.NoticeSearchCondition;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,6 @@ public interface NoticeQueryService {
     List<NoticeResponse> searchByCondition(NoticeSearchCondition condition, Pageable pageable);
 
     List<NoticeResponse> searchPinNotices();
+
+    DetailNoticeResponse searchNotice(Long noticeId);
 }

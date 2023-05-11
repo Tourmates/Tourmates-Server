@@ -2,6 +2,7 @@ package com.ssafy.tourmates.controller;
 
 import com.ssafy.tourmates.controller.dto.notice.request.AddNoticeRequest;
 import com.ssafy.tourmates.controller.dto.notice.request.EditNoticeRequest;
+import com.ssafy.tourmates.controller.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.controller.dto.notice.response.NoticeResponse;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import com.ssafy.tourmates.notice.repository.dto.NoticeSearchCondition;
@@ -60,6 +61,13 @@ public class NoticeController {
         return noticeService.registerNotice(loginId, dto);
     }
 
+    @ApiOperation(value = "공지사항 상세조회")
+    @GetMapping("/{noticeId}")
+    public Result<DetailNoticeResponse> searchNotice(@PathVariable Long noticeId) {
+        DetailNoticeResponse response = noticeQueryService.searchNotice(noticeId);
+        return new Result<>(response);
+    }
+
     @ApiOperation(value = "공지사항 수정")
     @PostMapping("/{noticeId}/edit")
     public Long editNotice(@PathVariable Long noticeId, EditNoticeRequest request) {
@@ -80,6 +88,12 @@ public class NoticeController {
         Long removedNoticeId = noticeService.removeNotice(noticeId);
         log.debug("removedNoticeId={}", removedNoticeId);
         return 1;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T data;
     }
 
     @Data
