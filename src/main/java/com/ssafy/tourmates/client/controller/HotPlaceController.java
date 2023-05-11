@@ -1,6 +1,9 @@
 package com.ssafy.tourmates.client.controller;
 
-import com.ssafy.tourmates.client.hotplace.HotplaceComment;
+import com.ssafy.tourmates.client.controller.dto.hotplace.request.AddHotplaceCommentRequest;
+import com.ssafy.tourmates.client.hotplace.service.HotplaceCommentQueryService;
+import com.ssafy.tourmates.client.hotplace.service.HotplaceCommentService;
+import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceCommentDto;
 import com.ssafy.tourmates.common.FileStore;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.UploadFile;
@@ -36,6 +39,8 @@ public class HotPlaceController {
 
     private final HotPlaceService hotPlaceService;
     private final HotPlaceQueryService hotPlaceQueryService;
+    private final HotplaceCommentService hotplaceCommentService;
+    private final HotplaceCommentQueryService hotplaceCommentQueryService;
     private final FileStore fileStore;
 
     @ApiOperation(value = "핫플레이스 등록")
@@ -58,6 +63,20 @@ public class HotPlaceController {
         return hotPlaceId;
     }
 
+    @ApiOperation(value = "핫플레이스 댓글 등록")
+    @PostMapping("/{hotPlaceId}/comments/register")
+    public Long registerHotplaceComment(@PathVariable Long hotPlaceId, @Valid @RequestBody AddHotplaceCommentRequest request){
+
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        AddHotPlaceCommentDto dto = AddHotPlaceCommentDto.builder()
+                .content(request.getComment())
+                .build();
+
+        Long hotplaceCommentId = hotplaceCommentService.registerHotplaceComment(loginId,hotPlaceId, dto);
+        return hotplaceCommentId;
+    }
+
     @ApiOperation(value = "핫플레이스 조회")
     @GetMapping
     public ResultPage<List<HotPlaceResponse>> searchHotPlaces(
@@ -78,12 +97,10 @@ public class HotPlaceController {
 
     @ApiOperation(value = "핫플레이스 상세조회")
     @GetMapping("/{hotPlaceId}")
-    public ResponseData searchHotPlace(@PathVariable Long hotPlaceId) {
+    public Response searchHotPlace(@PathVariable Long hotPlaceId) {
         DetailHotPlaceResponse response = hotPlaceQueryService.searchById(hotPlaceId);
-        List<HotplaceComment> hotplaceCommentList = null;
-        ResponseData responseData = new ResponseData(response, hotplaceCommentList);
-
-        return responseData;
+        ResponseData responseData = new ResponseData(response);
+        return new Response(responseData);
     }
 
     @ApiOperation(value = "핫플레이스 수정")
@@ -132,6 +149,5 @@ public class HotPlaceController {
     @AllArgsConstructor
     static class ResponseData {
         private DetailHotPlaceResponse detailHotPlaceResponse;
-        private List<HotplaceComment> hotplaceCommentList;
     }
 }
