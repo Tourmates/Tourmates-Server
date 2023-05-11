@@ -54,6 +54,18 @@ public class NoticeQueryRepository {
                 .fetch();
     }
 
+    public List<NoticeResponse> searchPinNotices() {
+        return queryFactory
+                .select(Projections.fields(NoticeResponse.class,
+                        notice.id.as("noticeId"),
+                        notice.title,
+                        notice.createdDate))
+                .from(notice)
+                .where(notice.pin.eq("1"))
+                .orderBy(notice.createdDate.desc())
+                .fetch();
+    }
+
     private BooleanExpression isKeyword(String keyword) {
         return hasText(keyword) ? notice.title.like("%" + keyword + "%")
                 .or(notice.content.like("%" + keyword + "%")) : null;
