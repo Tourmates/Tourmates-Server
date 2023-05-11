@@ -48,4 +48,8 @@ public class Board extends TimeBaseEntity {
         this.title = title;
         this.content = content;
     }
+
+    public void deActive() {
+        this.active = Active.DEACTIVE;
+    }
 }

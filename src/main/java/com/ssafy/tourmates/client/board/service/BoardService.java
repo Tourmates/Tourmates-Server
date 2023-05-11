@@ -10,4 +10,6 @@ public interface BoardService {
     Long registerBoard(String loginId, AddBoardDto dto);
 
     Long editBoard(Long boardId, EditBoardDto dto);
+
+    Long removeBoard(Long boardId);
 }

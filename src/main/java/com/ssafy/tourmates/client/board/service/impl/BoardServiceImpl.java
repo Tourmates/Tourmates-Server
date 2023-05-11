@@ -42,4 +42,11 @@ public class BoardServiceImpl implements BoardService {
         findBoard.changeBoard(dto.getTitle(), dto.getContent());
         return findBoard.getId();
     }
+
+    @Override
+    public Long removeBoard(Long boardId) {
+        Board findBoard = boardValidator.findById(boardId);
+        findBoard.deActive();
+        return findBoard.getId();
+    }
 }
