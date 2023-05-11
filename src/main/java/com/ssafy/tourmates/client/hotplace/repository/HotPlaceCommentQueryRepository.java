@@ -4,16 +4,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.List;
-
-import static com.ssafy.tourmates.client.hotplace.QHotplaceComment.hotplaceComment;
 
 @Repository
-public class HotplaceCommentQueryRepository {
+public class HotPlaceCommentQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public HotplaceCommentQueryRepository(EntityManager em){
+    public HotPlaceCommentQueryRepository(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
     }
 
