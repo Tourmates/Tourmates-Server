@@ -12,7 +12,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class HotplaceComment {
+public class HotPlaceComment {
 
     @Id
     @GeneratedValue
@@ -23,16 +23,17 @@ public class HotplaceComment {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "hot_place_id")
-    private HotPlace hotplace;
+    private HotPlace hotPlace;
 
     @Builder
-    public HotplaceComment(Long id, String content){
+    public HotPlaceComment(Long id, String content, HotPlace hotPlace) {
         this.id = id;
         this.content = content;
+        this.hotPlace = hotPlace;
     }
 
     //==비즈니스 로직==//
-    public void changeHotplaceComment(String content){
+    public void changeHotPlaceComment(String content){
         this.content = content;
     }
 }
