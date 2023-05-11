@@ -20,4 +20,9 @@ public class NoticeQueryServiceImpl implements NoticeQueryService {
     public List<NoticeResponse> searchByCondition(NoticeSearchCondition condition, Pageable pageable) {
         return noticeQueryRepository.searchByCondition(condition, pageable);
     }
+
+    @Override
+    public List<NoticeResponse> searchPinNotices() {
+        return noticeQueryRepository.searchPinNotices();
+    }
 }
