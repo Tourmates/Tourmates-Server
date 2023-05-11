@@ -1,9 +1,11 @@
 package com.ssafy.tourmates.client.controller;
 
 import com.ssafy.tourmates.client.controller.dto.hotplace.request.AddHotplaceCommentRequest;
+import com.ssafy.tourmates.client.controller.dto.hotplace.request.EditHotPlaceCommentRequest;
 import com.ssafy.tourmates.client.hotplace.service.HotplaceCommentQueryService;
 import com.ssafy.tourmates.client.hotplace.service.HotplaceCommentService;
 import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceCommentDto;
+import com.ssafy.tourmates.client.hotplace.service.dto.EditHotPlaceCommentDto;
 import com.ssafy.tourmates.common.FileStore;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.UploadFile;
@@ -39,8 +41,8 @@ public class HotPlaceController {
 
     private final HotPlaceService hotPlaceService;
     private final HotPlaceQueryService hotPlaceQueryService;
-    private final HotplaceCommentService hotplaceCommentService;
-    private final HotplaceCommentQueryService hotplaceCommentQueryService;
+    private final HotplaceCommentService hotPlaceCommentService;
+    private final HotplaceCommentQueryService hotPlaceCommentQueryService;
     private final FileStore fileStore;
 
     @ApiOperation(value = "핫플레이스 등록")
@@ -73,7 +75,7 @@ public class HotPlaceController {
                 .content(request.getComment())
                 .build();
 
-        Long hotplaceCommentId = hotplaceCommentService.registerHotplaceComment(loginId,hotPlaceId, dto);
+        Long hotplaceCommentId = hotPlaceCommentService.registerHotplaceComment(loginId,hotPlaceId, dto);
         return hotplaceCommentId;
     }
 
@@ -105,7 +107,7 @@ public class HotPlaceController {
 
     @ApiOperation(value = "핫플레이스 수정")
     @PostMapping("/{hotPlaceId}/edit")
-    public Long editHotPlace(@PathVariable Long hotPlaceId, EditHotPlaceRequest request) throws IOException {
+    public Long editHotPlace(@PathVariable Long hotPlaceId, @Valid @RequestBody EditHotPlaceRequest request) throws IOException {
         List<UploadFile> files = fileStore.storeFiles(request.getFiles());
 
         EditHotPlaceDto dto = EditHotPlaceDto.builder()
@@ -120,6 +122,18 @@ public class HotPlaceController {
         log.debug("request={}", request);
         log.debug("editHotPlaceId={}", editHotPlaceId);
         return editHotPlaceId;
+    }
+
+    @ApiOperation(value = "핫플레이스 댓글 수정")
+    @PostMapping("/{hotPlaceId}/comments/{hotPlaceCommentId}/edit")
+    public Long editHotPlaceComment(@PathVariable Long hotPlaceId, @PathVariable Long hotPlaceCommentId, @Valid @RequestBody EditHotPlaceCommentRequest request){
+
+        EditHotPlaceCommentDto dto = EditHotPlaceCommentDto.builder()
+                .content(request.getContent())
+                .build();
+
+        Long editHotPlaceCommentId = hotPlaceCommentService.editHotPlaceComment(hotPlaceId, hotPlaceCommentId, dto);
+        return editHotPlaceCommentId;
     }
 
     @ApiOperation(value = "핫플레이스 삭제")
