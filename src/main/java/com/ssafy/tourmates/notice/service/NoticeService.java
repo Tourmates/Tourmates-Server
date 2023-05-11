@@ -10,4 +10,6 @@ public interface NoticeService {
     Long registerNotice(String loginId, AddNoticeDto dto);
 
     Long editNotice(Long noticeId, EditNoticeDto dto);
+
+    Long removeNotice(Long noticeId);
 }

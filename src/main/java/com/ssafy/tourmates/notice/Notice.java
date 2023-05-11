@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static com.ssafy.tourmates.member.Active.DEACTIVE;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
 
@@ -50,5 +51,9 @@ public class Notice extends TimeBaseEntity {
         this.pin = pin;
         this.title = title;
         this.content = content;
+    }
+
+    public void deActive() {
+        this.active = DEACTIVE;
     }
 }

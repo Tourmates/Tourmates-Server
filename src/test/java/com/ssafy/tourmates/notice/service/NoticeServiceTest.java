@@ -89,6 +89,21 @@ class NoticeServiceTest {
         assertThat(findNotice.get().getTitle()).isEqualTo(dto.getTitle());
     }
 
+    @Test
+    @DisplayName("공지사항 삭제")
+    void removeNotice() {
+        //given
+        createNotice();
+
+        //when
+        Long removedNoticeId = noticeService.removeNotice(savedNotice.getId());
+
+        //then
+        Optional<Notice> findNotice = noticeRepository.findById(removedNoticeId);
+        assertThat(findNotice).isPresent();
+        assertThat(findNotice.get().getActive()).isEqualTo(DEACTIVE);
+    }
+
     private void createNotice() {
         Notice notice = Notice.builder()
                 .pin("0")
