@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ssafy.tourmates.notice.QNotice.*;
+import static com.ssafy.tourmates.admin.notice.QNotice.*;
 import static org.springframework.util.StringUtils.*;
 
 @Repository

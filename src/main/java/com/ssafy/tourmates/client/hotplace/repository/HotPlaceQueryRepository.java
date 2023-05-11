@@ -16,8 +16,8 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ssafy.tourmates.hotplace.QHotPlace.*;
-import static com.ssafy.tourmates.member.QMember.*;
+import static com.ssafy.tourmates.client.hotplace.QHotPlace.*;
+import static com.ssafy.tourmates.client.member.QMember.*;
 import static org.springframework.util.StringUtils.*;
 
 @Repository

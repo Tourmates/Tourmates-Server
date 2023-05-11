@@ -9,7 +9,7 @@ import com.ssafy.tourmates.admin.controller.dto.attraction.response.AttractionRe
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.ssafy.tourmates.attraction.QAttractionInfo.*;
+import static com.ssafy.tourmates.admin.attraction.QAttractionInfo.*;
 
 public class AttractionRepositoryImpl implements AttractionRepositoryCustom {
 
