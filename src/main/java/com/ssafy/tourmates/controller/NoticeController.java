@@ -32,7 +32,7 @@ public class NoticeController {
 
     @ApiOperation(value = "공지사항 조회")
     @GetMapping
-    public ResultPage<List<NoticeResponse>> searchNotices(
+    public ResultPage<ResultNotice> searchNotices(
             @RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "1") Integer pageNumber
     ) {
@@ -40,8 +40,10 @@ public class NoticeController {
                 .keyword(keyword)
                 .build();
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, 10);
+        List<NoticeResponse> pinResponse = noticeQueryService.searchPinNotices();
         List<NoticeResponse> responses = noticeQueryService.searchByCondition(condition, pageRequest);
-        return new ResultPage<>(responses, pageNumber, 10);
+        ResultNotice resultNotice = new ResultNotice(pinResponse, responses);
+        return new ResultPage<>(resultNotice, pageNumber, 10);
     }
 
     @ApiOperation(value = "공지사항 등록")
@@ -86,5 +88,12 @@ public class NoticeController {
         private T data;
         private int pageNumber;
         private int pageSize;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class ResultNotice {
+        private List<NoticeResponse> pin;
+        private List<NoticeResponse> noPin;
     }
 }
