@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.controller;
 
+import com.ssafy.tourmates.client.hotplace.HotplaceComment;
 import com.ssafy.tourmates.common.FileStore;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.UploadFile;
@@ -77,9 +78,12 @@ public class HotPlaceController {
 
     @ApiOperation(value = "핫플레이스 상세조회")
     @GetMapping("/{hotPlaceId}")
-    public DetailHotPlaceResponse searchHotPlace(@PathVariable Long hotPlaceId) {
+    public ResponseData searchHotPlace(@PathVariable Long hotPlaceId) {
         DetailHotPlaceResponse response = hotPlaceQueryService.searchById(hotPlaceId);
-        return response;
+        List<HotplaceComment> hotplaceCommentList = null;
+        ResponseData responseData = new ResponseData(response, hotplaceCommentList);
+
+        return responseData;
     }
 
     @ApiOperation(value = "핫플레이스 수정")
@@ -109,11 +113,25 @@ public class HotPlaceController {
         return 1;
     }
 
+
     @Data
     @AllArgsConstructor
     static class ResultPage<T> {
         private T data;
         private int pageNumber;
         private int pageSize;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Response {
+        private ResponseData data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class ResponseData {
+        private DetailHotPlaceResponse detailHotPlaceResponse;
+        private List<HotplaceComment> hotplaceCommentList;
     }
 }
