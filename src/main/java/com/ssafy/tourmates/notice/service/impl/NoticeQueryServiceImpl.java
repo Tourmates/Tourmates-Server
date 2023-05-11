@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.notice.service.impl;
 
+import com.ssafy.tourmates.controller.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.controller.dto.notice.response.NoticeResponse;
 import com.ssafy.tourmates.notice.repository.NoticeQueryRepository;
 import com.ssafy.tourmates.notice.repository.dto.NoticeSearchCondition;
@@ -24,5 +25,10 @@ public class NoticeQueryServiceImpl implements NoticeQueryService {
     @Override
     public List<NoticeResponse> searchPinNotices() {
         return noticeQueryRepository.searchPinNotices();
+    }
+
+    @Override
+    public DetailNoticeResponse searchNotice(Long noticeId) {
+        return noticeQueryRepository.searchNotice(noticeId);
     }
 }
