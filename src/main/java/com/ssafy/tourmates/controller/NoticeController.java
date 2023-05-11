@@ -2,18 +2,23 @@ package com.ssafy.tourmates.controller;
 
 import com.ssafy.tourmates.controller.dto.notice.request.AddNoticeRequest;
 import com.ssafy.tourmates.controller.dto.notice.request.EditNoticeRequest;
+import com.ssafy.tourmates.controller.dto.notice.response.NoticeResponse;
 import com.ssafy.tourmates.jwt.SecurityUtil;
+import com.ssafy.tourmates.notice.repository.dto.NoticeSearchCondition;
+import com.ssafy.tourmates.notice.service.NoticeQueryService;
 import com.ssafy.tourmates.notice.service.NoticeService;
 import com.ssafy.tourmates.notice.service.dto.AddNoticeDto;
 import com.ssafy.tourmates.notice.service.dto.EditNoticeDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +28,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class NoticeController {
 
     private final NoticeService noticeService;
+    private final NoticeQueryService noticeQueryService;
+
+    @ApiOperation(value = "공지사항 조회")
+    @GetMapping
+    public ResultPage<ResultNotice> searchNotices(
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "1") Integer pageNumber
+    ) {
+        NoticeSearchCondition condition = NoticeSearchCondition.builder()
+                .keyword(keyword)
+                .build();
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, 10);
+        List<NoticeResponse> pinResponse = noticeQueryService.searchPinNotices();
+        List<NoticeResponse> responses = noticeQueryService.searchByCondition(condition, pageRequest);
+        ResultNotice resultNotice = new ResultNotice(pinResponse, responses);
+        return new ResultPage<>(resultNotice, pageNumber, 10);
+    }
 
     @ApiOperation(value = "공지사항 등록")
     @PostMapping("/register")
@@ -58,5 +80,20 @@ public class NoticeController {
         Long removedNoticeId = noticeService.removeNotice(noticeId);
         log.debug("removedNoticeId={}", removedNoticeId);
         return 1;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class ResultPage<T> {
+        private T data;
+        private int pageNumber;
+        private int pageSize;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class ResultNotice {
+        private List<NoticeResponse> pin;
+        private List<NoticeResponse> noPin;
     }
 }
