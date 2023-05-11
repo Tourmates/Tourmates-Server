@@ -42,4 +42,11 @@ public class NoticeServiceImpl implements NoticeService {
         return findNotice.getId();
     }
 
+    @Override
+    public Long removeNotice(Long noticeId) {
+        Notice findNotice = noticeValidator.findById(noticeId);
+        findNotice.deActive();
+        return findNotice.getId();
+    }
+
 }
