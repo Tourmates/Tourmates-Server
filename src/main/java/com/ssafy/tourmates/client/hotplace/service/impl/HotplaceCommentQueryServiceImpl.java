@@ -1,6 +1,6 @@
 package com.ssafy.tourmates.client.hotplace.service.impl;
 
-import com.ssafy.tourmates.client.hotplace.HotplaceComment;
+import com.ssafy.tourmates.client.hotplace.HotPlaceComment;
 import com.ssafy.tourmates.client.hotplace.repository.HotplaceCommentQueryRepository;
 import com.ssafy.tourmates.client.hotplace.repository.HotplaceCommentRepository;
 import com.ssafy.tourmates.client.hotplace.service.HotplaceCommentQueryService;
@@ -15,8 +15,5 @@ public class HotplaceCommentQueryServiceImpl implements HotplaceCommentQueryServ
 
     private final HotplaceCommentQueryRepository hotplaceCommentQueryRepository;
 
-    @Override
-    public List<HotplaceComment> searchById(Long hotplaceId) {
-        return null;
-    }
+
 }
