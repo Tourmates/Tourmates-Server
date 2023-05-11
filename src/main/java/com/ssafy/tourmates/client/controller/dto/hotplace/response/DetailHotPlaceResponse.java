@@ -18,9 +18,10 @@ public class DetailHotPlaceResponse {
 
     private String nickname;
     private List<String> images;
+    private List<String> comments;
 
     @Builder
-    public DetailHotPlaceResponse(Long hotPlaceId, ContentType tag, String title, String content, int hit, String visitedDate, String nickname, List<String> images) {
+    public DetailHotPlaceResponse(Long hotPlaceId, ContentType tag, String title, String content, int hit, String visitedDate, String nickname, List<String> images, List<String> comments) {
         this.hotPlaceId = hotPlaceId;
         this.tag = tag;
         this.title = title;
@@ -29,5 +30,6 @@ public class DetailHotPlaceResponse {
         this.visitedDate = visitedDate;
         this.nickname = nickname;
         this.images = images;
+        this.comments = comments;
     }
 }
