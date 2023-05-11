@@ -1,10 +1,13 @@
 package com.ssafy.tourmates.client.hotplace.service.impl;
 
+import com.ssafy.tourmates.client.controller.dto.hotplace.request.EditHotPlaceCommentRequest;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
 import com.ssafy.tourmates.client.hotplace.HotPlaceComment;
 import com.ssafy.tourmates.client.hotplace.repository.HotPlaceCommentRepository;
 import com.ssafy.tourmates.client.hotplace.service.HotplaceCommentService;
 import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceCommentDto;
+import com.ssafy.tourmates.client.hotplace.service.dto.EditHotPlaceCommentDto;
+import com.ssafy.tourmates.client.hotplace.validator.HotPlaceCommentValidator;
 import com.ssafy.tourmates.client.hotplace.validator.HotPlaceValidator;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
@@ -19,6 +22,7 @@ public class HotplaceCommentServiceImpl implements HotplaceCommentService {
 
     private final MemberValidator memberValidator;
     private final HotPlaceValidator hotplaceValidator;
+    private final HotPlaceCommentValidator hotPlaceCommentValidator;
     private final HotPlaceCommentRepository hotplaceCommentRepository;
 
     @Override
@@ -35,5 +39,13 @@ public class HotplaceCommentServiceImpl implements HotplaceCommentService {
 
         HotPlaceComment savedHotPlaceComment = hotplaceCommentRepository.save(hotPlaceComment);
         return savedHotPlaceComment.getId();
+    }
+
+    @Override
+    public Long editHotPlaceComment(Long hotPlaceId, Long hotPlaceCommentId, EditHotPlaceCommentDto dto) {
+
+        HotPlaceComment findHotPlaceComment = hotPlaceCommentValidator.findById(hotPlaceCommentId);
+        findHotPlaceComment.changeHotPlaceComment(dto.getContent());
+        return findHotPlaceComment.getId();
     }
 }
