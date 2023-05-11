@@ -1,10 +1,12 @@
 package com.ssafy.tourmates.notice.service;
 
+import com.ssafy.tourmates.member.Active;
 import com.ssafy.tourmates.member.Member;
 import com.ssafy.tourmates.member.repository.MemberRepository;
 import com.ssafy.tourmates.notice.Notice;
 import com.ssafy.tourmates.notice.repository.NoticeRepository;
 import com.ssafy.tourmates.notice.service.dto.AddNoticeDto;
+import com.ssafy.tourmates.notice.service.dto.EditNoticeDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.ssafy.tourmates.member.Active.*;
 import static com.ssafy.tourmates.member.Gender.MALE;
 import static org.assertj.core.api.Assertions.*;
 
@@ -30,6 +33,7 @@ class NoticeServiceTest {
     private MemberRepository memberRepository;
 
     private Member savedMember;
+    private Notice savedNotice;
 
     @BeforeEach
     void beforeEach() {
@@ -63,5 +67,36 @@ class NoticeServiceTest {
         //then
         Optional<Notice> findNotice = noticeRepository.findById(noticeId);
         assertThat(findNotice).isPresent();
+    }
+
+    @Test
+    @DisplayName("공지사항 수정")
+    void editNotice() {
+        //given
+        createNotice();
+        EditNoticeDto dto = EditNoticeDto.builder()
+                .pin("1")
+                .title("수정된 공지사항 제목")
+                .content("수정된 공지사항 내용입니다.")
+                .build();
+
+        //when
+        Long noticeId = noticeService.editNotice(savedNotice.getId(), dto);
+
+        //then
+        Optional<Notice> findNotice = noticeRepository.findById(noticeId);
+        assertThat(findNotice).isPresent();
+        assertThat(findNotice.get().getTitle()).isEqualTo(dto.getTitle());
+    }
+
+    private void createNotice() {
+        Notice notice = Notice.builder()
+                .pin("0")
+                .title("공지사항 제목")
+                .content("공지사항 내용입니다.")
+                .active(ACTIVE)
+                .member(savedMember)
+                .build();
+        savedNotice = noticeRepository.save(notice);
     }
 }
