@@ -1,18 +1,16 @@
 package com.ssafy.tourmates.client.controller;
 
-import com.ssafy.tourmates.client.board.Board;
 import com.ssafy.tourmates.client.board.service.BoardService;
 import com.ssafy.tourmates.client.board.service.dto.AddBoardDto;
+import com.ssafy.tourmates.client.board.service.dto.EditBoardDto;
 import com.ssafy.tourmates.client.controller.dto.board.request.AddBoardRequest;
+import com.ssafy.tourmates.client.controller.dto.board.request.EditBoardRequest;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -37,5 +35,18 @@ public class BoardController {
         log.debug("request={}", request);
         log.debug("savedBoardId={}", savedBoardId);
         return savedBoardId;
+    }
+
+    @ApiOperation(value = "게시판 수정")
+    @PostMapping("/{boardId}/edit")
+    public Long editBoard(@PathVariable Long boardId, @Valid @RequestBody EditBoardRequest request) {
+        EditBoardDto dto = EditBoardDto.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
+        Long editedBoardId = boardService.editBoard(boardId, dto);
+        log.debug("request={}", request);
+        log.debug("editedBoardId={}", editedBoardId);
+        return editedBoardId;
     }
 }
