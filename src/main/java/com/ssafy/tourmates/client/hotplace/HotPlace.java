@@ -50,6 +50,9 @@ public class HotPlace extends TimeBaseEntity {
 
     @OneToMany(mappedBy = "hotPlace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HotPlaceImage> images = new ArrayList<>();
+    @OneToMany(mappedBy = "hotPlace", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HotPlaceComment> comments = new ArrayList<>();
+
 
     @Builder
     public HotPlace(Long id, ContentType tag, String title, String content, int hit, String visitedDate, Active active, Member member, AttractionInfo attractionInfo, List<HotPlaceImage> images) {

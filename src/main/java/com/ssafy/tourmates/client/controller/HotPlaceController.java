@@ -1,5 +1,11 @@
 package com.ssafy.tourmates.client.controller;
 
+import com.ssafy.tourmates.client.controller.dto.hotplace.request.AddHotplaceCommentRequest;
+import com.ssafy.tourmates.client.controller.dto.hotplace.request.EditHotPlaceCommentRequest;
+import com.ssafy.tourmates.client.hotplace.service.HotplaceCommentQueryService;
+import com.ssafy.tourmates.client.hotplace.service.HotplaceCommentService;
+import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceCommentDto;
+import com.ssafy.tourmates.client.hotplace.service.dto.EditHotPlaceCommentDto;
 import com.ssafy.tourmates.common.FileStore;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.UploadFile;
@@ -35,6 +41,8 @@ public class HotPlaceController {
 
     private final HotPlaceService hotPlaceService;
     private final HotPlaceQueryService hotPlaceQueryService;
+    private final HotplaceCommentService hotPlaceCommentService;
+    private final HotplaceCommentQueryService hotPlaceCommentQueryService;
     private final FileStore fileStore;
 
     @ApiOperation(value = "핫플레이스 등록")
@@ -57,6 +65,20 @@ public class HotPlaceController {
         return hotPlaceId;
     }
 
+    @ApiOperation(value = "핫플레이스 댓글 등록")
+    @PostMapping("/{hotPlaceId}/comments/register")
+    public Long registerHotplaceComment(@PathVariable Long hotPlaceId, @Valid @RequestBody AddHotplaceCommentRequest request){
+
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        AddHotPlaceCommentDto dto = AddHotPlaceCommentDto.builder()
+                .content(request.getComment())
+                .build();
+
+        Long hotplaceCommentId = hotPlaceCommentService.registerHotplaceComment(loginId,hotPlaceId, dto);
+        return hotplaceCommentId;
+    }
+
     @ApiOperation(value = "핫플레이스 조회")
     @GetMapping
     public ResultPage<List<HotPlaceResponse>> searchHotPlaces(
@@ -77,14 +99,15 @@ public class HotPlaceController {
 
     @ApiOperation(value = "핫플레이스 상세조회")
     @GetMapping("/{hotPlaceId}")
-    public DetailHotPlaceResponse searchHotPlace(@PathVariable Long hotPlaceId) {
+    public Response searchHotPlace(@PathVariable Long hotPlaceId) {
         DetailHotPlaceResponse response = hotPlaceQueryService.searchById(hotPlaceId);
-        return response;
+        ResponseData responseData = new ResponseData(response);
+        return new Response(responseData);
     }
 
     @ApiOperation(value = "핫플레이스 수정")
     @PostMapping("/{hotPlaceId}/edit")
-    public Long editHotPlace(@PathVariable Long hotPlaceId, EditHotPlaceRequest request) throws IOException {
+    public Long editHotPlace(@PathVariable Long hotPlaceId, @Valid @RequestBody EditHotPlaceRequest request) throws IOException {
         List<UploadFile> files = fileStore.storeFiles(request.getFiles());
 
         EditHotPlaceDto dto = EditHotPlaceDto.builder()
@@ -101,6 +124,18 @@ public class HotPlaceController {
         return editHotPlaceId;
     }
 
+    @ApiOperation(value = "핫플레이스 댓글 수정")
+    @PostMapping("/{hotPlaceId}/comments/{hotPlaceCommentId}/edit")
+    public Long editHotPlaceComment(@PathVariable Long hotPlaceId, @PathVariable Long hotPlaceCommentId, @Valid @RequestBody EditHotPlaceCommentRequest request){
+
+        EditHotPlaceCommentDto dto = EditHotPlaceCommentDto.builder()
+                .content(request.getContent())
+                .build();
+
+        Long editHotPlaceCommentId = hotPlaceCommentService.editHotPlaceComment(hotPlaceId, hotPlaceCommentId, dto);
+        return editHotPlaceCommentId;
+    }
+
     @ApiOperation(value = "핫플레이스 삭제")
     @PostMapping("/{hotPlaceId}/remove")
     public int removeHotPlace(@PathVariable Long hotPlaceId) {
@@ -109,11 +144,24 @@ public class HotPlaceController {
         return 1;
     }
 
+
     @Data
     @AllArgsConstructor
     static class ResultPage<T> {
         private T data;
         private int pageNumber;
         private int pageSize;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Response {
+        private ResponseData data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class ResponseData {
+        private DetailHotPlaceResponse detailHotPlaceResponse;
     }
 }
