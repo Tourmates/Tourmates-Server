@@ -34,4 +34,9 @@ public class HotPlaceLikeServiceImpl implements HotPlaceLikeService {
         HotPlaceLike savedHotPlaceLike = hotPlaceLikeRepository.save(hotPlaceLike);
         return savedHotPlaceLike.getId();
     }
+
+    @Override
+    public void removeHotPlaceLike(Long likeId) {
+        hotPlaceLikeRepository.deleteById(likeId);
+    }
 }
