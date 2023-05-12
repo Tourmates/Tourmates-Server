@@ -38,4 +38,18 @@ class BoardTest {
         //then
         assertThat(board.getActive()).isEqualTo(DEACTIVE);
     }
+
+    @Test
+    @DisplayName("게시물 조회수 증가")
+    void increaseHit() {
+        //given
+        Board board = Board.builder()
+                .build();
+
+        //when
+        board.increaseHit();
+
+        //then
+        assertThat(board.getHit()).isEqualTo(1);
+    }
 }
