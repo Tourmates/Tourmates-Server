@@ -1,16 +1,15 @@
 package com.ssafy.tourmates.client.hotplace.service;
 
+import com.ssafy.tourmates.admin.attraction.AttractionInfo;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
 import com.ssafy.tourmates.client.hotplace.HotPlaceComment;
 import com.ssafy.tourmates.client.hotplace.repository.HotPlaceCommentRepository;
 import com.ssafy.tourmates.client.hotplace.repository.HotPlaceRepository;
 import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceCommentDto;
-import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceDto;
 import com.ssafy.tourmates.client.hotplace.service.dto.EditHotPlaceCommentDto;
 import com.ssafy.tourmates.client.hotplace.validator.HotPlaceCommentValidator;
 import com.ssafy.tourmates.client.hotplace.validator.HotPlaceValidator;
 import com.ssafy.tourmates.client.member.Member;
-import com.ssafy.tourmates.admin.attraction.AttractionInfo;
 import com.ssafy.tourmates.client.member.repository.MemberRepository;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -27,7 +25,6 @@ import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 import static com.ssafy.tourmates.client.member.Gender.MALE;
 import static com.ssafy.tourmates.common.domain.ContentType.ATTRACTION;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional

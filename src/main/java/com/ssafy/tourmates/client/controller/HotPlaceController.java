@@ -2,8 +2,8 @@ package com.ssafy.tourmates.client.controller;
 
 import com.ssafy.tourmates.client.controller.dto.hotplace.request.AddHotplaceCommentRequest;
 import com.ssafy.tourmates.client.controller.dto.hotplace.request.EditHotPlaceCommentRequest;
-import com.ssafy.tourmates.client.hotplace.service.HotplaceCommentQueryService;
-import com.ssafy.tourmates.client.hotplace.service.HotplaceCommentService;
+import com.ssafy.tourmates.client.hotplace.service.HotPlaceCommentQueryService;
+import com.ssafy.tourmates.client.hotplace.service.HotPlaceCommentService;
 import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceCommentDto;
 import com.ssafy.tourmates.client.hotplace.service.dto.EditHotPlaceCommentDto;
 import com.ssafy.tourmates.common.FileStore;
@@ -41,8 +41,8 @@ public class HotPlaceController {
 
     private final HotPlaceService hotPlaceService;
     private final HotPlaceQueryService hotPlaceQueryService;
-    private final HotplaceCommentService hotPlaceCommentService;
-    private final HotplaceCommentQueryService hotPlaceCommentQueryService;
+    private final HotPlaceCommentService hotPlaceCommentService;
+    private final HotPlaceCommentQueryService hotPlaceCommentQueryService;
     private final FileStore fileStore;
 
     @ApiOperation(value = "핫플레이스 등록")
