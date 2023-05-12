@@ -123,6 +123,26 @@ public class HotPlaceCommentServiceTest {
         assertThat(editHotPlaceComment.get().getContent()).isEqualTo(editHotPlaceCommentDto.getContent());
     }
 
+    @Test
+    @DisplayName("댓글 삭제")
+    void deleteHotPlaceComment(){
+
+        //given
+        HotPlaceComment newHotPlaceComment = HotPlaceComment.builder()
+                .content("원본 내용")
+                .build();
+
+        HotPlaceComment savedHotPlaceComment = hotPlaceCommentRepository.save(newHotPlaceComment);
+
+        //when
+        hotPlaceCommentService.removeHotPlaceComment(savedHotPlaceComment.getId());
+
+        //then
+        Optional<HotPlaceComment> removedHotPlaceComment = hotPlaceCommentRepository.findById(savedHotPlaceComment.getId());
+
+        assertThat(removedHotPlaceComment).isNotPresent();
+    }
+
 
 
 }
