@@ -8,39 +8,32 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class HotPlaceComment extends TimeBaseEntity {
+public class HotPlaceLike extends TimeBaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "hot_place_comment_id")
+    @Id @GeneratedValue
+    @Column(name = "hot_palce_favorite_id")
     private Long id;
-    @Column(nullable = false, length = 50)
-    private String content;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "hot_place_id")
     private HotPlace hotPlace;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @Builder
-    public HotPlaceComment(Long id, String content, Member member, HotPlace hotPlace) {
+    public HotPlaceLike(Long id, HotPlace hotPlace, Member member) {
         this.id = id;
-        this.content = content;
-        this.member = member;
         this.hotPlace = hotPlace;
+        this.member = member;
     }
 
-    //==비즈니스 로직==//
-    public void changeHotPlaceComment(String content){
-        this.content = content;
-    }
 }

@@ -2,10 +2,8 @@ package com.ssafy.tourmates.client.controller;
 
 import com.ssafy.tourmates.client.controller.dto.hotplace.request.AddHotplaceCommentRequest;
 import com.ssafy.tourmates.client.controller.dto.hotplace.request.EditHotPlaceCommentRequest;
-import com.ssafy.tourmates.client.hotplace.service.HotPlaceCommentQueryService;
-import com.ssafy.tourmates.client.hotplace.service.HotPlaceCommentService;
-import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceCommentDto;
-import com.ssafy.tourmates.client.hotplace.service.dto.EditHotPlaceCommentDto;
+import com.ssafy.tourmates.client.hotplace.service.*;
+import com.ssafy.tourmates.client.hotplace.service.dto.*;
 import com.ssafy.tourmates.common.FileStore;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.UploadFile;
@@ -14,10 +12,6 @@ import com.ssafy.tourmates.client.controller.dto.hotplace.request.EditHotPlaceRe
 import com.ssafy.tourmates.client.controller.dto.hotplace.response.DetailHotPlaceResponse;
 import com.ssafy.tourmates.client.controller.dto.hotplace.response.HotPlaceResponse;
 import com.ssafy.tourmates.client.hotplace.repository.dto.HotPlaceSearchCondition;
-import com.ssafy.tourmates.client.hotplace.service.HotPlaceQueryService;
-import com.ssafy.tourmates.client.hotplace.service.HotPlaceService;
-import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceDto;
-import com.ssafy.tourmates.client.hotplace.service.dto.EditHotPlaceDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +36,7 @@ public class HotPlaceController {
     private final HotPlaceService hotPlaceService;
     private final HotPlaceQueryService hotPlaceQueryService;
     private final HotPlaceCommentService hotPlaceCommentService;
+    private final HotPlaceLikeService hotPlaceLikeService;
     private final HotPlaceCommentQueryService hotPlaceCommentQueryService;
     private final FileStore fileStore;
 
@@ -77,6 +72,16 @@ public class HotPlaceController {
 
         Long hotplaceCommentId = hotPlaceCommentService.registerHotplaceComment(loginId,hotPlaceId, dto);
         return hotplaceCommentId;
+    }
+
+    @ApiOperation(value = "핫플레이스 좋아요 등록")
+    @PostMapping("/{hotPlaceId}/like/register")
+    public Long registerHotPlaceLike(@PathVariable Long hotPlaceId){
+
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        Long hotPlaceLikeId = hotPlaceLikeService.registerHotPlaceLike(loginId, hotPlaceId);
+        return hotPlaceLikeId;
     }
 
     @ApiOperation(value = "핫플레이스 조회")
