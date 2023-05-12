@@ -1,6 +1,7 @@
 package com.ssafy.tourmates.client.hotplace;
 
 import com.ssafy.tourmates.client.member.Member;
+import com.ssafy.tourmates.common.domain.TimeBaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class HotPlaceComment {
+public class HotPlaceComment extends TimeBaseEntity {
 
     @Id
     @GeneratedValue
