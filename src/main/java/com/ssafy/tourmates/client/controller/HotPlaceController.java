@@ -144,6 +144,12 @@ public class HotPlaceController {
         return 1;
     }
 
+    @ApiOperation(value = "핫플레이스 댓글 삭제")
+    @GetMapping("/{hotPlaceId}/comments/{commentId}/remove")
+    public void removeHotPlaceComment(@PathVariable Long hotPlaceId, @PathVariable Long commentId){
+       hotPlaceCommentService.removeHotPlaceComment(commentId);
+    }
+
 
     @Data
     @AllArgsConstructor
