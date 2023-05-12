@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class HotPlaceCommentValidator {
 
-    private HotPlaceCommentRepository hotPlaceCommentRepository;
+    private final HotPlaceCommentRepository hotPlaceCommentRepository;
 
     public HotPlaceComment findById(Long id){
         return hotPlaceCommentRepository.findById(id)
