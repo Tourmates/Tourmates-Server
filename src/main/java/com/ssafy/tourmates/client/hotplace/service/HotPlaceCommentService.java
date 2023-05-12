@@ -10,4 +10,6 @@ public interface HotPlaceCommentService {
     Long registerHotplaceComment(String loginId, Long hotPlaceId, AddHotPlaceCommentDto dto);
 
     Long editHotPlaceComment(Long hotPlaceId, Long hotPlaceCommentId, EditHotPlaceCommentDto dto);
+
+    void removeHotPlaceComment(Long hotPlaceCommentId);
 }

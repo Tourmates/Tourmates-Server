@@ -45,4 +45,11 @@ public class HotPlaceCommentServiceImpl implements HotPlaceCommentService {
         findHotPlaceComment.changeHotPlaceComment(dto.getContent());
         return findHotPlaceComment.getId();
     }
+
+    @Override
+    public void removeHotPlaceComment(Long hotPlaceCommentId) {
+
+        hotplaceCommentRepository.deleteById(hotPlaceCommentId);
+
+    }
 }
