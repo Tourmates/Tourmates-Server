@@ -94,4 +94,17 @@ public class HotPlaceLikeServiceTest {
         //then
         assertThat(hotPlaceLikeRepository.findById(hotPlaceLikeId)).isPresent();
     }
+
+    @Test
+    @DisplayName("좋아요 삭제")
+    void deleteHotPlaceLike(){
+        //given
+        Long hotPlaceLikeId = hotPlaceLikeService.registerHotPlaceLike(savedMember.getLoginId(), savedHotPlace.getId());
+
+        //when
+        hotPlaceLikeService.removeHotPlaceLike(hotPlaceLikeId);
+
+        //then
+        assertThat(hotPlaceLikeRepository.findById(hotPlaceLikeId)).isNotPresent();
+    }
 }
