@@ -72,14 +72,12 @@ public class HotPlace extends TimeBaseEntity {
     }
 
     //== 비즈니스 로직 ==//
-    public void changeHotPlace(ContentType tag, String title, String content, String visitedDate, List<HotPlaceImage> images, List<HotPlaceComment> comments, List<HotPlaceLike> likes) {
+    public void changeHotPlace(ContentType tag, String title, String content, String visitedDate, List<HotPlaceImage> images) {
         this.tag = tag;
         this.title = title;
         this.content = content;
         this.visitedDate = visitedDate;
         this.images = images;
-        this.comments = comments;
-        this.likes = likes;
     }
 
     public void deActive() {
