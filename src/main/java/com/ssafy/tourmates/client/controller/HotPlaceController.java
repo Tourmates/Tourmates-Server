@@ -141,6 +141,7 @@ public class HotPlaceController {
         return editHotPlaceCommentId;
     }
 
+
     @ApiOperation(value = "핫플레이스 삭제")
     @PostMapping("/{hotPlaceId}/remove")
     public int removeHotPlace(@PathVariable Long hotPlaceId) {
@@ -153,6 +154,12 @@ public class HotPlaceController {
     @GetMapping("/{hotPlaceId}/comments/{commentId}/remove")
     public void removeHotPlaceComment(@PathVariable Long hotPlaceId, @PathVariable Long commentId){
        hotPlaceCommentService.removeHotPlaceComment(commentId);
+    }
+
+    @ApiOperation(value = "핫플레이스 좋아요 삭제")
+    @GetMapping("/{hotPlaceId}/likes/{likeId}/remove")
+    public void removeHotPlaceLike(@PathVariable Long hotPlaceId, @PathVariable Long likeId){
+        hotPlaceLikeService.removeHotPlaceLike(likeId);
     }
 
 
