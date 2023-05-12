@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.board.service.impl;
 
+import com.ssafy.tourmates.client.board.repository.BoardQueryRepository;
 import com.ssafy.tourmates.client.board.repository.dto.BoardSearchCondition;
 import com.ssafy.tourmates.client.board.service.BoardQueryService;
 import com.ssafy.tourmates.client.controller.dto.board.response.BoardResponse;
@@ -13,10 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardQueryServiceImpl implements BoardQueryService {
 
-    private final BoardQueryService boardQueryService;
+    private final BoardQueryRepository boardQueryRepository;
 
     @Override
     public List<BoardResponse> searchByCondition(BoardSearchCondition condition, Pageable pageable) {
-        return boardQueryService.searchByCondition(condition, pageable);
+        return boardQueryRepository.searchByCondition(condition, pageable);
     }
 }
