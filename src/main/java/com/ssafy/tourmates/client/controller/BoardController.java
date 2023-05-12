@@ -69,6 +69,7 @@ public class BoardController {
     @ApiOperation(value = "게시판 상세 조회")
     @GetMapping("/{boardId}")
     public Result<DetailBoardResponse> searchBoard(@PathVariable Long boardId) {
+        boardService.increaseHit(boardId);
         DetailBoardResponse response = boardQueryService.searchById(boardId);
         return new Result<>(response);
     }

@@ -44,6 +44,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Long increaseHit(Long boardId) {
+        Board findBoard = boardValidator.findById(boardId);
+        findBoard.increaseHit();
+        return findBoard.getId();
+    }
+
+    @Override
     public Long removeBoard(Long boardId) {
         Board findBoard = boardValidator.findById(boardId);
         findBoard.deActive();

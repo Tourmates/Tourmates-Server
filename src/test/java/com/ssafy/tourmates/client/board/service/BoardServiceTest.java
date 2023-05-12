@@ -37,7 +37,7 @@ class BoardServiceTest {
     @BeforeEach
     void beforeEach() {
         Member member = Member.builder()
-                .id(1L)
+                .id(100L)
                 .loginId("ssafy1234")
                 .loginPw("ssafy1234!")
                 .name("김싸피")
@@ -84,6 +84,21 @@ class BoardServiceTest {
         Optional<Board> findBoard = boardRepository.findById(boardId);
         assertThat(findBoard).isPresent();
         assertThat(findBoard.get().getTitle()).isEqualTo(dto.getTitle());
+    }
+
+    @Test
+    @DisplayName("게시판 조회수 증가")
+    void increaseHit() {
+        //given
+        createBoard();
+
+        //when
+        Long boardId = boardService.increaseHit(savedBoard.getId());
+
+        //then
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        assertThat(findBoard).isPresent();
+        assertThat(findBoard.get().getHit()).isEqualTo(1);
     }
 
     @Test
