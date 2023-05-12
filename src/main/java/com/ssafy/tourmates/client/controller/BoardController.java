@@ -9,6 +9,7 @@ import com.ssafy.tourmates.client.board.service.dto.EditBoardDto;
 import com.ssafy.tourmates.client.controller.dto.board.request.AddBoardRequest;
 import com.ssafy.tourmates.client.controller.dto.board.request.EditBoardRequest;
 import com.ssafy.tourmates.client.controller.dto.board.response.BoardResponse;
+import com.ssafy.tourmates.client.controller.dto.board.response.DetailBoardResponse;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,6 +66,13 @@ public class BoardController {
         return savedBoardId;
     }
 
+    @ApiOperation(value = "게시판 상세 조회")
+    @GetMapping("/{boardId}")
+    public Result<DetailBoardResponse> searchBoard(@PathVariable Long boardId) {
+        DetailBoardResponse response = boardQueryService.searchById(boardId);
+        return new Result<>(response);
+    }
+
     @ApiOperation(value = "게시판 수정")
     @PostMapping("/{boardId}/edit")
     public Long editBoard(@PathVariable Long boardId, @Valid @RequestBody EditBoardRequest request) {
@@ -84,5 +92,11 @@ public class BoardController {
         private T data;
         private int pageNumber;
         private int pageSize;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T data;
     }
 }
