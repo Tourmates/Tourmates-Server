@@ -52,10 +52,12 @@ public class HotPlace extends TimeBaseEntity {
     private List<HotPlaceImage> images = new ArrayList<>();
     @OneToMany(mappedBy = "hotPlace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HotPlaceComment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "hotPlace", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HotPlaceLike> likes = new ArrayList<>();
 
 
     @Builder
-    public HotPlace(Long id, ContentType tag, String title, String content, int hit, String visitedDate, Active active, Member member, AttractionInfo attractionInfo, List<HotPlaceImage> images) {
+    public HotPlace(Long id, ContentType tag, String title, String content, int hit, String visitedDate, Active active, Member member, AttractionInfo attractionInfo, List<HotPlaceImage> images, List<HotPlaceLike> likes) {
         this.id = id;
         this.tag = tag;
         this.title = title;
@@ -66,15 +68,18 @@ public class HotPlace extends TimeBaseEntity {
         this.member = member;
         this.attractionInfo = attractionInfo;
         this.images = images;
+        this.likes = likes;
     }
 
     //== 비즈니스 로직 ==//
-    public void changeHotPlace(ContentType tag, String title, String content, String visitedDate, List<HotPlaceImage> images) {
+    public void changeHotPlace(ContentType tag, String title, String content, String visitedDate, List<HotPlaceImage> images, List<HotPlaceComment> comments, List<HotPlaceLike> likes) {
         this.tag = tag;
         this.title = title;
         this.content = content;
         this.visitedDate = visitedDate;
         this.images = images;
+        this.comments = comments;
+        this.likes = likes;
     }
 
     public void deActive() {
