@@ -11,5 +11,7 @@ public interface BoardService {
 
     Long editBoard(Long boardId, EditBoardDto dto);
 
+    Long increaseHit(Long boardId);
+
     Long removeBoard(Long boardId);
 }
