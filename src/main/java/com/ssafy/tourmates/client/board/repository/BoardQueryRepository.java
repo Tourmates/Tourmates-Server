@@ -9,6 +9,9 @@ import com.ssafy.tourmates.client.board.repository.dto.BoardSearchCondition;
 import com.ssafy.tourmates.client.board.repository.dto.Sort;
 import com.ssafy.tourmates.client.controller.dto.board.response.BoardResponse;
 import com.ssafy.tourmates.client.controller.dto.board.response.DetailBoardResponse;
+import com.ssafy.tourmates.common.domain.ContentType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -30,7 +33,7 @@ public class BoardQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<BoardResponse> searchByCondition(BoardSearchCondition condition, Pageable pageable) {
+    public Page<BoardResponse> searchByCondition(BoardSearchCondition condition, Pageable pageable) {
         List<Long> ids = queryFactory
                 .select(board.id)
                 .from(board)
@@ -44,20 +47,30 @@ public class BoardQueryRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        long totalCount = queryFactory
+                .select(board.id)
+                .from(board)
+                .fetch()
+                .size();
+
         if (CollectionUtils.isEmpty(ids)) {
-            return new ArrayList<>();
+            return new PageImpl<>(new ArrayList<>(), pageable, totalCount);
         }
 
-        return queryFactory
-                .select(Projections.fields(BoardResponse.class,
-                        board.id.as("boardId"),
+        List<BoardResponse> content = queryFactory
+                .select(Projections.constructor(BoardResponse.class,
+                        board.id,
+                        Expressions.asEnum(ContentType.ATTRACTION),
                         board.title,
                         board.hit,
+                        board.member.nickname,
                         board.createdDate))
                 .from(board)
                 .where(board.id.in(ids))
                 .orderBy(sorted(condition.getSort()))
                 .fetch();
+
+        return new PageImpl<>(content, pageable, totalCount);
     }
 
     public DetailBoardResponse searchBoard(Long boardId) {
