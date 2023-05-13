@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.controller;
 
+import com.ssafy.tourmates.client.controller.dto.member.request.LoginRequest;
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.client.controller.dto.member.request.ForgotLoginIdRequest;
 import com.ssafy.tourmates.client.controller.dto.member.request.ForgotLoginPwRequest;
@@ -7,6 +8,7 @@ import com.ssafy.tourmates.client.controller.dto.member.request.JoinMemberReques
 import com.ssafy.tourmates.client.member.service.MemberQueryService;
 import com.ssafy.tourmates.client.member.service.MemberService;
 import com.ssafy.tourmates.client.member.service.dto.JoinMemberDto;
+import com.ssafy.tourmates.jwt.TokenInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +49,13 @@ public class HomeApiController {
             return -1;
         }
         return 1;
+    }
+
+    @ApiOperation(value = "로그인")
+    @PostMapping("/login")
+    public TokenInfo login(@RequestBody LoginRequest request) {
+        log.debug("request={}", request);
+        return memberQueryService.login(request.getLoginId(), request.getLoginPw());
     }
 
     @ApiOperation(value = "아이디찾기")
