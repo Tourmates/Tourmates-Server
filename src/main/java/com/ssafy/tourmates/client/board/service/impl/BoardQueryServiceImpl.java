@@ -6,6 +6,7 @@ import com.ssafy.tourmates.client.board.service.BoardQueryService;
 import com.ssafy.tourmates.client.controller.dto.board.response.BoardResponse;
 import com.ssafy.tourmates.client.controller.dto.board.response.DetailBoardResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class BoardQueryServiceImpl implements BoardQueryService {
     private final BoardQueryRepository boardQueryRepository;
 
     @Override
-    public List<BoardResponse> searchByCondition(BoardSearchCondition condition, Pageable pageable) {
+    public Page<BoardResponse> searchByCondition(BoardSearchCondition condition, Pageable pageable) {
         return boardQueryRepository.searchByCondition(condition, pageable);
     }
 
