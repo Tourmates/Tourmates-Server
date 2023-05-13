@@ -1,5 +1,7 @@
 package com.ssafy.tourmates.data;
 
+import com.ssafy.tourmates.admin.notice.Notice;
+import com.ssafy.tourmates.admin.notice.repository.NoticeRepository;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 import static com.ssafy.tourmates.client.member.Gender.*;
 
 @Configuration
@@ -18,10 +21,12 @@ import static com.ssafy.tourmates.client.member.Gender.*;
 public class InitData {
 
     private final MemberRepository memberRepository;
+    private final NoticeRepository noticeRepository;
 
     @PostConstruct
     public void init() {
         initMember();
+        initNotice();
     }
 
     private void initMember() {
@@ -31,5 +36,13 @@ public class InitData {
         members.add(member1);
         members.add(member2);
         memberRepository.saveAll(members);
+    }
+
+    private void initNotice() {
+        List<Notice> notices = new ArrayList<>();
+        for (int i = 1; i <= 100; i++) {
+            notices.add(Notice.builder().pin("0").title("공지사항" + i).content("공지사항" + i + " 내용").active(ACTIVE).build());
+        }
+        noticeRepository.saveAll(notices);
     }
 }
