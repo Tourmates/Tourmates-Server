@@ -4,6 +4,7 @@ import com.ssafy.tourmates.admin.controller.dto.notice.request.AddNoticeRequest;
 import com.ssafy.tourmates.admin.controller.dto.notice.request.EditNoticeRequest;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
+import com.ssafy.tourmates.common.PageDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.notice.service.NoticeQueryService;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,18 +35,22 @@ public class NoticeController {
 
     @ApiOperation(value = "공지사항 조회")
     @GetMapping
-    public ResultPage<ResultNotice> searchNotices(
+    public ResultPage<List<NoticeResponse>> searchNotices(
             @RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "1") Integer pageNumber
     ) {
         NoticeSearchCondition condition = NoticeSearchCondition.builder()
                 .keyword(keyword)
                 .build();
-        PageRequest pageRequest = PageRequest.of(pageNumber - 1, 10);
+        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
         List<NoticeResponse> pinResponse = noticeQueryService.searchPinNotices();
-        List<NoticeResponse> responses = noticeQueryService.searchByCondition(condition, pageRequest);
-        ResultNotice resultNotice = new ResultNotice(pinResponse, responses);
-        return new ResultPage<>(resultNotice, pageNumber, 10);
+        Page<NoticeResponse> responses = noticeQueryService.searchByCondition(condition, pageRequest);
+        return new ResultPage<>(responses.getContent(), new PageDto(pageNumber, 10, responses.getTotalElements()));
+    }
+
+    @GetMapping("/paging")
+    public Integer paging() {
+        return 100;
     }
 
     @ApiOperation(value = "공지사항 등록")
@@ -100,8 +106,7 @@ public class NoticeController {
     @AllArgsConstructor
     static class ResultPage<T> {
         private T data;
-        private int pageNumber;
-        private int pageSize;
+        private PageDto page;
     }
 
     @Data
