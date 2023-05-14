@@ -46,4 +46,9 @@ public class BoardCommentServiceImpl implements BoardCommentService {
     findBoardComment.changeBoardComment(dto.getContent());
     return findBoardComment.getId();
   }
+
+  @Override
+  public void removeBoardComment(Long boardCommentId) {
+    boardCommentRepository.deleteById(boardCommentId);
+  }
 }
