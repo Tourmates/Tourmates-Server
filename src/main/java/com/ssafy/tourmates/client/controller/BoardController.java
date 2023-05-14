@@ -4,12 +4,15 @@ import com.ssafy.tourmates.client.board.repository.dto.BoardSearchCondition;
 import com.ssafy.tourmates.client.board.repository.dto.Sort;
 import com.ssafy.tourmates.client.board.service.BoardQueryService;
 import com.ssafy.tourmates.client.board.service.BoardService;
+import com.ssafy.tourmates.client.board.service.dto.AddBoardCommentDto;
 import com.ssafy.tourmates.client.board.service.dto.AddBoardDto;
 import com.ssafy.tourmates.client.board.service.dto.EditBoardDto;
+import com.ssafy.tourmates.client.controller.dto.board.request.AddBoardCommentRequest;
 import com.ssafy.tourmates.client.controller.dto.board.request.AddBoardRequest;
 import com.ssafy.tourmates.client.controller.dto.board.request.EditBoardRequest;
 import com.ssafy.tourmates.client.controller.dto.board.response.BoardResponse;
 import com.ssafy.tourmates.client.controller.dto.board.response.DetailBoardResponse;
+import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceCommentDto;
 import com.ssafy.tourmates.common.PageDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
@@ -55,6 +58,19 @@ public class BoardController {
         return new ResultPage<>(responses.getContent(), new PageDto(pageNumber, 20, responses.getTotalElements()));
     }
 
+    @ApiOperation(value = "게시판 댓글 등록")
+    @GetMapping("/{boardId}/comments/register")
+    public Long registerBoardComment(@PathVariable Long boardId, @Valid @RequestBody AddBoardCommentRequest request){
+
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        AddBoardCommentDto dto = AddBoardCommentDto.builder()
+            .content(request.getComment())
+            .build();
+
+
+    }
+
     @ApiOperation(value = "게시판 등록")
     @PostMapping("/register")
     public Long registerBoard(@Valid @RequestBody AddBoardRequest request) {
@@ -89,6 +105,8 @@ public class BoardController {
         log.debug("editedBoardId={}", editedBoardId);
         return editedBoardId;
     }
+
+
 
     @Data
     @AllArgsConstructor
