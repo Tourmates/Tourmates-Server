@@ -10,7 +10,6 @@ import com.ssafy.tourmates.client.controller.dto.board.request.AddBoardRequest;
 import com.ssafy.tourmates.client.controller.dto.board.request.EditBoardRequest;
 import com.ssafy.tourmates.client.controller.dto.board.response.BoardResponse;
 import com.ssafy.tourmates.client.controller.dto.board.response.DetailBoardResponse;
-import com.ssafy.tourmates.common.PageDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +28,6 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/boards")
 @Api(tags = {"게시판"})
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 public class BoardController {
 
     private final BoardService boardService;
@@ -47,12 +44,25 @@ public class BoardController {
                 .keyword(keyword)
                 .sort(sort)
                 .build();
-        PageRequest pageRequest = PageRequest.of(pageNumber - 1, 20);
-        Page<BoardResponse> responses = boardQueryService.searchByCondition(condition, pageRequest);
-        log.debug("responses size={}", responses.getContent().size());
+        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 20);
+        List<BoardResponse> boardResponses = boardQueryService.searchByCondition(condition, pageRequest);
+        log.debug("responses size={}", boardResponses.size());
         log.debug("condition={}", condition);
         log.debug("pageNumber={}", pageNumber);
-        return new ResultPage<>(responses.getContent(), new PageDto(pageNumber, 20, responses.getTotalElements()));
+        return new ResultPage<>(boardResponses);
+    }
+
+    @ApiOperation(value = "게시물 총 갯수 조회")
+    @GetMapping("/totalCount")
+    public Long searchTotalCount(
+            @RequestParam(defaultValue = "") String keyword
+    ) {
+        BoardSearchCondition condition = BoardSearchCondition.builder()
+                .keyword(keyword)
+                .build();
+        Long totalCount = boardQueryService.getTotalCount(condition);
+        log.debug("totalCount={}", totalCount);
+        return totalCount;
     }
 
     @ApiOperation(value = "게시판 등록")
@@ -94,7 +104,6 @@ public class BoardController {
     @AllArgsConstructor
     static class ResultPage<T> {
         private T data;
-        private PageDto page;
     }
 
     @Data
