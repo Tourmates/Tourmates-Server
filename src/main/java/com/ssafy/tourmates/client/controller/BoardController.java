@@ -2,11 +2,16 @@ package com.ssafy.tourmates.client.controller;
 
 import com.ssafy.tourmates.client.board.repository.dto.BoardSearchCondition;
 import com.ssafy.tourmates.client.board.repository.dto.Sort;
+import com.ssafy.tourmates.client.board.service.BoardCommentService;
 import com.ssafy.tourmates.client.board.service.BoardQueryService;
 import com.ssafy.tourmates.client.board.service.BoardService;
+import com.ssafy.tourmates.client.board.service.dto.AddBoardCommentDto;
 import com.ssafy.tourmates.client.board.service.dto.AddBoardDto;
+import com.ssafy.tourmates.client.board.service.dto.EditBoardCommentDto;
 import com.ssafy.tourmates.client.board.service.dto.EditBoardDto;
+import com.ssafy.tourmates.client.controller.dto.board.request.AddBoardCommentRequest;
 import com.ssafy.tourmates.client.controller.dto.board.request.AddBoardRequest;
+import com.ssafy.tourmates.client.controller.dto.board.request.EditBoardCommentRequest;
 import com.ssafy.tourmates.client.controller.dto.board.request.EditBoardRequest;
 import com.ssafy.tourmates.client.controller.dto.board.response.BoardResponse;
 import com.ssafy.tourmates.client.controller.dto.board.response.DetailBoardResponse;
@@ -31,6 +36,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final BoardCommentService boardCommentService;
     private final BoardQueryService boardQueryService;
 
     @ApiOperation(value = "게시판 조회")
@@ -63,6 +69,20 @@ public class BoardController {
         Long totalCount = boardQueryService.getTotalCount(condition);
         log.debug("totalCount={}", totalCount);
         return totalCount;
+    }
+
+    @ApiOperation(value = "게시판 댓글 등록")
+    @GetMapping("/{boardId}/comments/register")
+    public Long registerBoardComment(@PathVariable Long boardId, @Valid @RequestBody AddBoardCommentRequest request){
+
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        AddBoardCommentDto dto = AddBoardCommentDto.builder()
+            .content(request.getComment())
+            .build();
+
+        Long boardCommentId = boardCommentService.registerBoardComment(loginId, boardId, dto);
+        return boardCommentId;
     }
 
     @ApiOperation(value = "게시판 등록")
@@ -99,6 +119,21 @@ public class BoardController {
         log.debug("editedBoardId={}", editedBoardId);
         return editedBoardId;
     }
+
+    @ApiOperation(value = "게시판 댓글 수정")
+    @PostMapping("/{boardId}/comments/{boardCommentId}/edit")
+    public Long editBoardComment(@PathVariable Long boardId, @PathVariable Long boardCommentId, @Valid @RequestBody EditBoardCommentRequest request){
+
+        EditBoardCommentDto dto = EditBoardCommentDto.builder()
+            .content(request.getContent())
+            .build();
+
+        Long editBoardCommentId = boardCommentService.editBoardComment(boardId, boardCommentId, dto);
+
+        return editBoardCommentId;
+    }
+
+
 
     @Data
     @AllArgsConstructor
