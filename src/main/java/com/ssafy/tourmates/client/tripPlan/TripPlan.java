@@ -39,7 +39,7 @@ public class TripPlan extends TimeBaseEntity {
   private Member member;
 
   @Builder
-  public TripPlan(Long id, String title, int hit, Active active){
+  public TripPlan(Long id, String title, int hit, Active active, Member member){
     this.id = id;
     this.title = title;
     this.hit = hit;
