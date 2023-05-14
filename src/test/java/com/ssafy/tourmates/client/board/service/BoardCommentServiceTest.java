@@ -9,6 +9,7 @@ import com.ssafy.tourmates.client.board.BoardComment;
 import com.ssafy.tourmates.client.board.repository.BoardCommentRepository;
 import com.ssafy.tourmates.client.board.repository.BoardRepository;
 import com.ssafy.tourmates.client.board.service.dto.AddBoardCommentDto;
+import com.ssafy.tourmates.client.board.service.dto.EditBoardCommentDto;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
 import com.ssafy.tourmates.client.hotplace.repository.HotPlaceRepository;
 import com.ssafy.tourmates.client.member.Member;
@@ -80,6 +81,30 @@ public class BoardCommentServiceTest {
     //then
     Optional<BoardComment> findBoardComment = boardCommentRepository.findById(boardCommentId);
     assertThat(findBoardComment).isPresent();
+  }
 
+  @Test
+  @DisplayName("게시물 댓글 수정")
+  void editBoardComment(){
+    //given
+    EditBoardCommentDto editBoardCommentDto = EditBoardCommentDto.builder()
+          .content("수정된 내용")
+          .build();
+
+    BoardComment savedBoardComment = BoardComment.builder()
+        .content("원본 내용")
+        .build();
+
+    BoardComment originalBoardComment = boardCommentRepository.save(savedBoardComment);
+
+    //when
+    Long boardCommentId = boardCommentService.editBoardComment(savedMember.getId(),
+        originalBoardComment.getId(), editBoardCommentDto);
+
+    //then
+    Optional<BoardComment> editBoardComment = boardCommentRepository.findById(boardCommentId);
+
+    assertThat(editBoardComment).isPresent();
+    assertThat(editBoardComment.get().getContent()).isEqualTo(editBoardCommentDto.getContent());
   }
 }
