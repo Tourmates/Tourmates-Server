@@ -12,7 +12,9 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface BoardQueryService {
 
-    Page<BoardResponse> searchByCondition(BoardSearchCondition condition, Pageable pageable);
+    List<BoardResponse> searchByCondition(BoardSearchCondition condition, Pageable pageable);
+
+    Long getTotalCount(BoardSearchCondition condition);
 
     DetailBoardResponse searchById(Long boardId);
 }
