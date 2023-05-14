@@ -6,8 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -18,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ssafy.tourmates.admin.notice.QNotice.*;
+import static com.ssafy.tourmates.client.member.Active.*;
 import static org.springframework.util.StringUtils.*;
 
 @Repository
@@ -29,12 +28,13 @@ public class NoticeQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public Page<NoticeResponse> searchByCondition(NoticeSearchCondition condition, Pageable pageable) {
+    public List<NoticeResponse> searchByCondition(NoticeSearchCondition condition, Pageable pageable) {
         List<Long> ids = queryFactory
                 .select(notice.id)
                 .from(notice)
                 .where(
                         notice.pin.eq("0"),
+                        notice.active.eq(ACTIVE),
                         isKeyword(condition.getKeyword())
                 )
                 .orderBy(notice.createdDate.desc())
@@ -42,33 +42,42 @@ public class NoticeQueryRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        long totalCount = queryFactory
-                .select(notice.id)
-                .from(notice)
-                .fetch()
-                .size();
+
 
         if (CollectionUtils.isEmpty(ids)) {
-            return new PageImpl<>(new ArrayList<>(), pageable, totalCount);
+            return new ArrayList<>();
         }
 
-        List<NoticeResponse> content = queryFactory
+        return queryFactory
                 .select(Projections.constructor(NoticeResponse.class,
                         notice.id,
+                        notice.pin,
                         notice.title,
                         notice.createdDate))
                 .from(notice)
                 .where(notice.id.in(ids))
                 .orderBy(notice.createdDate.desc())
                 .fetch();
+    }
 
-        return new PageImpl<>(content, pageable, totalCount);
+    public long totalCount(NoticeSearchCondition condition) {
+        return queryFactory
+                .select(notice.id)
+                .from(notice)
+                .where(
+                        notice.pin.eq("0"),
+                        notice.active.eq(ACTIVE),
+                        isKeyword(condition.getKeyword())
+                )
+                .fetch()
+                .size();
     }
 
     public List<NoticeResponse> searchPinNotices() {
         return queryFactory
                 .select(Projections.constructor(NoticeResponse.class,
                         notice.id,
+                        notice.pin,
                         notice.title,
                         notice.createdDate))
                 .from(notice)

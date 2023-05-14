@@ -12,9 +12,11 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface NoticeQueryService {
 
-    Page<NoticeResponse> searchByCondition(NoticeSearchCondition condition, Pageable pageable);
+    List<NoticeResponse> searchByCondition(NoticeSearchCondition condition, Pageable pageable);
 
     List<NoticeResponse> searchPinNotices();
+
+    Long getTotalCount(NoticeSearchCondition condition);
 
     DetailNoticeResponse searchNotice(Long noticeId);
 }
