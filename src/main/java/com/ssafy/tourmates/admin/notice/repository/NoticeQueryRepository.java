@@ -6,6 +6,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -27,7 +29,7 @@ public class NoticeQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<NoticeResponse> searchByCondition(NoticeSearchCondition condition, Pageable pageable) {
+    public Page<NoticeResponse> searchByCondition(NoticeSearchCondition condition, Pageable pageable) {
         List<Long> ids = queryFactory
                 .select(notice.id)
                 .from(notice)
@@ -40,25 +42,33 @@ public class NoticeQueryRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        long totalCount = queryFactory
+                .select(notice.id)
+                .from(notice)
+                .fetch()
+                .size();
+
         if (CollectionUtils.isEmpty(ids)) {
-            return new ArrayList<>();
+            return new PageImpl<>(new ArrayList<>(), pageable, totalCount);
         }
 
-        return queryFactory
-                .select(Projections.fields(NoticeResponse.class,
-                        notice.id.as("noticeId"),
+        List<NoticeResponse> content = queryFactory
+                .select(Projections.constructor(NoticeResponse.class,
+                        notice.id,
                         notice.title,
                         notice.createdDate))
                 .from(notice)
                 .where(notice.id.in(ids))
                 .orderBy(notice.createdDate.desc())
                 .fetch();
+
+        return new PageImpl<>(content, pageable, totalCount);
     }
 
     public List<NoticeResponse> searchPinNotices() {
         return queryFactory
-                .select(Projections.fields(NoticeResponse.class,
-                        notice.id.as("noticeId"),
+                .select(Projections.constructor(NoticeResponse.class,
+                        notice.id,
                         notice.title,
                         notice.createdDate))
                 .from(notice)
