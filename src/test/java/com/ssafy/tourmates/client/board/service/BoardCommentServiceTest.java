@@ -107,4 +107,23 @@ public class BoardCommentServiceTest {
     assertThat(editBoardComment).isPresent();
     assertThat(editBoardComment.get().getContent()).isEqualTo(editBoardCommentDto.getContent());
   }
+
+  @Test
+  @DisplayName("게시물 댓글 삭제")
+  void deleteBoardComment(){
+    //given
+    BoardComment newBoardComment = BoardComment.builder()
+        .content("원본 내용")
+        .build();
+
+    BoardComment savedBoardComment = boardCommentRepository.save(newBoardComment);
+
+    //when
+    boardCommentService.removeBoardComment(savedBoardComment.getId());
+
+    //then
+    Optional<BoardComment> removedBoardComment = boardCommentRepository.findById(savedBoardComment.getId());
+
+    assertThat(removedBoardComment).isNotPresent();
+  }
 }
