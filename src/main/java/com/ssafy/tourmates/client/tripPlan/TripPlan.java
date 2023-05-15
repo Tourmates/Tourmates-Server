@@ -48,7 +48,7 @@ public class TripPlan extends TimeBaseEntity {
   }
 
   //==비즈니스 로직==//
-  public void changedTripPlan(String title){
+  public void changeTripPlan(String title){
     this.title = title;
   }
 
