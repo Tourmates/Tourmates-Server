@@ -5,6 +5,7 @@ import com.ssafy.tourmates.client.member.repository.MemberRepository;
 import com.ssafy.tourmates.client.tripPlan.repository.TripPlanRepository;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanDto;
+import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 import static com.ssafy.tourmates.client.member.Gender.MALE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -30,6 +32,7 @@ public class TripPlanServiceTest {
     private MemberRepository memberRepository;
 
     private Member savedMember;
+    private TripPlan savedTripPlan;
 
     @BeforeEach
     void beforeEach(){
@@ -61,6 +64,36 @@ public class TripPlanServiceTest {
         //then
         Optional<TripPlan> findTripPlan = tripPlanRepository.findById(tripPlanId);
         assertThat(findTripPlan).isPresent();
+    }
+
+    @Test
+    @DisplayName("여행계획 수정")
+    void editTripPlan(){
+        //given
+        createTripPlan();
+        EditTripPlanDto dto = EditTripPlanDto.builder()
+                .title("수정된 여행계획 제목")
+                .build();
+
+        //when
+        Long tripPlanId = tripPlanService.editTripPlan(savedTripPlan.getId(), dto);
+
+        //then
+        Optional<TripPlan> findTripPlan = tripPlanRepository.findById(tripPlanId);
+        assertThat(findTripPlan).isPresent();
+        assertThat(findTripPlan.get().getTitle()).isEqualTo(dto.getTitle());
+
+
+    }
+
+    private void createTripPlan(){
+        TripPlan tripPlan = TripPlan.builder()
+                .title("제목")
+                .active(ACTIVE)
+                .member(savedMember)
+                .hit(0)
+                .build();
+        savedTripPlan = tripPlanRepository.save(tripPlan);
     }
 
 
