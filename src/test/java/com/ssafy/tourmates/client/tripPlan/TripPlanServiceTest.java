@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
-
 import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 import static com.ssafy.tourmates.client.member.Gender.MALE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -35,7 +33,7 @@ public class TripPlanServiceTest {
     private TripPlan savedTripPlan;
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() {
         Member member = Member.builder()
                 .loginId("ssafy1234")
                 .loginPw("ssafy1234!")
@@ -52,7 +50,7 @@ public class TripPlanServiceTest {
     @Test
     @DisplayName("여행계획 등록")
     @Rollback(value = false)
-    void registerTripPlan(){
+    void registerTripPlan() {
         //given
         AddTripPlanDto dto = AddTripPlanDto.builder()
                 .title("여행계획 제목")
@@ -68,7 +66,7 @@ public class TripPlanServiceTest {
 
     @Test
     @DisplayName("여행계획 수정")
-    void editTripPlan(){
+    void editTripPlan() {
         //given
         createTripPlan();
         EditTripPlanDto dto = EditTripPlanDto.builder()
@@ -86,7 +84,7 @@ public class TripPlanServiceTest {
 
     }
 
-    private void createTripPlan(){
+    private void createTripPlan() {
         TripPlan tripPlan = TripPlan.builder()
                 .title("제목")
                 .active(ACTIVE)
@@ -95,7 +93,6 @@ public class TripPlanServiceTest {
                 .build();
         savedTripPlan = tripPlanRepository.save(tripPlan);
     }
-
 
 
 }
