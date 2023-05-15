@@ -1,10 +1,10 @@
 package com.ssafy.tourmates.admin.api;
 
-import com.ssafy.tourmates.admin.controller.dto.notice.request.AddNoticeRequest;
-import com.ssafy.tourmates.admin.controller.dto.notice.request.EditNoticeRequest;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.EditNoticeResponse;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.request.AddNoticeRequest;
+import com.ssafy.tourmates.admin.api.dto.notice.request.EditNoticeRequest;
+import com.ssafy.tourmates.admin.api.dto.notice.response.DetailNoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.EditNoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.NoticeResponse;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.notice.service.NoticeQueryService;

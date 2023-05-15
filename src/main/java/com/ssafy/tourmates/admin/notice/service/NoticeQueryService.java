@@ -1,9 +1,9 @@
 package com.ssafy.tourmates.admin.notice.service;
 
-import com.ssafy.tourmates.admin.controller.dto.notice.response.EditNoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.EditNoticeResponse;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.DetailNoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.NoticeResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
