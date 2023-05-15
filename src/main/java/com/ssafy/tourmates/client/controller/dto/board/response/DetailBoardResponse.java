@@ -3,6 +3,7 @@ package com.ssafy.tourmates.client.controller.dto.board.response;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 public class DetailBoardResponse {
@@ -11,7 +12,16 @@ public class DetailBoardResponse {
     private String title;
     private String content;
     private int hit;
-    private LocalDateTime createdDate;
+    private String createdDate;
 
     private String nickname;
+
+    public DetailBoardResponse(Long boardId, String title, String content, int hit, LocalDateTime createdDate, String nickname) {
+        this.boardId = boardId;
+        this.title = title;
+        this.content = content;
+        this.hit = hit;
+        this.createdDate = createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
+        this.nickname = nickname;
+    }
 }
