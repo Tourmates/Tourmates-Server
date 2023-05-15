@@ -48,8 +48,8 @@ public class TripPlanController {
 
     @ApiOperation(value = "여행계획 삭제")
     @PostMapping("/{tripPlanId}/remove")
-    public int removeTripPlan(@PathVariable Long tripPlanId){
-        tripPlanService.removeTripPlan(tripPlanId);
-        return 1;
+    public Long removeTripPlan(@PathVariable Long tripPlanId){
+        Long removedTripPlanId = tripPlanService.removeTripPlan(tripPlanId);
+        return removedTripPlanId;
     }
 }
