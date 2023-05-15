@@ -52,7 +52,7 @@ public class TripPlanController {
     @ApiOperation(value = "여행계획 삭제")
     @PostMapping("/{tripPlanId}/remove")
     public int removeTripPlan(@PathVariable Long tripPlanId){
-        Long removeTripPlanId = tripPlanService.removeTripPlan(tripPlanId);
+        tripPlanService.removeTripPlan(tripPlanId);
         return 1;
     }
 }
