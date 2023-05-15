@@ -43,7 +43,9 @@ public class TripPlanServiceImpl implements TripPlanService {
     }
 
     @Override
-    public void removeTripPlan(Long tripPlanId) {
-        tripPlanRepository.deleteById(tripPlanId);
+    public Long removeTripPlan(Long tripPlanId) {
+        TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
+        findTripPlan.deActive();
+        return findTripPlan.getId();
     }
 }

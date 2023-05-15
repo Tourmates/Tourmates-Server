@@ -15,6 +15,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import static com.ssafy.tourmates.client.member.Active.ACTIVE;
+import static com.ssafy.tourmates.client.member.Active.DEACTIVE;
 import static com.ssafy.tourmates.client.member.Gender.MALE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -80,8 +81,18 @@ public class TripPlanServiceTest {
         Optional<TripPlan> findTripPlan = tripPlanRepository.findById(tripPlanId);
         assertThat(findTripPlan).isPresent();
         assertThat(findTripPlan.get().getTitle()).isEqualTo(dto.getTitle());
+    }
 
+    @Test
+    @DisplayName("여행계획 삭제")
+    void deleteTripPlan(){
+        //given
+        createTripPlan();
 
+        //when
+        savedTripPlan.deActive();
+
+        assertThat(savedTripPlan.getActive()).isEqualTo(DEACTIVE);
     }
 
     private void createTripPlan() {
