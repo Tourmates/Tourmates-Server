@@ -1,7 +1,6 @@
 package com.ssafy.tourmates.client.tripPlan.service.impl;
 
 import static com.ssafy.tourmates.client.member.Active.ACTIVE;
-
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import com.ssafy.tourmates.client.tripPlan.TripPlan;
