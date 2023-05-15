@@ -88,8 +88,8 @@ public class NoticeQueryRepository {
 
     public DetailNoticeResponse searchNotice(Long noticeId) {
         return queryFactory
-                .select(Projections.fields(DetailNoticeResponse.class,
-                        notice.id.as("noticeId"),
+                .select(Projections.constructor(DetailNoticeResponse.class,
+                        notice.id,
                         notice.title,
                         notice.content,
                         notice.createdDate))
