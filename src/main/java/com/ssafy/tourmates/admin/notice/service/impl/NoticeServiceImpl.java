@@ -1,5 +1,7 @@
 package com.ssafy.tourmates.admin.notice.service.impl;
 
+import com.ssafy.tourmates.admin.admin.Admin;
+import com.ssafy.tourmates.admin.admin.validator.AdminValidator;
 import com.ssafy.tourmates.admin.notice.Notice;
 import com.ssafy.tourmates.admin.notice.repository.NoticeRepository;
 import com.ssafy.tourmates.admin.notice.service.NoticeService;
@@ -19,17 +21,17 @@ public class NoticeServiceImpl implements NoticeService {
 
     private final NoticeRepository noticeRepository;
     private final NoticeValidator noticeValidator;
-    private final MemberValidator memberValidator;
+    private final AdminValidator adminValidator;
 
     @Override
     public Long registerNotice(String loginId, AddNoticeDto dto) {
-        Member findMember = memberValidator.findByLoginId(loginId);
+        Admin findMember = adminValidator.findByLoginId(loginId);
         Notice notice = Notice.builder()
                 .pin(dto.getPin())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .active(ACTIVE)
-                .member(findMember)
+                .admin(findMember)
                 .build();
         Notice savedNotice = noticeRepository.save(notice);
         return savedNotice.getId();
