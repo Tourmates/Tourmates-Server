@@ -10,4 +10,6 @@ public interface TripPlanService {
     Long registerTripPlan(String loginId, AddTripPlanDto dto);
 
     Long editTripPlan(Long tripPlanId, EditTripPlanDto dto);
+
+    Long removeTripPlan(Long tripPlanId);
 }
