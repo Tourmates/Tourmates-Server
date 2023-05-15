@@ -1,9 +1,9 @@
 package com.ssafy.tourmates.admin.notice.service;
 
+import com.ssafy.tourmates.admin.controller.dto.notice.response.EditNoticeResponse;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,4 +19,6 @@ public interface NoticeQueryService {
     Long getTotalCount(NoticeSearchCondition condition);
 
     DetailNoticeResponse searchNotice(Long noticeId);
+
+    EditNoticeResponse searchEditNotice(Long noticeId);
 }
