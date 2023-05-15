@@ -42,4 +42,11 @@ public class TripPlanServiceImpl implements TripPlanService {
         findTripPlan.changeTripPlan(dto.getTitle());
         return findTripPlan.getId();
     }
+
+    @Override
+    public Long removeTripPlan(Long tripPlanId) {
+        TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
+        findTripPlan.deActive();
+        return findTripPlan.getId();
+    }
 }

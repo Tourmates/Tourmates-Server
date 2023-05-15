@@ -9,7 +9,7 @@ public class EditTripPlanDto {
     private String title;
 
     @Builder
-    public EditTripPlanDto(String content){
+    public EditTripPlanDto(String title){
         this.title = title;
     }
 }
