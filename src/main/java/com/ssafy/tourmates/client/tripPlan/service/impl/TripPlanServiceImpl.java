@@ -1,7 +1,6 @@
 package com.ssafy.tourmates.client.tripPlan.service.impl;
 
 import static com.ssafy.tourmates.client.member.Active.ACTIVE;
-
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import com.ssafy.tourmates.client.tripPlan.TripPlan;
@@ -41,5 +40,10 @@ public class TripPlanServiceImpl implements TripPlanService {
         TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
         findTripPlan.changeTripPlan(dto.getTitle());
         return findTripPlan.getId();
+    }
+
+    @Override
+    public void removeTripPlan(Long tripPlanId) {
+        tripPlanRepository.deleteById(tripPlanId);
     }
 }

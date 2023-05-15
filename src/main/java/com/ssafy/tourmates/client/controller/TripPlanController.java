@@ -8,12 +8,9 @@ import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
 import javax.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -52,7 +49,7 @@ public class TripPlanController {
     @ApiOperation(value = "여행계획 삭제")
     @PostMapping("/{tripPlanId}/remove")
     public int removeTripPlan(@PathVariable Long tripPlanId){
-        Long removeTripPlanId = tripPlanService.removeTripPlan(tripPlanId);
+        tripPlanService.removeTripPlan(tripPlanId);
         return 1;
     }
 }
