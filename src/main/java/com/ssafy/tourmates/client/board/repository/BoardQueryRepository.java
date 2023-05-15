@@ -9,6 +9,7 @@ import com.ssafy.tourmates.client.board.repository.dto.BoardSearchCondition;
 import com.ssafy.tourmates.client.board.repository.dto.Sort;
 import com.ssafy.tourmates.client.controller.dto.board.response.BoardResponse;
 import com.ssafy.tourmates.client.controller.dto.board.response.DetailBoardResponse;
+import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.common.domain.ContentType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ssafy.tourmates.client.board.QBoard.*;
+import static com.ssafy.tourmates.client.member.Active.*;
 import static com.ssafy.tourmates.client.member.QMember.*;
 
 @Repository
@@ -36,6 +38,7 @@ public class BoardQueryRepository {
                 .select(board.id)
                 .from(board)
                 .where(
+                        board.active.eq(ACTIVE),
                         isKeyword(condition.getKeyword())
                 )
                 .orderBy(
@@ -70,6 +73,7 @@ public class BoardQueryRepository {
                 .select(board.id)
                 .from(board)
                 .where(
+                        board.active.eq(ACTIVE),
                         isKeyword(condition.getKeyword())
                 )
                 .fetch()
@@ -78,7 +82,7 @@ public class BoardQueryRepository {
 
     public DetailBoardResponse searchBoard(Long boardId) {
         return queryFactory
-                .select(Projections.fields(DetailBoardResponse.class,
+                .select(Projections.constructor(DetailBoardResponse.class,
                         Expressions.asNumber(boardId).as("boardId"),
                         board.title,
                         board.content,
