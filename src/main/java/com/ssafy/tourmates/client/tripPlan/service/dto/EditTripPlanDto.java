@@ -4,13 +4,12 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class AddTripPlanDto {
+public class EditTripPlanDto {
 
     private String title;
 
     @Builder
-    public AddTripPlanDto(String title) {
-    this.title = title;
-  }
-
+    public EditTripPlanDto(String content){
+        this.title = title;
+    }
 }
