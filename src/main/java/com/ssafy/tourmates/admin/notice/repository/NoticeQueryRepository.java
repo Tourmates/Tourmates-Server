@@ -3,6 +3,7 @@ package com.ssafy.tourmates.admin.notice.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.tourmates.admin.controller.dto.notice.response.EditNoticeResponse;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
@@ -92,6 +93,19 @@ public class NoticeQueryRepository {
                         notice.id,
                         notice.title,
                         notice.content,
+                        notice.createdDate))
+                .from(notice)
+                .where(notice.id.eq(noticeId))
+                .fetchOne();
+    }
+
+    public EditNoticeResponse searchEditNotice(Long noticeId) {
+        return queryFactory
+                .select(Projections.constructor(EditNoticeResponse.class,
+                        notice.id,
+                        notice.title,
+                        notice.content,
+                        notice.pin,
                         notice.createdDate))
                 .from(notice)
                 .where(notice.id.eq(noticeId))
