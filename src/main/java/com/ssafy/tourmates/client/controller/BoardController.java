@@ -116,6 +116,13 @@ public class BoardController {
         return new Result<>(response);
     }
 
+    @ApiOperation(value = "게시판 수정 조회")
+    @GetMapping("/{boardId}/edit")
+    public Result<DetailBoardResponse> sss(@PathVariable Long boardId) {
+        DetailBoardResponse response = boardQueryService.searchById(boardId);
+        return new Result<>(response);
+    }
+
     @ApiOperation(value = "게시판 수정")
     @PostMapping("/{boardId}/edit")
     public Long editBoard(@PathVariable Long boardId, @Valid @RequestBody EditBoardRequest request) {
@@ -127,6 +134,14 @@ public class BoardController {
         log.debug("request={}", request);
         log.debug("editedBoardId={}", editedBoardId);
         return editedBoardId;
+    }
+
+    @ApiOperation(value = "게시판 삭제")
+    @PostMapping("/{boardId}/remove")
+    public Long removeBoard(@PathVariable Long boardId) {
+        Long removedBoardId = boardService.removeBoard(boardId);
+        log.debug("removedBoardId={}", removedBoardId);
+        return removedBoardId;
     }
 
     @ApiOperation(value = "게시판 댓글 수정")
