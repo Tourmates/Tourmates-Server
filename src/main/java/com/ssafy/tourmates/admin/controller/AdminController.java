@@ -16,17 +16,17 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/erp/admin")
+@RequestMapping("/intranet")
 public class AdminController {
 
     private final AdminQueryService adminQueryService;
 
-    @GetMapping("/login")
+    @GetMapping
     public String loginAdmin(@ModelAttribute(name = "form") LoginAdminForm form) {
         return "adminLogin";
     }
 
-    @PostMapping("/login")
+    @PostMapping
     public String loginAdmin(@ModelAttribute LoginAdminForm form, HttpSession session) {
         LoginAdmin loginAdmin = adminQueryService.loginAdmin(form.getLoginId(), form.getLoginPw());
         log.debug("loginAdmin={}", loginAdmin);
