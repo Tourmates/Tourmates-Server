@@ -1,7 +1,6 @@
 package com.ssafy.tourmates.client.controller.dto.tripPlan;
 
 import lombok.Data;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
