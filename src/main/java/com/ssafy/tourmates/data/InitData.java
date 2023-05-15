@@ -1,5 +1,7 @@
 package com.ssafy.tourmates.data;
 
+import com.ssafy.tourmates.admin.admin.Admin;
+import com.ssafy.tourmates.admin.admin.repository.AdminRepository;
 import com.ssafy.tourmates.admin.notice.Notice;
 import com.ssafy.tourmates.admin.notice.repository.NoticeRepository;
 import com.ssafy.tourmates.client.member.Member;
@@ -22,11 +24,13 @@ public class InitData {
 
     private final MemberRepository memberRepository;
     private final NoticeRepository noticeRepository;
+    private final AdminRepository adminRepository;
 
     @PostConstruct
     public void init() {
         initMember();
         initNotice();
+        initAdmin();
     }
 
     private void initMember() {
@@ -44,5 +48,10 @@ public class InitData {
             notices.add(Notice.builder().pin("0").title("공지사항" + i).content("공지사항" + i + " 내용").active(ACTIVE).build());
         }
         noticeRepository.saveAll(notices);
+    }
+
+    private void initAdmin() {
+        Admin admin = Admin.builder().id(1L).loginId("admin").loginPw("1!").name("임우택").email("admin@ssafy.com").tel("010-0000-0000").active(ACTIVE).build();
+        adminRepository.save(admin);
     }
 }
