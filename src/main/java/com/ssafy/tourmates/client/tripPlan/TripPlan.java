@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.tripPlan;
 
+import static com.ssafy.tourmates.client.member.Active.DEACTIVE;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -23,33 +24,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 public class TripPlan extends TimeBaseEntity {
 
-  @Id
-  @GeneratedValue
-  @Column(name = "trip_plan_id")
-  private Long id;
-  @Column(nullable = false, length = 50)
-  private String title;
-  private int hit;
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false, length = 20)
-  private Active active;
+    @Id
+    @GeneratedValue
+    @Column(name = "trip_plan_id")
+    private Long id;
+    @Column(nullable = false, length = 50)
+    private String title;
+    private int hit;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Active active;
 
-  @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "member_id")
-  private Member member;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-  @Builder
-  public TripPlan(Long id, String title, int hit, Active active, Member member){
-    this.id = id;
+    @Builder
+    public TripPlan(Long id, String title, int hit, Active active, Member member){
+        this.id = id;
+        this.title = title;
+        this.hit = hit;
+        this.active = active;
+        this.member = member;
+    }
+
+    //==비즈니스 로직==//
+    public void changeTripPlan(String title){
     this.title = title;
-    this.hit = hit;
-    this.active = active;
-    this.member = member;
   }
 
-  //==비즈니스 로직==//
-  public void changeTripPlan(String title){
-    this.title = title;
-  }
-
+    public void deActive() {
+        this.active = DEACTIVE;
+    }
 }
