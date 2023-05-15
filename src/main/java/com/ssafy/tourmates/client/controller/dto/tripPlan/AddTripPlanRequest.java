@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class AddTripPlanRequest {
 
-  @NotBlank
-  @Size(max = 50)
-  private String title;
+    @NotBlank
+    @Size(max = 50)
+    private String title;
 }
