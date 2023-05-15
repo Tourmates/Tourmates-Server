@@ -68,7 +68,7 @@ public class NoticeController {
 
     @ApiOperation(value = "공지사항 등록")
     @PostMapping("/register")
-    public Long registerNotice(AddNoticeRequest request) {
+    public Long registerNotice(@Valid @RequestBody AddNoticeRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
 
         AddNoticeDto dto = AddNoticeDto.builder()
