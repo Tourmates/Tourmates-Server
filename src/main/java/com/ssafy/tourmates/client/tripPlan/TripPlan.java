@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.tripPlan;
 
+import static com.ssafy.tourmates.client.member.Active.DEACTIVE;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -54,4 +55,7 @@ public class TripPlan extends TimeBaseEntity {
         this.title = title;
     }
 
+    public void deActive() {
+        this.active = DEACTIVE;
+    }
 }

@@ -1,11 +1,12 @@
 package com.ssafy.tourmates.client.controller.dto.tripPlan;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 @Data
-public class AddTripPlanRequest {
+public class EditTripPlanRequest {
 
     @NotBlank
     @Size(max = 50)

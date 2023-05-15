@@ -8,6 +8,7 @@ import com.ssafy.tourmates.client.tripPlan.TripPlan;
 import com.ssafy.tourmates.client.tripPlan.repository.TripPlanRepository;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanDto;
+import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
 import com.ssafy.tourmates.client.tripPlan.validator.TripPlanValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,12 @@ public class TripPlanServiceImpl implements TripPlanService {
 
         TripPlan savedTripPlan = tripPlanRepository.save(tripPlan);
         return savedTripPlan.getId();
+    }
+
+    @Override
+    public Long editTripPlan(Long tripPlanId, EditTripPlanDto dto) {
+        TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
+        findTripPlan.changeTripPlan(dto.getTitle());
+        return findTripPlan.getId();
     }
 }
