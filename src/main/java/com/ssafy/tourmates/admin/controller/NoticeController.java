@@ -3,6 +3,7 @@ package com.ssafy.tourmates.admin.controller;
 import com.ssafy.tourmates.admin.controller.dto.notice.request.AddNoticeRequest;
 import com.ssafy.tourmates.admin.controller.dto.notice.request.EditNoticeRequest;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
+import com.ssafy.tourmates.admin.controller.dto.notice.response.EditNoticeResponse;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
 import com.ssafy.tourmates.common.PageDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,16 +87,24 @@ public class NoticeController {
         return new Result<>(response);
     }
 
+    @ApiOperation(value = "공지사항 수정 조회")
+    @GetMapping("/{noticeId}/edit")
+    public Result<EditNoticeResponse> editNotice(@PathVariable Long noticeId) {
+        EditNoticeResponse response = noticeQueryService.searchEditNotice(noticeId);
+        return new Result<>(response);
+    }
+
     @ApiOperation(value = "공지사항 수정")
     @PostMapping("/{noticeId}/edit")
-    public Long editNotice(@PathVariable Long noticeId, EditNoticeRequest request) {
+    public Long editNotice(@PathVariable Long noticeId, @RequestBody EditNoticeRequest request) {
+        log.debug("request={}", request);
         EditNoticeDto dto = EditNoticeDto.builder()
-                .pin(request.getPin())
+                .pin(request.getPin().equals("true") ? "1" : "0")
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build();
+
         Long editNoticeId = noticeService.editNotice(noticeId, dto);
-        log.debug("request={}", request);
         log.debug("editNoticeId={}", editNoticeId);
         return editNoticeId;
     }
@@ -117,12 +127,5 @@ public class NoticeController {
     @AllArgsConstructor
     static class ResultPage<T> {
         private T data;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class ResultNotice {
-        private List<NoticeResponse> pin;
-        private List<NoticeResponse> noPin;
     }
 }

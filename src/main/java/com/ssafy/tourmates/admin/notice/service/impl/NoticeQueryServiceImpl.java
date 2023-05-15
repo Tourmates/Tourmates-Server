@@ -1,12 +1,12 @@
 package com.ssafy.tourmates.admin.notice.service.impl;
 
+import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
+import com.ssafy.tourmates.admin.controller.dto.notice.response.EditNoticeResponse;
+import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
 import com.ssafy.tourmates.admin.notice.repository.NoticeQueryRepository;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.notice.service.NoticeQueryService;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +36,10 @@ public class NoticeQueryServiceImpl implements NoticeQueryService {
     @Override
     public DetailNoticeResponse searchNotice(Long noticeId) {
         return noticeQueryRepository.searchNotice(noticeId);
+    }
+
+    @Override
+    public EditNoticeResponse searchEditNotice(Long noticeId) {
+        return noticeQueryRepository.searchEditNotice(noticeId);
     }
 }
