@@ -24,8 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 public class TripPlan extends TimeBaseEntity {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     @Column(name = "trip_plan_id")
     private Long id;
     @Column(nullable = false, length = 50)
