@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 public class EditBoardCommentDto {
 
-  private String content;
+    private String content;
 
-  @Builder
-  public EditBoardCommentDto(String content) {
-    this.content = content;
-  }
+    @Builder
+    public EditBoardCommentDto(String content) {
+        this.content = content;
+    }
 }

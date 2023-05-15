@@ -8,7 +8,9 @@ import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
 import javax.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.parameters.P;
@@ -25,11 +27,11 @@ public class TripPlanController {
 
     @ApiOperation(value = "여행계획 등록")
     @PostMapping("/register")
-    public Long registerTripPlan(@Valid @RequestBody AddTripPlanRequest request){
+    public Long registerTripPlan(@Valid @RequestBody AddTripPlanRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
-          AddTripPlanDto dto = AddTripPlanDto.builder()
-          .title(request.getTitle())
-          .build();
+        AddTripPlanDto dto = AddTripPlanDto.builder()
+                .title(request.getTitle())
+                .build();
 
         Long savedTripPlanId = tripPlanService.registerTripPlan(loginId, dto);
 

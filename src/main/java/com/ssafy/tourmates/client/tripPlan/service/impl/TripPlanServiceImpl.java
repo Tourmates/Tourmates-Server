@@ -26,11 +26,11 @@ public class TripPlanServiceImpl implements TripPlanService {
         Member findMember = memberValidator.findByLoginId(loginId);
 
         TripPlan tripPlan = TripPlan.builder()
-            .title(dto.getTitle())
-            .hit(0)
-            .active(ACTIVE)
-            .member(findMember)
-            .build();
+                .title(dto.getTitle())
+                .hit(0)
+                .active(ACTIVE)
+                .member(findMember)
+                .build();
 
         TripPlan savedTripPlan = tripPlanRepository.save(tripPlan);
         return savedTripPlan.getId();
@@ -40,13 +40,6 @@ public class TripPlanServiceImpl implements TripPlanService {
     public Long editTripPlan(Long tripPlanId, EditTripPlanDto dto) {
         TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
         findTripPlan.changeTripPlan(dto.getTitle());
-        return findTripPlan.getId();
-    }
-
-    @Override
-    public Long removeTripPlan(Long tripPlanId) {
-        TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
-        findTripPlan.deActive();
         return findTripPlan.getId();
     }
 }

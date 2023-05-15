@@ -10,7 +10,7 @@ public class AddTripPlanDto {
 
     @Builder
     public AddTripPlanDto(String title) {
-    this.title = title;
-  }
+        this.title = title;
+    }
 
 }
