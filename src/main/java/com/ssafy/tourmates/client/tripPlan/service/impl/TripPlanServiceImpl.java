@@ -16,22 +16,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TripPlanServiceImpl implements TripPlanService {
 
-  private final TripPlanRepository tripPlanRepository;
-  private final TripPlanValidator tripPlanValidator;
-  private final MemberValidator memberValidator;
+    private final TripPlanRepository tripPlanRepository;
+    private final TripPlanValidator tripPlanValidator;
+    private final MemberValidator memberValidator;
 
-  @Override
-  public Long registerTripPlan(String loginId, AddTripPlanDto dto) {
-    Member findMember = memberValidator.findByLoginId(loginId);
+    @Override
+    public Long registerTripPlan(String loginId, AddTripPlanDto dto) {
+        Member findMember = memberValidator.findByLoginId(loginId);
 
-    TripPlan tripPlan = TripPlan.builder()
-        .title(dto.getTitle())
-        .hit(0)
-        .active(ACTIVE)
-        .member(findMember)
-        .build();
+        TripPlan tripPlan = TripPlan.builder()
+                .title(dto.getTitle())
+                .hit(0)
+                .active(ACTIVE)
+                .member(findMember)
+                .build();
 
-    TripPlan savedTripPlan = tripPlanRepository.save(tripPlan);
-    return savedTripPlan.getId();
-  }
+        TripPlan savedTripPlan = tripPlanRepository.save(tripPlan);
+        return savedTripPlan.getId();
+    }
 }

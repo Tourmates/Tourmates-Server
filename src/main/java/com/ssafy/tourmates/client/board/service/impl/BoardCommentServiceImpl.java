@@ -17,38 +17,38 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class BoardCommentServiceImpl implements BoardCommentService {
 
-  private final MemberValidator memberValidator;
-  private final BoardValidator boardValidator;
-  private final BoardCommentValidator boardCommentValidator;
-  private final BoardCommentRepository boardCommentRepository;
+    private final MemberValidator memberValidator;
+    private final BoardValidator boardValidator;
+    private final BoardCommentValidator boardCommentValidator;
+    private final BoardCommentRepository boardCommentRepository;
 
-  @Override
-  public Long registerBoardComment(String loginId, Long boardId, AddBoardCommentDto dto) {
+    @Override
+    public Long registerBoardComment(String loginId, Long boardId, AddBoardCommentDto dto) {
 
-    Member findMember = memberValidator.findByLoginId(loginId);
-    Board board = boardValidator.findById(boardId);
+        Member findMember = memberValidator.findByLoginId(loginId);
+        Board board = boardValidator.findById(boardId);
 
-    BoardComment boardComment = BoardComment.builder()
-        .content(dto.getContent())
-        .member(findMember)
-        .board(board)
-        .build();
+        BoardComment boardComment = BoardComment.builder()
+                .content(dto.getContent())
+                .member(findMember)
+                .board(board)
+                .build();
 
-    BoardComment savedBoardComment = boardCommentRepository.save(boardComment);
+        BoardComment savedBoardComment = boardCommentRepository.save(boardComment);
 
-    return savedBoardComment.getId();
-  }
+        return savedBoardComment.getId();
+    }
 
-  @Override
-  public Long editBoardComment(Long boardId, Long boardCommentId, EditBoardCommentDto dto) {
+    @Override
+    public Long editBoardComment(Long boardId, Long boardCommentId, EditBoardCommentDto dto) {
 
-    BoardComment findBoardComment = boardCommentValidator.findById(boardCommentId);
-    findBoardComment.changeBoardComment(dto.getContent());
-    return findBoardComment.getId();
-  }
+        BoardComment findBoardComment = boardCommentValidator.findById(boardCommentId);
+        findBoardComment.changeBoardComment(dto.getContent());
+        return findBoardComment.getId();
+    }
 
-  @Override
-  public void removeBoardComment(Long boardCommentId) {
-    boardCommentRepository.deleteById(boardCommentId);
-  }
+    @Override
+    public void removeBoardComment(Long boardCommentId) {
+        boardCommentRepository.deleteById(boardCommentId);
+    }
 }

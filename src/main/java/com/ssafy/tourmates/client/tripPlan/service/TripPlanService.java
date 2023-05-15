@@ -6,6 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface TripPlanService {
 
-  Long registerTripPlan(String loginId, AddTripPlanDto dto);
+    Long registerTripPlan(String loginId, AddTripPlanDto dto);
 
 }
