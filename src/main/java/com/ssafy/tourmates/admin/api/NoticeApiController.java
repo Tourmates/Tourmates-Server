@@ -1,4 +1,4 @@
-package com.ssafy.tourmates.admin.controller;
+package com.ssafy.tourmates.admin.api;
 
 import com.ssafy.tourmates.admin.controller.dto.notice.request.AddNoticeRequest;
 import com.ssafy.tourmates.admin.controller.dto.notice.request.EditNoticeRequest;
