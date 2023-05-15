@@ -5,7 +5,6 @@ import com.ssafy.tourmates.admin.controller.dto.notice.request.EditNoticeRequest
 import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.EditNoticeResponse;
 import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
-import com.ssafy.tourmates.common.PageDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.notice.service.NoticeQueryService;
@@ -18,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +29,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/notices")
 @Api(tags = {"공지사항"})
-public class NoticeController {
+public class NoticeApiController {
 
     private final NoticeService noticeService;
     private final NoticeQueryService noticeQueryService;
