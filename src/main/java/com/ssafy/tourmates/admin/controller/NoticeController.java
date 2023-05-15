@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -43,14 +44,24 @@ public class NoticeController {
                 .keyword(keyword)
                 .build();
         PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
-        List<NoticeResponse> pinResponse = noticeQueryService.searchPinNotices();
-        Page<NoticeResponse> responses = noticeQueryService.searchByCondition(condition, pageRequest);
-        return new ResultPage<>(responses.getContent(), new PageDto(pageNumber, 10, responses.getTotalElements()));
+        List<NoticeResponse> pinResponses = noticeQueryService.searchPinNotices();
+        List<NoticeResponse> responses = noticeQueryService.searchByCondition(condition, pageRequest);
+        List<NoticeResponse> res = new ArrayList<>();
+        res.addAll(pinResponses);
+        res.addAll(responses);
+        return new ResultPage<>(res);
     }
 
-    @GetMapping("/paging")
-    public Integer paging() {
-        return 100;
+    @GetMapping("/totalCount")
+    public Long paging(
+            @RequestParam(defaultValue = "") String keyword
+    ) {
+        NoticeSearchCondition condition = NoticeSearchCondition.builder()
+                .keyword(keyword)
+                .build();
+        Long totalCount = noticeQueryService.getTotalCount(condition);
+        log.debug("totalCount={}", totalCount);
+        return totalCount;
     }
 
     @ApiOperation(value = "공지사항 등록")
@@ -106,7 +117,6 @@ public class NoticeController {
     @AllArgsConstructor
     static class ResultPage<T> {
         private T data;
-        private PageDto page;
     }
 
     @Data
