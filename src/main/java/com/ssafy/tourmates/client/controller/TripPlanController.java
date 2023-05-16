@@ -11,11 +11,11 @@ import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -43,10 +43,10 @@ public class TripPlanController {
 
     @ApiOperation(value = "세부 여행 계획 등록")
     @PostMapping("/{tripPlanId}/detailPlan/register")
-    public List<Integer> registerDetailPlan(@PathVariable Long tripPlanId, @Valid @RequestBody AddDetailPlanRequest request){
+    public List<Integer> registerDetailPlan(@PathVariable Long tripPlanId, @Valid @RequestBody AddDetailPlanRequest request) {
 
         AddDetailTripPlanDto dto = AddDetailTripPlanDto.builder()
-                .contendIds(request.getContendIds())
+                .contentIds(request.getContentIds())
                 .build();
 
         List<Integer> contentIds = detailTripPlanService.registerDetailTripPlan(tripPlanId, dto);
@@ -55,18 +55,18 @@ public class TripPlanController {
 
     @ApiOperation(value = "여행계획 수정")
     @PostMapping("/{tripPlanId}/edit")
-    public Long editTripPlan(@PathVariable Long tripPlanId, EditTripPlanRequest request){
+    public Long editTripPlan(@PathVariable Long tripPlanId, EditTripPlanRequest request) {
         EditTripPlanDto dto = EditTripPlanDto.builder()
-            .title(request.getTitle())
-            .build();
+                .title(request.getTitle())
+                .build();
 
         Long editTripPlanId = tripPlanService.editTripPlan(tripPlanId, dto);
         return editTripPlanId;
-  }
+    }
 
     @ApiOperation(value = "여행계획 삭제")
     @PostMapping("/{tripPlanId}/remove")
-    public Long removeTripPlan(@PathVariable Long tripPlanId){
+    public Long removeTripPlan(@PathVariable Long tripPlanId) {
         Long removedTripPlanId = tripPlanService.removeTripPlan(tripPlanId);
         return removedTripPlanId;
     }
