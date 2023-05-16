@@ -31,6 +31,7 @@ public class AdminController {
         LoginAdmin loginAdmin = adminQueryService.loginAdmin(form.getLoginId(), form.getLoginPw());
         log.debug("loginAdmin={}", loginAdmin);
         session.setAttribute("loginAdmin", loginAdmin);
-        return "main";
+        return "dashboard";
     }
+
 }
