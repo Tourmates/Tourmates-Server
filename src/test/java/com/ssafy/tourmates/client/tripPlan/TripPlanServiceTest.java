@@ -6,6 +6,7 @@ import com.ssafy.tourmates.client.tripPlan.repository.TripPlanRepository;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
+import com.ssafy.tourmates.client.tripPlan.validator.TripPlanValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
+
 import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 import static com.ssafy.tourmates.client.member.Active.DEACTIVE;
 import static com.ssafy.tourmates.client.member.Gender.MALE;
@@ -29,6 +32,8 @@ public class TripPlanServiceTest {
     private TripPlanRepository tripPlanRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private TripPlanValidator tripPlanValidator;
 
     private Member savedMember;
     private TripPlan savedTripPlan;
@@ -61,8 +66,8 @@ public class TripPlanServiceTest {
         Long tripPlanId = tripPlanService.registerTripPlan(savedMember.getLoginId(), dto);
 
         //then
-        Optional<TripPlan> findTripPlan = tripPlanRepository.findById(tripPlanId);
-        assertThat(findTripPlan).isPresent();
+        TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
+        assertThat(findTripPlan).isNotNull();
     }
 
     @Test
@@ -85,7 +90,7 @@ public class TripPlanServiceTest {
 
     @Test
     @DisplayName("여행계획 삭제")
-    void deleteTripPlan(){
+    void deleteTripPlan() {
         //given
         createTripPlan();
 

@@ -11,9 +11,9 @@ import com.ssafy.tourmates.client.board.validator.BoardValidator;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-@Repository
+@Service
 @RequiredArgsConstructor
 public class BoardCommentServiceImpl implements BoardCommentService {
 

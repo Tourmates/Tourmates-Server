@@ -1,6 +1,5 @@
 package com.ssafy.tourmates.client.tripPlan.service.impl;
 
-import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import com.ssafy.tourmates.client.tripPlan.TripPlan;
@@ -11,6 +10,8 @@ import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
 import com.ssafy.tourmates.client.tripPlan.validator.TripPlanValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class TripPlanServiceImpl implements TripPlanService {
     @Override
     public Long editTripPlan(Long tripPlanId, EditTripPlanDto dto) {
         TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
-        findTripPlan.changeTripPlan(dto.getTitle());
+        findTripPlan.changeTripPlan(dto.getTitle(), findTripPlan.getDetailTripPlanList());
         return findTripPlan.getId();
     }
 

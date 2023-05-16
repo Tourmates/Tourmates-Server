@@ -8,18 +8,13 @@ import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.common.domain.TimeBaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,6 +35,10 @@ public class TripPlan extends TimeBaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToMany(fetch = LAZY)
+    @JoinColumn(name = "detail_trip_plan_id")
+    private List<DetailTripPlan> detailTripPlanList;
+
     @Builder
     public TripPlan(Long id, String title, int hit, Active active, Member member) {
         this.id = id;
@@ -50,8 +49,9 @@ public class TripPlan extends TimeBaseEntity {
     }
 
     //==비즈니스 로직==//
-    public void changeTripPlan(String title) {
+    public void changeTripPlan(String title, List<DetailTripPlan> detailTripPlanList) {
         this.title = title;
+        this.detailTripPlanList = detailTripPlanList;
     }
 
     public void deActive() {
