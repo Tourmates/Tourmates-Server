@@ -7,6 +7,8 @@ import com.ssafy.tourmates.client.tripPlan.TripPlanComment;
 import com.ssafy.tourmates.client.tripPlan.repository.TripPlanCommentRepository;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanCommentService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanCommentDto;
+import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanCommentDto;
+import com.ssafy.tourmates.client.tripPlan.validator.TripPlanCommentValidator;
 import com.ssafy.tourmates.client.tripPlan.validator.TripPlanValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ public class TripPlanCommentServiceImpl implements TripPlanCommentService {
 
     private final MemberValidator memberValidator;
     private final TripPlanValidator tripPlanValidator;
+    private final TripPlanCommentValidator tripPlanCommentValidator;
     private final TripPlanCommentRepository tripPlanCommentRepository;
 
     @Override
@@ -33,5 +36,13 @@ public class TripPlanCommentServiceImpl implements TripPlanCommentService {
 
         TripPlanComment savedTripPlanComment = tripPlanCommentRepository.save(tripPlanComment);
         return savedTripPlanComment.getId();
+    }
+
+    @Override
+    public Long editTripPlanComment(Long tripPlanId, Long tripPlanCommentId, EditTripPlanCommentDto dto) {
+
+        TripPlanComment findTripPlanComment = tripPlanCommentValidator.findById(tripPlanCommentId);
+        findTripPlanComment.changeTripPlanComment(dto.getContent());
+        return findTripPlanComment.getId();
     }
 }
