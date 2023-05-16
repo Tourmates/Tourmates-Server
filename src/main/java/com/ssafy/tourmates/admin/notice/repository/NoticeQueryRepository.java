@@ -127,6 +127,14 @@ public class NoticeQueryRepository {
                 .fetch();
     }
 
+    public Long bulkDeActive(List<Long> noticeIds) {
+        return queryFactory
+                .update(notice)
+                .where(notice.id.in(noticeIds))
+                .set(notice.active, DEACTIVE)
+                .execute();
+    }
+
     private BooleanExpression isKeyword(String keyword) {
         return hasText(keyword) ? notice.title.like("%" + keyword + "%")
                 .or(notice.content.like("%" + keyword + "%")) : null;
