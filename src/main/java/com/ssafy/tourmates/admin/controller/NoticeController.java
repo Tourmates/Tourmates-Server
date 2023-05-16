@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -121,8 +123,11 @@ public class NoticeController {
             cell.setCellValue(notice.getActive());
         }
 
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String fileName = "notices" + date + ".xlsx";
+
         response.setContentType("ms-vnd/excel");
-        response.setHeader("Content-Disposition", "attachment;filename=notices.xlsx");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
         //Excel File Output
         wb.write(response.getOutputStream());
         wb.close();
