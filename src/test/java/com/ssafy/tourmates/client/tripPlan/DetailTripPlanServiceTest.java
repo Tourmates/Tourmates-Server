@@ -9,9 +9,7 @@ import com.ssafy.tourmates.client.tripPlan.repository.TripPlanRepository;
 import com.ssafy.tourmates.client.tripPlan.service.DetailTripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddDetailTripPlanDto;
-import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanDto;
 import com.ssafy.tourmates.client.tripPlan.validator.TripPlanValidator;
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,19 +70,11 @@ public class DetailTripPlanServiceTest {
         savedMember = memberRepository.save(member);
         savedAttractionInfo = attractionValidator.findById(125266);
 
-        AddTripPlanDto dto = AddTripPlanDto.builder()
-                .title("여행계획 제목")
-                .build();
-
-        Long tripPlanId = tripPlanService.registerTripPlan(savedMember.getLoginId(), dto);
-
-        savedTripPlan = tripPlanValidator.findById(tripPlanId);
-
     }
 
     @Test
     @DisplayName("세부 계획 등록")
-    void registerDetailPlan(){
+    void registerDetailTripPlan() {
 
         List<Integer> contentIds = new ArrayList<>();
         contentIds.add(125266);
@@ -95,9 +85,35 @@ public class DetailTripPlanServiceTest {
                 .contentIds(contentIds)
                 .build();
 
-        List<Integer> findContentIds = detailTripPlanService.registerDetailTripPlan(savedTripPlan.getId(),dto);
+        //when
+        List<Integer> findContentIds = detailTripPlanService.registerDetailTripPlan(savedTripPlan.getId(), dto);
 
+        //then
         assertThat(findContentIds.size()).isNotZero();
-
     }
+
+    @Test
+    @DisplayName("세부 계획 삭제")
+    void deleteDetailTripPlan() {
+
+        //given
+        //  createTripPlan();
+
+        //when
+    }
+
+//    private void createTripPlan(){
+//
+//        List<DetailTripPlan> detailTripPlanList = new ArrayList<>();
+//        detailTripPlanList.add(new DetailTripPlan())
+//
+//        TripPlan tripPlan = TripPlan.builder()
+//                .member(savedMember)
+//                .hit(0)
+//                .
+//                .title("제목")
+//                .build();
+//
+//        savedTripPlan = tripPlanRepository.save(tripPlan);
+//    }
 }
