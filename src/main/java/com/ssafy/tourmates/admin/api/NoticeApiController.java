@@ -27,7 +27,6 @@ import java.util.List;
 @Api(tags = {"공지사항"})
 public class NoticeApiController {
 
-    private final NoticeService noticeService;
     private final NoticeQueryService noticeQueryService;
 
     @ApiOperation(value = "공지사항 조회")
@@ -65,28 +64,6 @@ public class NoticeApiController {
     public Result<DetailNoticeResponse> searchNotice(@PathVariable Long noticeId) {
         DetailNoticeResponse response = noticeQueryService.searchNotice(noticeId);
         return new Result<>(response);
-    }
-
-    @ApiOperation(value = "공지사항 수정 조회")
-    @GetMapping("/{noticeId}/edit")
-    public Result<EditNoticeResponse> editNotice(@PathVariable Long noticeId) {
-        EditNoticeResponse response = noticeQueryService.searchEditNotice(noticeId);
-        return new Result<>(response);
-    }
-
-    @ApiOperation(value = "공지사항 수정")
-    @PostMapping("/{noticeId}/edit")
-    public Long editNotice(@PathVariable Long noticeId, @RequestBody EditNoticeRequest request) {
-        log.debug("request={}", request);
-        EditNoticeDto dto = EditNoticeDto.builder()
-                .pin(request.getPin().equals("true") ? "1" : "0")
-                .title(request.getTitle())
-                .content(request.getContent())
-                .build();
-
-        Long editNoticeId = noticeService.editNotice(noticeId, dto);
-        log.debug("editNoticeId={}", editNoticeId);
-        return editNoticeId;
     }
 
     @Data
