@@ -1,27 +1,26 @@
 package com.ssafy.tourmates.client.tripPlan;
 
-import static com.ssafy.tourmates.client.member.Active.DEACTIVE;
-import static javax.persistence.FetchType.LAZY;
-import static lombok.AccessLevel.PROTECTED;
-
 import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.common.domain.TimeBaseEntity;
-
-import javax.persistence.*;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.List;
+
+import static com.ssafy.tourmates.client.member.Active.DEACTIVE;
+import static javax.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class TripPlan extends TimeBaseEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "trip_plan_id")
     private Long id;
     @Column(nullable = false, length = 50)
@@ -40,12 +39,13 @@ public class TripPlan extends TimeBaseEntity {
     private List<DetailTripPlan> detailTripPlanList;
 
     @Builder
-    public TripPlan(Long id, String title, int hit, Active active, Member member) {
+    public TripPlan(Long id, String title, int hit, Active active, Member member, List<DetailTripPlan> detailTripPlanList) {
         this.id = id;
         this.title = title;
         this.hit = hit;
         this.active = active;
         this.member = member;
+        this.detailTripPlanList = detailTripPlanList;
     }
 
     //==비즈니스 로직==//

@@ -63,11 +63,20 @@ public class TripPlanController {
         Long editTripPlanId = tripPlanService.editTripPlan(tripPlanId, dto);
         return editTripPlanId;
     }
+    
+
 
     @ApiOperation(value = "여행계획 삭제")
     @PostMapping("/{tripPlanId}/remove")
     public Long removeTripPlan(@PathVariable Long tripPlanId) {
         Long removedTripPlanId = tripPlanService.removeTripPlan(tripPlanId);
         return removedTripPlanId;
+    }
+
+    @ApiOperation(value = "세부 여행 계획 삭제")
+    @PostMapping("/{tripPlanId}/detail/{detailTripPlanId}/remove")
+    public Integer removeDetailTripPlan(@PathVariable Long tripPlanId, @PathVariable Long detailTripPlanId){
+        detailTripPlanService.removeDetailTripPlan(detailTripPlanId);
+        return 1;
     }
 }
