@@ -8,10 +8,10 @@ import java.util.List;
 @Data
 public class AddDetailTripPlanDto {
 
-    private List<Integer> contendIds;
+    private List<Integer> contentIds;
 
     @Builder
-    public AddDetailTripPlanDto(List<Integer> contendIds) {
-        this.contendIds = contendIds;
+    public AddDetailTripPlanDto(List<Integer> contentIds) {
+        this.contentIds = contentIds;
     }
 }
