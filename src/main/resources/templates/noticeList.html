@@ -105,6 +105,10 @@
                 <h1 class="h2">공지사항</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerNotice">등록</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger">삭제</button>
+                    </div>
+                    <div class="btn-group me-2">
                         <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
                         <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
                     </div>
@@ -117,8 +121,17 @@
 
             <div class="table-responsive">
                 <table class="table table-striped table-sm">
+                    <colgroup>
+                        <col style="width: 2%;">
+                        <col style="width: 5%;">
+                        <col style="width: 58%;">
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                        <col style="width: 5%;">
+                    </colgroup>
                     <thead>
-                    <tr>
+                    <tr class="text-center">
+                        <th scope="col"></th>
                         <th scope="col">#</th>
                         <th scope="col">제목</th>
                         <th scope="col">작성자</th>
@@ -128,11 +141,18 @@
                     </thead>
                     <tbody>
                     <tr th:each="notice : ${notices}">
-                        <td>1</td>
+                        <td class="text-center">
+                            <div>
+                                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
+                            </div>
+                        </td>
+                        <td th:text="${notice.noticeId}" class="text-center">1</td>
                         <td th:text="${notice.title}">공자사항 1</td>
-                        <td>김싸피</td>
-                        <td th:text="${notice.createdDate}">2020.01.01</td>
-                        <td  th:text="${notice.active}">X</td>
+                        <td th:text="${notice.writer}" class="text-center">김싸피</td>
+                        <td th:text="${notice.createdDate}" class="text-center">2020.01.01</td>
+                        <td class="text-center">
+                            <span class="badge text-bg-primary">Primary</span>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -140,5 +160,41 @@
         </main>
     </div>
 </div>
+<!-- 공지사항 등록 modal -->
+<div class="modal fade" id="registerNotice" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="registerNoticeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <form class="modal-content" method="post" action="/intranet/notices/register" th:object="${addForm}">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="registerNoticeLabel">공지사항 등록</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="title" class="form-label">제목</label>
+                    <div class='row'>
+                        <div class='col-10'>
+                            <input type="text" class="form-control" id="title" th:field="*{title}">
+                        </div>
+                        <div class="form-check col-2">
+                            <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault" th:field="*{pin}">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                상단 고정
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">내용</label>
+                    <textarea class="form-control" id="content" rows="20" th:field="*{content}"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="submit" class="btn btn-primary">등록</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </body>
 </html>
