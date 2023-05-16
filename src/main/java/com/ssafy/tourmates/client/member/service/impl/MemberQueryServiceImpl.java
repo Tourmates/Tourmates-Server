@@ -1,5 +1,7 @@
 package com.ssafy.tourmates.client.member.service.impl;
 
+import com.ssafy.tourmates.admin.controller.dto.member.response.MemberResponse;
+import com.ssafy.tourmates.client.member.repository.MemberQueryRepository;
 import com.ssafy.tourmates.client.member.service.MemberQueryService;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import com.ssafy.tourmates.client.member.Member;
@@ -11,6 +13,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -20,6 +23,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberValidator memberValidator;
+    private final MemberQueryRepository memberQueryRepository;
 
     @Override
     public TokenInfo login(String loginId, String loginPw) {
@@ -56,5 +60,10 @@ public class MemberQueryServiceImpl implements MemberQueryService {
             throw new NoSuchElementException();
         }
         return findMember.getLoginPw();
+    }
+
+    @Override
+    public List<MemberResponse> searchMembers() {
+        return memberQueryRepository.searchMembers();
     }
 }
