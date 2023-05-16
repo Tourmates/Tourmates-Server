@@ -89,14 +89,6 @@ public class NoticeApiController {
         return editNoticeId;
     }
 
-    @ApiOperation(value = "공지사항 삭제")
-    @PostMapping("/{noticeId}/remove")
-    public int removeNotice(@PathVariable Long noticeId) {
-        Long removedNoticeId = noticeService.removeNotice(noticeId);
-        log.debug("removedNoticeId={}", removedNoticeId);
-        return 1;
-    }
-
     @Data
     @AllArgsConstructor
     static class Result<T> {
