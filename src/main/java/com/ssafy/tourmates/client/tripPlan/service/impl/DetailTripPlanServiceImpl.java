@@ -4,8 +4,10 @@ import com.ssafy.tourmates.admin.attraction.AttractionInfo;
 import com.ssafy.tourmates.admin.attraction.validator.AttractionValidator;
 import com.ssafy.tourmates.client.tripPlan.DetailTripPlan;
 import com.ssafy.tourmates.client.tripPlan.TripPlan;
+import com.ssafy.tourmates.client.tripPlan.repository.DetailTripPlanRepository;
 import com.ssafy.tourmates.client.tripPlan.service.DetailTripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddDetailTripPlanDto;
+import com.ssafy.tourmates.client.tripPlan.validator.DetailTripPlanValidator;
 import com.ssafy.tourmates.client.tripPlan.validator.TripPlanValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,10 @@ import java.util.List;
 public class DetailTripPlanServiceImpl implements DetailTripPlanService {
 
     private final TripPlanValidator tripPlanValidator;
+    private final DetailTripPlanValidator detailTripPlanValidator;
     private final AttractionValidator attractionValidator;
+    private final DetailTripPlanRepository detailTripPlanRepository;
+
     @Override
     public List<Integer> registerDetailTripPlan(Long tripPlanId, AddDetailTripPlanDto dto) {
 
@@ -27,7 +32,7 @@ public class DetailTripPlanServiceImpl implements DetailTripPlanService {
         List<DetailTripPlan> detailTripPlanList = new ArrayList<>();
         List<Integer> contentIds = dto.getContentIds();
 
-        for(int i = 0; i < contentIds.size(); i++){
+        for (int i = 0; i < contentIds.size(); i++) {
             AttractionInfo attractionInfo = attractionValidator.findById(contentIds.get(i));
 
             DetailTripPlan detailTripPlan = DetailTripPlan.builder()
@@ -41,5 +46,11 @@ public class DetailTripPlanServiceImpl implements DetailTripPlanService {
         findTripPlan.changeTripPlan(findTripPlan.getTitle(), detailTripPlanList);
 
         return contentIds;
+    }
+
+    @Override
+    public void removeDetailTripPlan(Long detailTripPlanId) {
+        DetailTripPlan detailTripPlan = detailTripPlanValidator.findById(detailTripPlanId);
+        detailTripPlanRepository.deleteById(detailTripPlan.getId());
     }
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface DetailTripPlanService {
     List<Integer> registerDetailTripPlan(Long tripPlanId, AddDetailTripPlanDto dto);
+
+    void removeDetailTripPlan(Long detailTripPlanId);
 }
