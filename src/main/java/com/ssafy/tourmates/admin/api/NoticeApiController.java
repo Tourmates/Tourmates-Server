@@ -1,15 +1,12 @@
 package com.ssafy.tourmates.admin.api;
 
-import com.ssafy.tourmates.admin.api.dto.notice.request.AddNoticeRequest;
 import com.ssafy.tourmates.admin.api.dto.notice.request.EditNoticeRequest;
 import com.ssafy.tourmates.admin.api.dto.notice.response.DetailNoticeResponse;
 import com.ssafy.tourmates.admin.api.dto.notice.response.EditNoticeResponse;
 import com.ssafy.tourmates.admin.api.dto.notice.response.NoticeResponse;
-import com.ssafy.tourmates.jwt.SecurityUtil;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.notice.service.NoticeQueryService;
 import com.ssafy.tourmates.admin.notice.service.NoticeService;
-import com.ssafy.tourmates.admin.notice.service.dto.AddNoticeDto;
 import com.ssafy.tourmates.admin.notice.service.dto.EditNoticeDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
