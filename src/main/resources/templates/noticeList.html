@@ -151,10 +151,10 @@
                         <td th:text="${notice.writer}" class="text-center">김싸피</td>
                         <td th:text="${notice.createdDate}" class="text-center">2020.01.01</td>
                         <td class="text-center" th:if="${notice.active}">
-                            <span class="badge text-bg-primary">ACTIVE</span>
+                            <span class="badge text-bg-primary w-100">ACTIVE</span>
                         </td>
                         <td class="text-center" th:if="${!notice.active}">
-                            <span class="badge text-bg-danger">DEACTIVE</span>
+                            <span class="badge text-bg-danger w-100">DEACTIVE</span>
                         </td>
                     </tr>
                     </tbody>

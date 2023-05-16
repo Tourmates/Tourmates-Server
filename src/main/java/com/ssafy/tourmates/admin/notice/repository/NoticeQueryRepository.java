@@ -124,6 +124,7 @@ public class NoticeQueryRepository {
                         notice.active))
                 .from(notice)
                 .join(notice.admin, admin)
+                .orderBy(notice.createdDate.desc())
                 .fetch();
     }
 
