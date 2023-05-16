@@ -64,20 +64,6 @@ public class NoticeApiController {
         return totalCount;
     }
 
-    @ApiOperation(value = "공지사항 등록")
-    @PostMapping("/register")
-    public Long registerNotice(@Valid @RequestBody AddNoticeRequest request) {
-        String loginId = SecurityUtil.getCurrentLoginId();
-
-        AddNoticeDto dto = AddNoticeDto.builder()
-                .pin(request.getPin())
-                .title(request.getTitle())
-                .content(request.getContent())
-                .build();
-
-        return noticeService.registerNotice(loginId, dto);
-    }
-
     @ApiOperation(value = "공지사항 상세조회")
     @GetMapping("/{noticeId}")
     public Result<DetailNoticeResponse> searchNotice(@PathVariable Long noticeId) {
