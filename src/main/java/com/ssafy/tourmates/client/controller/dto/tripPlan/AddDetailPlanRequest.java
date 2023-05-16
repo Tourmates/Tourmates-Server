@@ -11,5 +11,5 @@ public class AddDetailPlanRequest {
 
     @NotNull
     @Size(min = 1)
-    List<Long> contendIds;
+    List<Integer> contendIds;
 }
