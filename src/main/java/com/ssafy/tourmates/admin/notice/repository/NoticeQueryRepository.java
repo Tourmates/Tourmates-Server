@@ -3,10 +3,11 @@ package com.ssafy.tourmates.admin.notice.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.EditNoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.EditNoticeResponse;
+import com.ssafy.tourmates.admin.controller.dto.notice.response.AdminNoticeResponse;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.DetailNoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.NoticeResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -16,6 +17,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ssafy.tourmates.admin.admin.QAdmin.*;
 import static com.ssafy.tourmates.admin.notice.QNotice.*;
 import static com.ssafy.tourmates.client.member.Active.*;
 import static org.springframework.util.StringUtils.*;
@@ -110,6 +112,28 @@ public class NoticeQueryRepository {
                 .from(notice)
                 .where(notice.id.eq(noticeId))
                 .fetchOne();
+    }
+
+    public List<AdminNoticeResponse> searchAdminNotices() {
+        return queryFactory
+                .select(Projections.constructor(AdminNoticeResponse.class,
+                        notice.id,
+                        notice.title,
+                        notice.admin.name,
+                        notice.createdDate,
+                        notice.active))
+                .from(notice)
+                .join(notice.admin, admin)
+                .orderBy(notice.createdDate.desc())
+                .fetch();
+    }
+
+    public Long bulkDeActive(List<Long> noticeIds) {
+        return queryFactory
+                .update(notice)
+                .where(notice.id.in(noticeIds))
+                .set(notice.active, DEACTIVE)
+                .execute();
     }
 
     private BooleanExpression isKeyword(String keyword) {

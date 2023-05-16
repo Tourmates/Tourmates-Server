@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.admin.notice;
 
+import com.ssafy.tourmates.admin.admin.Admin;
 import com.ssafy.tourmates.common.domain.TimeBaseEntity;
 import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.client.member.Member;
@@ -33,17 +34,17 @@ public class Notice extends TimeBaseEntity {
     private Active active;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "admin_id")
+    private Admin admin;
 
     @Builder
-    public Notice(Long id, String pin, String title, String content, Active active, Member member) {
+    public Notice(Long id, String pin, String title, String content, Active active, Admin admin) {
         this.id = id;
         this.pin = pin;
         this.title = title;
         this.content = content;
         this.active = active;
-        this.member = member;
+        this.admin = admin;
     }
 
     //== 비즈니스 로직 ==//

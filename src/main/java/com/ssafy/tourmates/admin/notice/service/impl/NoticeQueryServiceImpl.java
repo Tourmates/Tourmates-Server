@@ -1,8 +1,9 @@
 package com.ssafy.tourmates.admin.notice.service.impl;
 
-import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.EditNoticeResponse;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.DetailNoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.EditNoticeResponse;
+import com.ssafy.tourmates.admin.api.dto.notice.response.NoticeResponse;
+import com.ssafy.tourmates.admin.controller.dto.notice.response.AdminNoticeResponse;
 import com.ssafy.tourmates.admin.notice.repository.NoticeQueryRepository;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.notice.service.NoticeQueryService;
@@ -41,5 +42,15 @@ public class NoticeQueryServiceImpl implements NoticeQueryService {
     @Override
     public EditNoticeResponse searchEditNotice(Long noticeId) {
         return noticeQueryRepository.searchEditNotice(noticeId);
+    }
+
+    @Override
+    public List<AdminNoticeResponse> searchAdminNotices() {
+        return noticeQueryRepository.searchAdminNotices();
+    }
+
+    @Override
+    public Long bulkDeActive(List<Long> noticeIds) {
+        return noticeQueryRepository.bulkDeActive(noticeIds);
     }
 }

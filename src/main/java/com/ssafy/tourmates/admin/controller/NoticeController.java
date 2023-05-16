@@ -1,131 +1,135 @@
 package com.ssafy.tourmates.admin.controller;
 
-import com.ssafy.tourmates.admin.controller.dto.notice.request.AddNoticeRequest;
-import com.ssafy.tourmates.admin.controller.dto.notice.request.EditNoticeRequest;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.DetailNoticeResponse;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.EditNoticeResponse;
-import com.ssafy.tourmates.admin.controller.dto.notice.response.NoticeResponse;
-import com.ssafy.tourmates.common.PageDto;
-import com.ssafy.tourmates.jwt.SecurityUtil;
-import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
+import com.ssafy.tourmates.admin.controller.dto.admin.LoginAdmin;
+import com.ssafy.tourmates.admin.controller.dto.notice.form.AddNoticeForm;
+import com.ssafy.tourmates.admin.controller.dto.notice.form.EditNoticeForm;
+import com.ssafy.tourmates.admin.controller.dto.notice.response.AdminNoticeResponse;
 import com.ssafy.tourmates.admin.notice.service.NoticeQueryService;
 import com.ssafy.tourmates.admin.notice.service.NoticeService;
 import com.ssafy.tourmates.admin.notice.service.dto.AddNoticeDto;
 import com.ssafy.tourmates.admin.notice.service.dto.EditNoticeDto;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/notices")
-@Api(tags = {"공지사항"})
+@RequestMapping("/intranet/notices")
 public class NoticeController {
 
+    // TODO: 2023/05/16 세부 수정
+    //관리자 권한: 복사
     private final NoticeService noticeService;
     private final NoticeQueryService noticeQueryService;
 
-    @ApiOperation(value = "공지사항 조회")
     @GetMapping
-    public ResultPage<List<NoticeResponse>> searchNotices(
-            @RequestParam(defaultValue = "") String keyword,
-            @RequestParam(defaultValue = "1") Integer pageNumber
-    ) {
-        NoticeSearchCondition condition = NoticeSearchCondition.builder()
-                .keyword(keyword)
-                .build();
-        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
-        List<NoticeResponse> pinResponses = noticeQueryService.searchPinNotices();
-        List<NoticeResponse> responses = noticeQueryService.searchByCondition(condition, pageRequest);
-        List<NoticeResponse> res = new ArrayList<>();
-        res.addAll(pinResponses);
-        res.addAll(responses);
-        return new ResultPage<>(res);
+    public String noticeList(
+            @ModelAttribute("addForm") AddNoticeForm addForm,
+            @ModelAttribute("editForm") EditNoticeForm editForm,
+            Model model) {
+        List<AdminNoticeResponse> notices = noticeQueryService.searchAdminNotices();
+        model.addAttribute("notices", notices);
+        return "noticeList";
     }
 
-    @GetMapping("/totalCount")
-    public Long paging(
-            @RequestParam(defaultValue = "") String keyword
-    ) {
-        NoticeSearchCondition condition = NoticeSearchCondition.builder()
-                .keyword(keyword)
-                .build();
-        Long totalCount = noticeQueryService.getTotalCount(condition);
-        log.debug("totalCount={}", totalCount);
-        return totalCount;
-    }
-
-    @ApiOperation(value = "공지사항 등록")
     @PostMapping("/register")
-    public Long registerNotice(@Valid @RequestBody AddNoticeRequest request) {
-        String loginId = SecurityUtil.getCurrentLoginId();
-
+    public String registerNotice(
+            @ModelAttribute AddNoticeForm form,
+            @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin
+    ) {
         AddNoticeDto dto = AddNoticeDto.builder()
-                .pin(request.getPin())
-                .title(request.getTitle())
-                .content(request.getContent())
+                .pin(form.getPin() == null ? "0" : "1")
+                .title(form.getTitle())
+                .content(form.getContent())
                 .build();
 
-        return noticeService.registerNotice(loginId, dto);
+        Long noticeId = noticeService.registerNotice(loginAdmin.getLoginId(), dto);
+        log.debug("noticeId={}", noticeId);
+        return "redirect:/intranet/notices";
     }
 
-    @ApiOperation(value = "공지사항 상세조회")
-    @GetMapping("/{noticeId}")
-    public Result<DetailNoticeResponse> searchNotice(@PathVariable Long noticeId) {
-        DetailNoticeResponse response = noticeQueryService.searchNotice(noticeId);
-        return new Result<>(response);
-    }
-
-    @ApiOperation(value = "공지사항 수정 조회")
-    @GetMapping("/{noticeId}/edit")
-    public Result<EditNoticeResponse> editNotice(@PathVariable Long noticeId) {
-        EditNoticeResponse response = noticeQueryService.searchEditNotice(noticeId);
-        return new Result<>(response);
-    }
-
-    @ApiOperation(value = "공지사항 수정")
-    @PostMapping("/{noticeId}/edit")
-    public Long editNotice(@PathVariable Long noticeId, @RequestBody EditNoticeRequest request) {
-        log.debug("request={}", request);
+    @PostMapping("/edit")
+    public String editNotice(
+            @ModelAttribute EditNoticeForm form
+    ) {
         EditNoticeDto dto = EditNoticeDto.builder()
-                .pin(request.getPin().equals("true") ? "1" : "0")
-                .title(request.getTitle())
-                .content(request.getContent())
+                .pin(form.getPin().equals("true") ? "1" : "0")
+                .title(form.getTitle())
+                .content(form.getContent())
                 .build();
-
-        Long editNoticeId = noticeService.editNotice(noticeId, dto);
-        log.debug("editNoticeId={}", editNoticeId);
-        return editNoticeId;
+        Long noticeId = noticeService.editNotice(form.getNoticeId(), dto);
+        log.debug("noticeId={}", noticeId);
+        return "redirect:/intranet/notices";
     }
 
-    @ApiOperation(value = "공지사항 삭제")
-    @PostMapping("/{noticeId}/remove")
-    public int removeNotice(@PathVariable Long noticeId) {
-        Long removedNoticeId = noticeService.removeNotice(noticeId);
-        log.debug("removedNoticeId={}", removedNoticeId);
-        return 1;
+    @PostMapping("/remove")
+    public String removeNotice(@RequestBody List<Long> noticeIds) {
+        Long count = noticeQueryService.bulkDeActive(noticeIds);
+        log.debug("count={}", count);
+        return "redirect:/intranet/notices";
     }
 
-    @Data
-    @AllArgsConstructor
-    static class Result<T> {
-        private T data;
-    }
+    @GetMapping("/excel/download")
+    public void excelDownload(HttpServletResponse response) throws IOException {
+        log.debug("excelDownload");
 
-    @Data
-    @AllArgsConstructor
-    static class ResultPage<T> {
-        private T data;
+        List<AdminNoticeResponse> notices = noticeQueryService.searchAdminNotices();
+
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("첫번째 시트");
+        Row row = null;
+        Cell cell = null;
+        int rowNum = 0;
+
+        //Header
+        row = sheet.createRow(rowNum++);
+        cell = row.createCell(0);
+        cell.setCellValue("번호");
+        cell = row.createCell(1);
+        cell.setCellValue("제목");
+        cell = row.createCell(2);
+        cell.setCellValue("작성자");
+        cell = row.createCell(3);
+        cell.setCellValue("작성일");
+        cell = row.createCell(4);
+        cell.setCellValue("삭제여부");
+
+        //Body
+        for (AdminNoticeResponse notice : notices) {
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(0);
+            cell.setCellValue(notice.getNoticeId());
+            cell = row.createCell(1);
+            cell.setCellValue(notice.getTitle());
+            cell = row.createCell(2);
+            cell.setCellValue(notice.getWriter());
+            cell = row.createCell(3);
+            cell.setCellValue(notice.getCreatedDate());
+            cell = row.createCell(4);
+            cell.setCellValue(notice.getActive());
+        }
+
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String fileName = "notices" + date + ".xlsx";
+
+        response.setContentType("ms-vnd/excel");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        //Excel File Output
+        wb.write(response.getOutputStream());
+        wb.close();
     }
 }

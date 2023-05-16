@@ -29,8 +29,8 @@ public class InitData {
     @PostConstruct
     public void init() {
         initMember();
-        initNotice();
         initAdmin();
+        initNotice();
     }
 
     private void initMember() {
@@ -43,9 +43,10 @@ public class InitData {
     }
 
     private void initNotice() {
+        Admin admin = adminRepository.findByLoginId("admin").get();
         List<Notice> notices = new ArrayList<>();
         for (int i = 1; i <= 100; i++) {
-            notices.add(Notice.builder().pin("0").title("공지사항" + i).content("공지사항" + i + " 내용").active(ACTIVE).build());
+            notices.add(Notice.builder().pin("0").title("공지사항" + i).content("공지사항" + i + " 내용").active(ACTIVE).admin(admin).build());
         }
         noticeRepository.saveAll(notices);
     }
