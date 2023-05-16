@@ -10,10 +10,17 @@ import com.ssafy.tourmates.admin.notice.service.dto.AddNoticeDto;
 import com.ssafy.tourmates.admin.notice.service.dto.EditNoticeDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -72,5 +79,52 @@ public class NoticeController {
         Long count = noticeQueryService.bulkDeActive(noticeIds);
         log.debug("count={}", count);
         return "redirect:/intranet/notices";
+    }
+
+    @GetMapping("/excel/download")
+    public void excelDownload(HttpServletResponse response) throws IOException {
+        log.debug("excelDownload");
+
+        List<AdminNoticeResponse> notices = noticeQueryService.searchAdminNotices();
+
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("첫번째 시트");
+        Row row = null;
+        Cell cell = null;
+        int rowNum = 0;
+
+        //Header
+        row = sheet.createRow(rowNum++);
+        cell = row.createCell(0);
+        cell.setCellValue("번호");
+        cell = row.createCell(1);
+        cell.setCellValue("제목");
+        cell = row.createCell(2);
+        cell.setCellValue("작성자");
+        cell = row.createCell(3);
+        cell.setCellValue("작성일");
+        cell = row.createCell(4);
+        cell.setCellValue("삭제여부");
+
+        //Body
+        for (AdminNoticeResponse notice : notices) {
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(0);
+            cell.setCellValue(notice.getNoticeId());
+            cell = row.createCell(1);
+            cell.setCellValue(notice.getTitle());
+            cell = row.createCell(2);
+            cell.setCellValue(notice.getWriter());
+            cell = row.createCell(3);
+            cell.setCellValue(notice.getCreatedDate());
+            cell = row.createCell(4);
+            cell.setCellValue(notice.getActive());
+        }
+
+        response.setContentType("ms-vnd/excel");
+        response.setHeader("Content-Disposition", "attachment;filename=notices.xlsx");
+        //Excel File Output
+        wb.write(response.getOutputStream());
+        wb.close();
     }
 }
