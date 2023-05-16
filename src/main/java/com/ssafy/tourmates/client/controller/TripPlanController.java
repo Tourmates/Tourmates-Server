@@ -1,11 +1,14 @@
 package com.ssafy.tourmates.client.controller;
 
 import com.ssafy.tourmates.client.controller.dto.tripPlan.AddDetailPlanRequest;
+import com.ssafy.tourmates.client.controller.dto.tripPlan.AddTripPlanCommentRequest;
 import com.ssafy.tourmates.client.controller.dto.tripPlan.AddTripPlanRequest;
 import com.ssafy.tourmates.client.controller.dto.tripPlan.EditTripPlanRequest;
 import com.ssafy.tourmates.client.tripPlan.service.DetailTripPlanService;
+import com.ssafy.tourmates.client.tripPlan.service.TripPlanCommentService;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddDetailTripPlanDto;
+import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanCommentDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
@@ -27,6 +30,7 @@ public class TripPlanController {
 
     private final TripPlanService tripPlanService;
     private final DetailTripPlanService detailTripPlanService;
+    private final TripPlanCommentService tripPlanCommentService;
 
     @ApiOperation(value = "여행계획 등록")
     @PostMapping("/register")
@@ -39,6 +43,21 @@ public class TripPlanController {
         Long savedTripPlanId = tripPlanService.registerTripPlan(loginId, dto);
 
         return savedTripPlanId;
+    }
+
+    @ApiOperation(value = "여행 계획 댓글 등록")
+    @PostMapping("/{tripPlanId}/comments/register")
+    public Long registerTripPlanComment(@PathVariable Long tripPlanId, @Valid @RequestBody AddTripPlanCommentRequest request) {
+
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        AddTripPlanCommentDto dto = AddTripPlanCommentDto.builder()
+                .content(request.getComment())
+                .build();
+
+        Long tripPlanCommentId = tripPlanCommentService.registerTripPlanComment(loginId, tripPlanId, dto);
+
+        return tripPlanCommentId;
     }
 
     @ApiOperation(value = "세부 여행 계획 등록")
@@ -63,7 +82,6 @@ public class TripPlanController {
         Long editTripPlanId = tripPlanService.editTripPlan(tripPlanId, dto);
         return editTripPlanId;
     }
-    
 
 
     @ApiOperation(value = "여행계획 삭제")
@@ -75,7 +93,7 @@ public class TripPlanController {
 
     @ApiOperation(value = "세부 여행 계획 삭제")
     @PostMapping("/{tripPlanId}/detail/{detailTripPlanId}/remove")
-    public Integer removeDetailTripPlan(@PathVariable Long tripPlanId, @PathVariable Long detailTripPlanId){
+    public Integer removeDetailTripPlan(@PathVariable Long tripPlanId, @PathVariable Long detailTripPlanId) {
         detailTripPlanService.removeDetailTripPlan(detailTripPlanId);
         return 1;
     }
