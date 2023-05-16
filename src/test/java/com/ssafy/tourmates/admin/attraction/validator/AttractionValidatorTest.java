@@ -21,7 +21,7 @@ class AttractionValidatorTest {
     @DisplayName("관광지 PK 조회")
     void findById() {
         //given
-        int contentId = 125266;
+        Long contentId = 125266L;
 
         //when
         AttractionInfo findAttractionInfo = attractionValidator.findById(contentId);
