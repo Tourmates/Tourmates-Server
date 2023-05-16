@@ -13,7 +13,7 @@ public class AttractionValidator {
 
     private final AttractionRepository attractionRepository;
 
-    public AttractionInfo findById(Integer id) {
+    public AttractionInfo findById(Long id) {
         return attractionRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
     }
