@@ -1,16 +1,10 @@
 package com.ssafy.tourmates.client.controller;
 
-import com.ssafy.tourmates.client.controller.dto.tripPlan.AddDetailPlanRequest;
-import com.ssafy.tourmates.client.controller.dto.tripPlan.AddTripPlanCommentRequest;
-import com.ssafy.tourmates.client.controller.dto.tripPlan.AddTripPlanRequest;
-import com.ssafy.tourmates.client.controller.dto.tripPlan.EditTripPlanRequest;
+import com.ssafy.tourmates.client.controller.dto.tripPlan.*;
 import com.ssafy.tourmates.client.tripPlan.service.DetailTripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanCommentService;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
-import com.ssafy.tourmates.client.tripPlan.service.dto.AddDetailTripPlanDto;
-import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanCommentDto;
-import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanDto;
-import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
+import com.ssafy.tourmates.client.tripPlan.service.dto.*;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -81,6 +75,18 @@ public class TripPlanController {
 
         Long editTripPlanId = tripPlanService.editTripPlan(tripPlanId, dto);
         return editTripPlanId;
+    }
+
+    @ApiOperation(value = "세부 여행계획 수정")
+    @PostMapping("/{tripPlanId}/comments/{tripPlanCommentId}/edit")
+    public Long editTripPlanComment(@PathVariable Long tripPlanId, @PathVariable Long tripPlanCommentId, @Valid @RequestBody EditTripPlanCommentReqeust request) {
+
+        EditTripPlanCommentDto dto = EditTripPlanCommentDto.builder()
+                .content(request.getContent())
+                .build();
+
+        Long editTripPlanCommentId = tripPlanCommentService.editTripPlanComment(tripPlanId, tripPlanCommentId, dto);
+        return editTripPlanCommentId;
     }
 
 
