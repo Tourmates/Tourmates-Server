@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class DetailPlan extends TimeBaseEntity {
+public class DetailTripPlan extends TimeBaseEntity {
 
     @Id
     @GeneratedValue
@@ -30,7 +30,7 @@ public class DetailPlan extends TimeBaseEntity {
     private AttractionInfo attractionInfo;
 
     @Builder
-    public DetailPlan(Long id, TripPlan tripPlan, AttractionInfo attractionInfo){
+    public DetailTripPlan(Long id, TripPlan tripPlan, AttractionInfo attractionInfo){
         this.id = id;
         this.tripPlan = tripPlan;
         this.attractionInfo = attractionInfo;
