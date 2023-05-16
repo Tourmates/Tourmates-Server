@@ -97,6 +97,15 @@ public class TripPlanController {
         return removedTripPlanId;
     }
 
+    @ApiOperation(value = "여행 계획 댓글 삭제")
+    @PostMapping("/{tripPlanId}/comments/{tripPlanCommentId}/remove")
+    public void removeTripPlanComment(@PathVariable Long tripPlanId, @PathVariable Long tripPlanCommentId){
+        tripPlanCommentService.removeTripPlanComment(tripPlanCommentId);
+    }
+
+
+
+
     @ApiOperation(value = "세부 여행 계획 삭제")
     @PostMapping("/{tripPlanId}/detail/{detailTripPlanId}/remove")
     public Integer removeDetailTripPlan(@PathVariable Long tripPlanId, @PathVariable Long detailTripPlanId) {

@@ -45,4 +45,9 @@ public class TripPlanCommentServiceImpl implements TripPlanCommentService {
         findTripPlanComment.changeTripPlanComment(dto.getContent());
         return findTripPlanComment.getId();
     }
+
+    @Override
+    public void removeTripPlanComment(Long tripPlanCommentId) {
+        tripPlanCommentRepository.deleteById(tripPlanCommentId);
+    }
 }
