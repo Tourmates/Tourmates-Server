@@ -24,4 +24,7 @@ public interface NoticeQueryService {
     EditNoticeResponse searchEditNotice(Long noticeId);
 
     List<AdminNoticeResponse> searchAdminNotices();
+
+    @Transactional
+    Long bulkDeActive(List<Long> noticeIds);
 }

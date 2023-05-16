@@ -48,4 +48,9 @@ public class NoticeQueryServiceImpl implements NoticeQueryService {
     public List<AdminNoticeResponse> searchAdminNotices() {
         return noticeQueryRepository.searchAdminNotices();
     }
+
+    @Override
+    public Long bulkDeActive(List<Long> noticeIds) {
+        return noticeQueryRepository.bulkDeActive(noticeIds);
+    }
 }
