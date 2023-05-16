@@ -25,7 +25,7 @@ public class DetailTripPlanServiceImpl implements DetailTripPlanService {
         TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
 
         List<DetailTripPlan> detailTripPlanList = new ArrayList<>();
-        List<Integer> contentIds = dto.getContendIds();
+        List<Integer> contentIds = dto.getContentIds();
 
         for(int i = 0; i < contentIds.size(); i++){
             AttractionInfo attractionInfo = attractionValidator.findById(contentIds.get(i));
