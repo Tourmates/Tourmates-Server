@@ -24,7 +24,6 @@ public class TripPlanApiController {
 
     private final TripPlanService tripPlanService;
     private final DetailTripPlanService detailTripPlanService;
-    private final TripPlanCommentService tripPlanCommentService;
 
     @ApiOperation(value = "여행계획 등록")
     @PostMapping("/register")
@@ -37,21 +36,6 @@ public class TripPlanApiController {
         Long savedTripPlanId = tripPlanService.registerTripPlan(loginId, dto);
 
         return savedTripPlanId;
-    }
-
-    @ApiOperation(value = "여행 계획 댓글 등록")
-    @PostMapping("/{tripPlanId}/comments/register")
-    public Long registerTripPlanComment(@PathVariable Long tripPlanId, @Valid @RequestBody AddTripPlanCommentRequest request) {
-
-        String loginId = SecurityUtil.getCurrentLoginId();
-
-        AddTripPlanCommentDto dto = AddTripPlanCommentDto.builder()
-                .content(request.getComment())
-                .build();
-
-        Long tripPlanCommentId = tripPlanCommentService.registerTripPlanComment(loginId, tripPlanId, dto);
-
-        return tripPlanCommentId;
     }
 
     @ApiOperation(value = "세부 여행 계획 등록")
@@ -77,34 +61,12 @@ public class TripPlanApiController {
         return editTripPlanId;
     }
 
-    @ApiOperation(value = "세부 여행계획 수정")
-    @PostMapping("/{tripPlanId}/comments/{tripPlanCommentId}/edit")
-    public Long editTripPlanComment(@PathVariable Long tripPlanId, @PathVariable Long tripPlanCommentId, @Valid @RequestBody EditTripPlanCommentReqeust request) {
-
-        EditTripPlanCommentDto dto = EditTripPlanCommentDto.builder()
-                .content(request.getContent())
-                .build();
-
-        Long editTripPlanCommentId = tripPlanCommentService.editTripPlanComment(tripPlanId, tripPlanCommentId, dto);
-        return editTripPlanCommentId;
-    }
-
-
     @ApiOperation(value = "여행계획 삭제")
     @PostMapping("/{tripPlanId}/remove")
     public Long removeTripPlan(@PathVariable Long tripPlanId) {
         Long removedTripPlanId = tripPlanService.removeTripPlan(tripPlanId);
         return removedTripPlanId;
     }
-
-    @ApiOperation(value = "여행 계획 댓글 삭제")
-    @PostMapping("/{tripPlanId}/comments/{tripPlanCommentId}/remove")
-    public void removeTripPlanComment(@PathVariable Long tripPlanId, @PathVariable Long tripPlanCommentId){
-        tripPlanCommentService.removeTripPlanComment(tripPlanCommentId);
-    }
-
-
-
 
     @ApiOperation(value = "세부 여행 계획 삭제")
     @PostMapping("/{tripPlanId}/detail/{detailTripPlanId}/remove")
