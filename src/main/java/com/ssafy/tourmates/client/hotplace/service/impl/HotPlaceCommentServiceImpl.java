@@ -36,7 +36,7 @@ public class HotPlaceCommentServiceImpl implements HotPlaceCommentService {
     }
 
     @Override
-    public Long editHotPlaceComment(Long hotPlaceId, Long hotPlaceCommentId, EditHotPlaceCommentDto dto) {
+    public Long editHotPlaceComment(Long hotPlaceCommentId, EditHotPlaceCommentDto dto) {
         HotPlaceComment findHotPlaceComment = hotPlaceCommentValidator.findById(hotPlaceCommentId);
         findHotPlaceComment.changeComment(dto.getContent());
         return findHotPlaceComment.getId();

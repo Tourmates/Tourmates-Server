@@ -9,7 +9,7 @@ public interface HotPlaceCommentService {
 
     Long registerHotPlaceComment(String loginId, Long hotPlaceId, AddHotPlaceCommentDto dto);
 
-    Long editHotPlaceComment(Long hotPlaceId, Long hotPlaceCommentId, EditHotPlaceCommentDto dto);
+    Long editHotPlaceComment(Long hotPlaceCommentId, EditHotPlaceCommentDto dto);
 
     Long removeHotPlaceComment(Long hotPlaceCommentId);
 }
