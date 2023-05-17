@@ -19,7 +19,7 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
 
     @Override
     public List<QuestionResponse> searchByCondition(QuestionSearchCondition condition, Pageable pageable) {
-        return questionQueryRepository.searchByCondition(condition, pageable)
+        return questionQueryRepository.searchByCondition(condition, pageable);
     }
 
     @Override
