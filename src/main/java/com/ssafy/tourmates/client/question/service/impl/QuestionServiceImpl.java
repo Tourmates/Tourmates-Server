@@ -1,6 +1,5 @@
 package com.ssafy.tourmates.client.question.service.impl;
 
-import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import com.ssafy.tourmates.client.question.Question;
