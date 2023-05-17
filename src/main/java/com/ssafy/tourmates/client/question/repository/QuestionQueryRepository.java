@@ -3,6 +3,8 @@ package com.ssafy.tourmates.client.question.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.tourmates.admin.answer.QAnswer;
+import com.ssafy.tourmates.client.controller.dto.question.response.DetailQuestionResponse;
 import com.ssafy.tourmates.client.controller.dto.question.response.QuestionResponse;
 import com.ssafy.tourmates.client.question.QuestionType;
 import com.ssafy.tourmates.client.question.repository.dto.QuestionSearchCondition;
@@ -14,6 +16,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ssafy.tourmates.admin.answer.QAnswer.*;
 import static com.ssafy.tourmates.client.member.Active.*;
 import static com.ssafy.tourmates.client.question.QQuestion.*;
 import static org.springframework.util.StringUtils.*;
@@ -68,6 +71,22 @@ public class QuestionQueryRepository {
                 )
                 .fetch()
                 .size();
+    }
+
+    public DetailQuestionResponse searchQuestion(Long questionId) {
+        return queryFactory
+                .select(Projections.constructor(DetailQuestionResponse.class,
+                        question.type,
+                        question.title,
+                        question.content,
+                        question.createdDate,
+                        question.answer.content,
+                        question.answer.createdDate
+                        ))
+                .from(question)
+                .leftJoin(question, answer.question)
+                .where(question.id.eq(questionId))
+                .fetchOne();
     }
 
     private BooleanExpression isType(QuestionType type) {
