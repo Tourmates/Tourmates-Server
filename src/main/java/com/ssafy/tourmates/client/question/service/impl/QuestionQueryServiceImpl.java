@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.question.service.impl;
 
+import com.ssafy.tourmates.client.controller.dto.question.response.DetailQuestionResponse;
 import com.ssafy.tourmates.client.controller.dto.question.response.QuestionResponse;
 import com.ssafy.tourmates.client.question.repository.QuestionQueryRepository;
 import com.ssafy.tourmates.client.question.repository.dto.QuestionSearchCondition;
@@ -25,5 +26,10 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
     @Override
     public Long totalCount(QuestionSearchCondition condition) {
         return questionQueryRepository.totalCount(condition);
+    }
+
+    @Override
+    public DetailQuestionResponse searchQuestion(Long questionId) {
+        return questionQueryRepository.searchQuestion(questionId);
     }
 }
