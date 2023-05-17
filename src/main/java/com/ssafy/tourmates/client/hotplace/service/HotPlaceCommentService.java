@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface HotPlaceCommentService {
 
-    Long registerHotplaceComment(String loginId, Long hotPlaceId, AddHotPlaceCommentDto dto);
+    Long registerHotPlaceComment(String loginId, Long hotPlaceId, AddHotPlaceCommentDto dto);
 
-    Long editHotPlaceComment(Long hotPlaceId, Long hotPlaceCommentId, EditHotPlaceCommentDto dto);
+    Long editHotPlaceComment(Long hotPlaceCommentId, EditHotPlaceCommentDto dto);
 
-    void removeHotPlaceComment(Long hotPlaceCommentId);
+    Long removeHotPlaceComment(Long hotPlaceCommentId);
 }

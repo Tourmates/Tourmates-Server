@@ -18,20 +18,17 @@ import org.springframework.stereotype.Service;
 public class HotPlaceCommentServiceImpl implements HotPlaceCommentService {
 
     private final MemberValidator memberValidator;
-    private final HotPlaceValidator hotplaceValidator;
     private final HotPlaceCommentValidator hotPlaceCommentValidator;
     private final HotPlaceCommentRepository hotplaceCommentRepository;
 
     @Override
-    public Long registerHotplaceComment(String loginId, Long hotPlaceId, AddHotPlaceCommentDto dto) {
-
+    public Long registerHotPlaceComment(String loginId, Long hotPlaceId, AddHotPlaceCommentDto dto) {
         Member findMember = memberValidator.findByLoginId(loginId);
-        HotPlace findHotPlace = hotplaceValidator.findById(hotPlaceId);
 
         HotPlaceComment hotPlaceComment = HotPlaceComment.builder()
                 .content(dto.getContent())
                 .member(findMember)
-                .hotPlace(findHotPlace)
+                .hotPlace(HotPlace.builder().id(hotPlaceId).build())
                 .build();
 
         HotPlaceComment savedHotPlaceComment = hotplaceCommentRepository.save(hotPlaceComment);
@@ -39,17 +36,15 @@ public class HotPlaceCommentServiceImpl implements HotPlaceCommentService {
     }
 
     @Override
-    public Long editHotPlaceComment(Long hotPlaceId, Long hotPlaceCommentId, EditHotPlaceCommentDto dto) {
-
+    public Long editHotPlaceComment(Long hotPlaceCommentId, EditHotPlaceCommentDto dto) {
         HotPlaceComment findHotPlaceComment = hotPlaceCommentValidator.findById(hotPlaceCommentId);
-        findHotPlaceComment.changeHotPlaceComment(dto.getContent());
+        findHotPlaceComment.changeComment(dto.getContent());
         return findHotPlaceComment.getId();
     }
 
     @Override
-    public void removeHotPlaceComment(Long hotPlaceCommentId) {
-
+    public Long removeHotPlaceComment(Long hotPlaceCommentId) {
         hotplaceCommentRepository.deleteById(hotPlaceCommentId);
-
+        return hotPlaceCommentId;
     }
 }
