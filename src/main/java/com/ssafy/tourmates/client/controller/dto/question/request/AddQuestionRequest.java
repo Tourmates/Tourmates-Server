@@ -9,4 +9,5 @@ public class AddQuestionRequest {
     private QuestionType type;
     private String title;
     private String content;
+    private String password;
 }
