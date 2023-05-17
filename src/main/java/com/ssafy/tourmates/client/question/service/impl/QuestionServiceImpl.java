@@ -9,6 +9,8 @@ import com.ssafy.tourmates.client.question.service.dto.AddQuestionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.ssafy.tourmates.client.member.Active.*;
+
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
@@ -25,6 +27,7 @@ public class QuestionServiceImpl implements QuestionService {
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .password(dto.getPassword())
+                .active(ACTIVE)
                 .member(member)
                 .build();
 

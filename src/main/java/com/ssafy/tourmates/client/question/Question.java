@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.question;
 
+import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.common.domain.TimeBaseEntity;
 import lombok.Builder;
@@ -29,18 +30,22 @@ public class Question extends TimeBaseEntity {
     private String content;
     @Column(updatable = false, length = 4)
     private String password;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Active active;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder
-    public Question(Long id, QuestionType type, String title, String content, String password, Member member) {
+    public Question(Long id, QuestionType type, String title, String content, String password, Active active, Member member) {
         this.id = id;
         this.type = type;
         this.title = title;
         this.content = content;
         this.password = password;
+        this.active = active;
         this.member = member;
     }
 }
