@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/join", "/boards/**", "/notices/**", "/questions/**",
+                .antMatchers("/login", "/join", "/boards/**", "/notices/**", "/qna/**",
                         "/intranet/**", "/css/**", "/img/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/boards/register").hasRole("MEMBER")
