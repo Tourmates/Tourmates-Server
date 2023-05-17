@@ -22,17 +22,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardComment extends TimeBaseEntity {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     @Column(name = "board_comment_id")
     private Long id;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String content;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
@@ -42,12 +40,11 @@ public class BoardComment extends TimeBaseEntity {
         this.id = id;
         this.content = content;
         this.member = member;
+        this.board = board;
     }
 
     //==비즈니스 로직==//
-    public void changeBoardComment(String content) {
+    public void changeComment(String content) {
         this.content = content;
     }
-
-
 }
