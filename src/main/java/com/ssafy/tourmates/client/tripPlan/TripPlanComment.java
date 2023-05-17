@@ -16,9 +16,8 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class TripPlanComment extends TimeBaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "trip_plan_comment")
+    @Id @GeneratedValue
+    @Column(name = "trip_plan_comment_id")
     private Long id;
     @Column(nullable = false, length = 50)
     private String content;
@@ -26,7 +25,6 @@ public class TripPlanComment extends TimeBaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "trip_plan_id")
     private TripPlan tripPlan;
-
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -39,8 +37,7 @@ public class TripPlanComment extends TimeBaseEntity {
         this.member = member;
     }
 
-    public void changeTripPlanComment(String content) {
+    public void changeComment(String content) {
         this.content = content;
     }
-
 }

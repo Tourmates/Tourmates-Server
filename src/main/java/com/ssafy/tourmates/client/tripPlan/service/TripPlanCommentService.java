@@ -11,5 +11,5 @@ public interface TripPlanCommentService {
 
     Long editTripPlanComment(Long tripPlanId, Long tripPlanCommentId, EditTripPlanCommentDto dto);
 
-    void removeTripPlanComment(Long tripPlanCommentId);
+    Long removeTripPlanComment(Long tripPlanCommentId);
 }
