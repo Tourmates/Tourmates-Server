@@ -16,8 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class HotPlaceComment extends TimeBaseEntity {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     @Column(name = "hot_place_comment_id")
     private Long id;
     @Column(nullable = false, length = 50)
@@ -26,7 +25,6 @@ public class HotPlaceComment extends TimeBaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "hot_place_id")
     private HotPlace hotPlace;
@@ -39,8 +37,8 @@ public class HotPlaceComment extends TimeBaseEntity {
         this.hotPlace = hotPlace;
     }
 
-    //==비즈니스 로직==//
-    public void changeHotPlaceComment(String content){
+    //== 비즈니스 로직 ==//
+    public void changeComment(String content){
         this.content = content;
     }
 }
