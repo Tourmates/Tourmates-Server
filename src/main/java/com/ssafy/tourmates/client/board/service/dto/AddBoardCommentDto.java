@@ -12,5 +12,4 @@ public class AddBoardCommentDto {
     public AddBoardCommentDto(String content) {
         this.content = content;
     }
-
 }

@@ -79,21 +79,6 @@ public class BoardApiController {
         return totalCount;
     }
 
-    @ApiOperation(value = "게시판 댓글 등록")
-    @GetMapping("/{boardId}/comments/register")
-    public Long registerBoardComment(@PathVariable Long boardId,
-                                     @Valid @RequestBody AddBoardCommentRequest request) {
-
-        String loginId = SecurityUtil.getCurrentLoginId();
-
-        AddBoardCommentDto dto = AddBoardCommentDto.builder()
-                .content(request.getComment())
-                .build();
-
-        Long boardCommentId = boardCommentService.registerBoardComment(loginId, boardId, dto);
-        return boardCommentId;
-    }
-
     @ApiOperation(value = "게시판 등록")
     @PostMapping("/register")
     public Long registerBoard(@Valid @RequestBody AddBoardRequest request) {
@@ -144,40 +129,15 @@ public class BoardApiController {
         return removedBoardId;
     }
 
-    @ApiOperation(value = "게시판 댓글 수정")
-    @PostMapping("/{boardId}/comments/{boardCommentId}/edit")
-    public Long editBoardComment(@PathVariable Long boardId,
-                                 @PathVariable Long boardCommentId,
-                                 @Valid @RequestBody EditBoardCommentRequest request) {
-
-        EditBoardCommentDto dto = EditBoardCommentDto.builder()
-                .content(request.getContent())
-                .build();
-
-        Long editBoardCommentId = boardCommentService.editBoardComment(boardId, boardCommentId, dto);
-        log.debug("editBoardCommentId={}", editBoardCommentId);
-        return editBoardCommentId;
-    }
-
-    @ApiOperation(value = "게시판 댓글 삭제")
-    @GetMapping("/{boardId}/comments/{boardCommentId}/remove")
-    public int removeBoardComment(@PathVariable Long boardId, @PathVariable Long boardCommentId) {
-        boardCommentService.removeBoardComment(boardCommentId);
-        return 1;
-    }
-
-
     @Data
     @AllArgsConstructor
     static class ResultPage<T> {
-
         private T data;
     }
 
     @Data
     @AllArgsConstructor
     static class Result<T> {
-
         private T data;
     }
 }
