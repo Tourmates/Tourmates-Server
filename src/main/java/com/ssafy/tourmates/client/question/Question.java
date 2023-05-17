@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.question;
 
+import com.ssafy.tourmates.admin.answer.Answer;
 import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.common.domain.TimeBaseEntity;
@@ -37,9 +38,11 @@ public class Question extends TimeBaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+    @OneToOne(fetch = LAZY, mappedBy = "question")
+    private Answer answer;
 
     @Builder
-    public Question(Long id, QuestionType type, String title, String content, String password, Active active, Member member) {
+    public Question(Long id, QuestionType type, String title, String content, String password, Active active, Member member, Answer answer) {
         this.id = id;
         this.type = type;
         this.title = title;
@@ -47,5 +50,6 @@ public class Question extends TimeBaseEntity {
         this.password = password;
         this.active = active;
         this.member = member;
+        this.answer = answer;
     }
 }
