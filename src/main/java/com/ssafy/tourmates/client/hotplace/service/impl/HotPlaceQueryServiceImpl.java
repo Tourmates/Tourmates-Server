@@ -2,8 +2,8 @@ package com.ssafy.tourmates.client.hotplace.service.impl;
 
 import com.ssafy.tourmates.client.hotplace.HotPlaceComment;
 import com.ssafy.tourmates.client.hotplace.service.HotPlaceQueryService;
-import com.ssafy.tourmates.client.controller.dto.hotplace.response.DetailHotPlaceResponse;
-import com.ssafy.tourmates.client.controller.dto.hotplace.response.HotPlaceResponse;
+import com.ssafy.tourmates.client.api.dto.hotplace.response.DetailHotPlaceResponse;
+import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceResponse;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
 import com.ssafy.tourmates.client.hotplace.repository.HotPlaceQueryRepository;
 import com.ssafy.tourmates.client.hotplace.repository.dto.HotPlaceSearchCondition;

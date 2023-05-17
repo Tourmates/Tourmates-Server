@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
 import com.ssafy.tourmates.client.hotplace.repository.dto.HotPlaceSearchCondition;
 import com.ssafy.tourmates.common.domain.ContentType;
-import com.ssafy.tourmates.client.controller.dto.hotplace.response.HotPlaceResponse;
+import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;

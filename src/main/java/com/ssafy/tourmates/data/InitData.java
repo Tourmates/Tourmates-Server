@@ -6,6 +6,8 @@ import com.ssafy.tourmates.admin.notice.Notice;
 import com.ssafy.tourmates.admin.notice.repository.NoticeRepository;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.repository.MemberRepository;
+import com.ssafy.tourmates.client.question.Question;
+import com.ssafy.tourmates.client.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +19,7 @@ import java.util.List;
 
 import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 import static com.ssafy.tourmates.client.member.Gender.*;
+import static com.ssafy.tourmates.client.question.QuestionType.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -25,12 +28,14 @@ public class InitData {
     private final MemberRepository memberRepository;
     private final NoticeRepository noticeRepository;
     private final AdminRepository adminRepository;
+    private final QuestionRepository questionRepository;
 
     @PostConstruct
     public void init() {
         initMember();
         initAdmin();
         initNotice();
+        initQuestion();
     }
 
     private void initMember() {
@@ -54,5 +59,12 @@ public class InitData {
     private void initAdmin() {
         Admin admin = Admin.builder().id(1L).loginId("admin").loginPw("1!").name("임우택").email("admin@ssafy.com").tel("010-0000-0000").active(ACTIVE).build();
         adminRepository.save(admin);
+    }
+
+    private void initQuestion() {
+        List<Question> questions = new ArrayList<>();
+        questions.add(Question.builder().type(NONE).title("공개 질문").content("공개 질문입니다.").password(null).active(ACTIVE).member(Member.builder().id(1L).build()).build());
+        questions.add(Question.builder().type(NONE).title("비공개 질문").content("비공개 질문입니다.").password("1234").active(ACTIVE).member(Member.builder().id(1L).build()).build());
+        questionRepository.saveAll(questions);
     }
 }
