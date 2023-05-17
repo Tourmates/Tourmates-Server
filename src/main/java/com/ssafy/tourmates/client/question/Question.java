@@ -27,7 +27,7 @@ public class Question extends TimeBaseEntity {
     @Lob
     @Column(nullable = false, updatable = false)
     private String content;
-    @Column(nullable = false, updatable = false, length = 4)
+    @Column(updatable = false, length = 4)
     private String password;
 
     @ManyToOne(fetch = LAZY)
