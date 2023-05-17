@@ -1,7 +1,7 @@
 package com.ssafy.tourmates.admin.controller;
 
 import com.ssafy.tourmates.admin.attraction.repository.dto.AttractionSearchCondition;
-import com.ssafy.tourmates.admin.attraction.service.AttractionService;
+import com.ssafy.tourmates.admin.attraction.service.AttractionQueryService;
 import com.ssafy.tourmates.admin.controller.dto.attraction.response.AttractionResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +18,11 @@ import java.util.List;
 @RequestMapping("/attraction")
 public class AttractionController {
 
-    private final AttractionService attractionService;
+    private final AttractionQueryService attractionService;
 
     @GetMapping("/search")
     public List<AttractionResponse> searchAttraction(@RequestBody AttractionSearchCondition attractionSearchCondition) {
-        return attractionService.searchAttractionByCondition(attractionSearchCondition);
+        return attractionService.searchByCondition(attractionSearchCondition);
     }
 
 }
