@@ -9,7 +9,6 @@ import com.ssafy.tourmates.client.tripPlan.service.TripPlanCommentService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanCommentDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanCommentDto;
 import com.ssafy.tourmates.client.tripPlan.validator.TripPlanCommentValidator;
-import com.ssafy.tourmates.client.tripPlan.validator.TripPlanValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +18,17 @@ import org.springframework.stereotype.Service;
 public class TripPlanCommentServiceImpl implements TripPlanCommentService {
 
     private final MemberValidator memberValidator;
-    private final TripPlanValidator tripPlanValidator;
     private final TripPlanCommentValidator tripPlanCommentValidator;
     private final TripPlanCommentRepository tripPlanCommentRepository;
 
     @Override
     public Long registerTripPlanComment(String loginId, Long tripPlanId, AddTripPlanCommentDto dto) {
         Member findMember = memberValidator.findByLoginId(loginId);
-        TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
 
         TripPlanComment tripPlanComment = TripPlanComment.builder()
-                .tripPlan(findTripPlan)
-                .member(findMember)
                 .content(dto.getContent())
+                .member(findMember)
+                .tripPlan(TripPlan.builder().id(tripPlanId).build())
                 .build();
 
         TripPlanComment savedTripPlanComment = tripPlanCommentRepository.save(tripPlanComment);
@@ -40,14 +37,14 @@ public class TripPlanCommentServiceImpl implements TripPlanCommentService {
 
     @Override
     public Long editTripPlanComment(Long tripPlanId, Long tripPlanCommentId, EditTripPlanCommentDto dto) {
-
         TripPlanComment findTripPlanComment = tripPlanCommentValidator.findById(tripPlanCommentId);
-        findTripPlanComment.changeTripPlanComment(dto.getContent());
+        findTripPlanComment.changeComment(dto.getContent());
         return findTripPlanComment.getId();
     }
 
     @Override
-    public void removeTripPlanComment(Long tripPlanCommentId) {
+    public Long removeTripPlanComment(Long tripPlanCommentId) {
         tripPlanCommentRepository.deleteById(tripPlanCommentId);
+        return tripPlanCommentId;
     }
 }
