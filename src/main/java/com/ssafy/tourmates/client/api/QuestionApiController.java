@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/questions")
+@RequestMapping("/qna")
 @Api(tags = {"질문"})
 public class QuestionApiController {
 
@@ -35,9 +35,9 @@ public class QuestionApiController {
     @GetMapping
     public Result<List<QuestionResponse>> searchQuestions(
             @RequestParam(defaultValue = "") String title,
-            @RequestParam QuestionType type,
+            @RequestParam(required = false) QuestionType type,
             @RequestParam(defaultValue = "1") Integer pageNumber
-            ) {
+    ) {
         QuestionSearchCondition condition = QuestionSearchCondition.builder()
                 .title(title)
                 .type(type)
@@ -54,7 +54,7 @@ public class QuestionApiController {
     @GetMapping("/totalCount")
     public Long searchTotalCount(
             @RequestParam(defaultValue = "") String title,
-            @RequestParam QuestionType type
+            @RequestParam(required = false) QuestionType type
     ) {
         QuestionSearchCondition condition = QuestionSearchCondition.builder()
                 .title(title)
