@@ -29,6 +29,7 @@ public class QuestionController {
                 .type(request.getType())
                 .title(request.getTitle())
                 .content(request.getContent())
+                .password(request.getPassword())
                 .build();
 
         Long questionId = questionService.registerQuestion(loginId, dto);
