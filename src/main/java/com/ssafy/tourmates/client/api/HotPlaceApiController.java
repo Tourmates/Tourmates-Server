@@ -35,9 +35,7 @@ public class HotPlaceApiController {
 
     private final HotPlaceService hotPlaceService;
     private final HotPlaceQueryService hotPlaceQueryService;
-    private final HotPlaceCommentService hotPlaceCommentService;
     private final HotPlaceLikeService hotPlaceLikeService;
-    private final HotPlaceCommentQueryService hotPlaceCommentQueryService;
     private final FileStore fileStore;
 
     @ApiOperation(value = "핫플레이스 등록")
@@ -60,23 +58,9 @@ public class HotPlaceApiController {
         return hotPlaceId;
     }
 
-    @ApiOperation(value = "핫플레이스 댓글 등록")
-    @PostMapping("/{hotPlaceId}/comments/register")
-    public Long registerHotplaceComment(@PathVariable Long hotPlaceId, @Valid @RequestBody AddHotplaceCommentRequest request){
-
-        String loginId = SecurityUtil.getCurrentLoginId();
-
-        AddHotPlaceCommentDto dto = AddHotPlaceCommentDto.builder()
-                .content(request.getComment())
-                .build();
-
-        Long hotplaceCommentId = hotPlaceCommentService.registerHotplaceComment(loginId,hotPlaceId, dto);
-        return hotplaceCommentId;
-    }
-
     @ApiOperation(value = "핫플레이스 좋아요 등록")
     @PostMapping("/{hotPlaceId}/like/register")
-    public Long registerHotPlaceLike(@PathVariable Long hotPlaceId){
+    public Long registerHotPlaceLike(@PathVariable Long hotPlaceId) {
 
         String loginId = SecurityUtil.getCurrentLoginId();
 
@@ -99,7 +83,7 @@ public class HotPlaceApiController {
                 .build();
         PageRequest pageRequest = PageRequest.of(pageNumber, 10);
         List<HotPlaceResponse> responses = hotPlaceQueryService.searchByCondition(condition, pageRequest);
-        return new ResultPage<>(responses, pageNumber, 10);
+        return new ResultPage<>(responses);
     }
 
     @ApiOperation(value = "핫플레이스 상세조회")
@@ -129,19 +113,6 @@ public class HotPlaceApiController {
         return editHotPlaceId;
     }
 
-    @ApiOperation(value = "핫플레이스 댓글 수정")
-    @PostMapping("/{hotPlaceId}/comments/{hotPlaceCommentId}/edit")
-    public Long editHotPlaceComment(@PathVariable Long hotPlaceId, @PathVariable Long hotPlaceCommentId, @Valid @RequestBody EditHotPlaceCommentRequest request){
-
-        EditHotPlaceCommentDto dto = EditHotPlaceCommentDto.builder()
-                .content(request.getContent())
-                .build();
-
-        Long editHotPlaceCommentId = hotPlaceCommentService.editHotPlaceComment(hotPlaceId, hotPlaceCommentId, dto);
-        return editHotPlaceCommentId;
-    }
-
-
     @ApiOperation(value = "핫플레이스 삭제")
     @PostMapping("/{hotPlaceId}/remove")
     public int removeHotPlace(@PathVariable Long hotPlaceId) {
@@ -150,25 +121,16 @@ public class HotPlaceApiController {
         return 1;
     }
 
-    @ApiOperation(value = "핫플레이스 댓글 삭제")
-    @GetMapping("/{hotPlaceId}/comments/{commentId}/remove")
-    public void removeHotPlaceComment(@PathVariable Long hotPlaceId, @PathVariable Long commentId){
-       hotPlaceCommentService.removeHotPlaceComment(commentId);
-    }
-
     @ApiOperation(value = "핫플레이스 좋아요 삭제")
     @GetMapping("/{hotPlaceId}/likes/{likeId}/remove")
-    public void removeHotPlaceLike(@PathVariable Long hotPlaceId, @PathVariable Long likeId){
+    public void removeHotPlaceLike(@PathVariable Long hotPlaceId, @PathVariable Long likeId) {
         hotPlaceLikeService.removeHotPlaceLike(likeId);
     }
-
 
     @Data
     @AllArgsConstructor
     static class ResultPage<T> {
         private T data;
-        private int pageNumber;
-        private int pageSize;
     }
 
     @Data
