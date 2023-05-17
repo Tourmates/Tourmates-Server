@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ssafy.tourmates.client.member.Active.*;
 import static com.ssafy.tourmates.client.question.QQuestion.*;
 import static org.springframework.util.StringUtils.*;
 
@@ -31,6 +32,7 @@ public class QuestionQueryRepository {
                 .select(question.id)
                 .from(question)
                 .where(
+                        question.active.eq(ACTIVE),
                         isType(condition.getType()),
                         likeTitle(condition.getTitle())
                 )
@@ -53,6 +55,19 @@ public class QuestionQueryRepository {
                 .where(question.id.in((ids)))
                 .orderBy(question.createdDate.desc())
                 .fetch();
+    }
+
+    public long totalCount(QuestionSearchCondition condition) {
+        return queryFactory
+                .select(question.id)
+                .from(question)
+                .where(
+                        question.active.eq(ACTIVE),
+                        isType(condition.getType()),
+                        likeTitle(condition.getTitle())
+                )
+                .fetch()
+                .size();
     }
 
     private BooleanExpression isType(QuestionType type) {
