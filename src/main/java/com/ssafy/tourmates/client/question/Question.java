@@ -27,17 +27,20 @@ public class Question extends TimeBaseEntity {
     @Lob
     @Column(nullable = false, updatable = false)
     private String content;
+    @Column(nullable = false, updatable = false, length = 4)
+    private String password;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder
-    public Question(Long id, QuestionType type, String title, String content, Member member) {
+    public Question(Long id, QuestionType type, String title, String content, String password, Member member) {
         this.id = id;
         this.type = type;
         this.title = title;
         this.content = content;
+        this.password = password;
         this.member = member;
     }
 }
