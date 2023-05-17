@@ -51,6 +51,7 @@ public class QuestionQueryRepository {
                 .select(Projections.constructor(QuestionResponse.class,
                         question.id,
                         question.type,
+                        question.title,
                         question.password,
                         question.createdDate))
                 .from(question)
