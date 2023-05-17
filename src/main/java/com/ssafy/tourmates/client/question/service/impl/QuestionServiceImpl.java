@@ -24,6 +24,7 @@ public class QuestionServiceImpl implements QuestionService {
                 .type(dto.getType())
                 .title(dto.getTitle())
                 .content(dto.getContent())
+                .password(dto.getPassword())
                 .member(member)
                 .build();
 
