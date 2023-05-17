@@ -1,6 +1,7 @@
 package com.ssafy.tourmates.client.controller;
 
 import com.ssafy.tourmates.client.controller.dto.question.request.AddQuestionRequest;
+import com.ssafy.tourmates.client.controller.dto.question.response.DetailQuestionResponse;
 import com.ssafy.tourmates.client.controller.dto.question.response.QuestionResponse;
 import com.ssafy.tourmates.client.question.QuestionType;
 import com.ssafy.tourmates.client.question.repository.dto.QuestionSearchCondition;
@@ -30,7 +31,7 @@ public class QuestionController {
 
     @ApiOperation(value = "질문 조회")
     @GetMapping
-    public ResultPage<List<QuestionResponse>> searchQuestions(
+    public Result<List<QuestionResponse>> searchQuestions(
             @RequestParam(defaultValue = "") String title,
             @RequestParam QuestionType type,
             @RequestParam(defaultValue = "1") Integer pageNumber
@@ -44,7 +45,7 @@ public class QuestionController {
         log.debug("responses size={}", responses.size());
         log.debug("condition={}", condition);
         log.debug("pageNumber={}", pageNumber);
-        return new ResultPage<>(responses);
+        return new Result<>(responses);
     }
 
     @ApiOperation(value = "질문 총 갯수 조회")
@@ -62,6 +63,7 @@ public class QuestionController {
         return totalCount;
     }
 
+    @ApiOperation(value = "질문 등록")
     @PostMapping("/register")
     public Long registerQuestion(@Valid @RequestBody AddQuestionRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
@@ -78,10 +80,20 @@ public class QuestionController {
         return questionId;
     }
 
+    @ApiOperation(value = "질문 상세 조회")
+    @GetMapping("/{questionId}")
+    public Result<DetailQuestionResponse> searchQuestion(
+            @PathVariable Long questionId
+    ) {
+        DetailQuestionResponse response = questionQueryService.searchQuestion(questionId);
+        log.debug("response={}", response);
+        return new Result<>(response);
+    }
+
 
     @Data
     @AllArgsConstructor
-    static class ResultPage<T> {
+    static class Result<T> {
         private T data;
     }
 }
