@@ -3,10 +3,7 @@ package com.ssafy.tourmates.client.api.dto.member.request;
 import com.ssafy.tourmates.client.member.Gender;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 public class JoinMemberRequest {
@@ -35,7 +32,7 @@ public class JoinMemberRequest {
     @Size(min = 10, max = 10)
     @Pattern(regexp = "^\\d{4}.\\d{2}.\\d{2}$")
     private String birth;
-    @NotBlank
+    @NotNull
     private Gender gender;
     @NotBlank
     @Size(max = 10)
