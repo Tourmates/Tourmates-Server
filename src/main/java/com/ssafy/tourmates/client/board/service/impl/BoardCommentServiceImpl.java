@@ -13,6 +13,7 @@ import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +61,8 @@ public class BoardCommentServiceImpl implements BoardCommentService {
         for(int i = 0; i < boardCommentList.size(); i++){
             BoardComment comment = boardCommentList.get(i);
             String nickName = comment.getMember().getNickname();
-            boardCommentResponseList.add(new BoardCommentResponse(nickName, comment.getContent()));
+            LocalDateTime createdTime = comment.getCreatedDate();
+            boardCommentResponseList.add(new BoardCommentResponse(nickName, comment.getContent(), createdTime));
         }
 
         return boardCommentResponseList;
