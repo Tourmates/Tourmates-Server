@@ -74,7 +74,7 @@ public class HotPlace extends TimeBaseEntity {
     }
 
     @Builder
-    public static HotPlace createHotPlace(ContentType tag, String title, String content, String visitedDate, Member member, AttractionInfo attractionInfo, List<UploadFile> uploadFiles) {
+    public static HotPlace createHotPlace(ContentType tag, String title, String content, String visitedDate, Member member, Integer contentId, List<UploadFile> uploadFiles) {
         HotPlace hotPlace = HotPlace.builder()
                 .tag(tag)
                 .title(title)
@@ -82,7 +82,7 @@ public class HotPlace extends TimeBaseEntity {
                 .visitedDate(visitedDate)
                 .active(ACTIVE)
                 .member(member)
-                .attractionInfo(attractionInfo)
+                .attractionInfo(AttractionInfo.builder().id(contentId).build())
                 .build();
 
         List<HotPlaceImage> images = new ArrayList<>();
