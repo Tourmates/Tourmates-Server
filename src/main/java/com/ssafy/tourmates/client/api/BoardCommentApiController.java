@@ -2,6 +2,7 @@ package com.ssafy.tourmates.client.api;
 
 import com.ssafy.tourmates.client.api.dto.board.request.AddBoardCommentRequest;
 import com.ssafy.tourmates.client.api.dto.board.request.EditBoardCommentRequest;
+import com.ssafy.tourmates.client.api.dto.board.response.BoardCommentResponse;
 import com.ssafy.tourmates.client.board.service.BoardCommentService;
 import com.ssafy.tourmates.client.board.service.dto.AddBoardCommentDto;
 import com.ssafy.tourmates.client.board.service.dto.EditBoardCommentDto;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +39,15 @@ public class BoardCommentApiController {
         Long boardCommentId = boardCommentService.registerBoardComment(loginId, boardId, dto);
         log.debug("boardCommentId={}", boardCommentId);
         return boardCommentId;
+    }
+
+    @ApiOperation(value = "게시판 댓글 목록")
+    @PostMapping("/list")
+    public List<BoardCommentResponse> boardCommentList(@PathVariable Long boardId) {
+        List<BoardCommentResponse> boardCommentResponseList =
+                boardCommentService.searchAll(boardId);
+
+        return boardCommentResponseList;
     }
 
     @ApiOperation(value = "게시판 댓글 수정")

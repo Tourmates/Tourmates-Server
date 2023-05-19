@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.board.service.impl;
 
+import com.ssafy.tourmates.client.api.dto.board.response.BoardCommentResponse;
 import com.ssafy.tourmates.client.board.Board;
 import com.ssafy.tourmates.client.board.BoardComment;
 import com.ssafy.tourmates.client.board.repository.BoardCommentRepository;
@@ -11,6 +12,9 @@ import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,5 +49,19 @@ public class BoardCommentServiceImpl implements BoardCommentService {
     public Long removeBoardComment(Long boardCommentId) {
         boardCommentRepository.deleteById(boardCommentId);
         return boardCommentId;
+    }
+
+    @Override
+    public List<BoardCommentResponse> searchAll(Long boardId) {
+        List<BoardComment> boardCommentList =  boardCommentValidator.findByBoardId(boardId);
+
+        List<BoardCommentResponse> boardCommentResponseList = new ArrayList<>();
+
+        for(int i = 0; i < boardCommentList.size(); i++){
+            BoardComment comment = boardCommentList.get(i);
+            boardCommentResponseList.add(new BoardCommentResponse(comment.getContent()));
+        }
+
+        return boardCommentResponseList;
     }
 }

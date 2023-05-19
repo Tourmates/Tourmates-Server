@@ -1,8 +1,11 @@
 package com.ssafy.tourmates.client.board.service;
 
+import com.ssafy.tourmates.client.api.dto.board.response.BoardCommentResponse;
 import com.ssafy.tourmates.client.board.service.dto.AddBoardCommentDto;
 import com.ssafy.tourmates.client.board.service.dto.EditBoardCommentDto;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional
 public interface BoardCommentService {
@@ -12,4 +15,6 @@ public interface BoardCommentService {
     Long editBoardComment(Long boardCommentId, EditBoardCommentDto dto);
 
     Long removeBoardComment(Long boardCommentId);
+
+    List<BoardCommentResponse> searchAll(Long boardId);
 }

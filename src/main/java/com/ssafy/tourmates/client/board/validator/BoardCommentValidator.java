@@ -3,6 +3,7 @@ package com.ssafy.tourmates.client.board.validator;
 import com.ssafy.tourmates.client.board.BoardComment;
 import com.ssafy.tourmates.client.board.repository.BoardCommentRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import lombok.RequiredArgsConstructor;
@@ -17,5 +18,9 @@ public class BoardCommentValidator {
     public BoardComment findById(Long id) {
         return boardCommentRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    public List<BoardComment> findByBoardId(Long boardId) {
+        return boardCommentRepository.findAllByBoardId(boardId);
     }
 }
