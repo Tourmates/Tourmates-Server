@@ -6,8 +6,10 @@ import lombok.Data;
 public class BoardCommentResponse {
 
     private String content;
+    private String nickName;
 
-    public BoardCommentResponse(String content){
+    public BoardCommentResponse(String nickName, String content){
+        this.nickName = nickName;
         this.content = content;
     }
 }
