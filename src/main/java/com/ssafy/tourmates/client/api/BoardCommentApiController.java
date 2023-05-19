@@ -26,7 +26,7 @@ public class BoardCommentApiController {
     private final BoardCommentService boardCommentService;
 
     @ApiOperation(value = "게시판 댓글 등록")
-    @GetMapping("/register")
+    @PostMapping("/register")
     public Long registerBoardComment(
             @PathVariable Long boardId,
             @Valid @RequestBody AddBoardCommentRequest request) {
