@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login", "/join", "/boards/**", "/notices/**", "/qna/**", "/swagger-ui.html", "/webjars/**", "/swagger-resources/**", "/v2/api-docs/**",
-                        "/check/**",
+                        "/check/**", "/hotPlaces/**",
                         "/intranet/**", "/css/**", "/img/**", "/js/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/boards/register").hasRole("MEMBER")
