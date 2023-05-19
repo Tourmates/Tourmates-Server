@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class AddHotPlaceRequest {
 
-    @NotBlank
+    @NotNull
     private Integer contentId;
     @NotNull
     private ContentType tag;
@@ -24,6 +24,6 @@ public class AddHotPlaceRequest {
     @NotBlank
     @Size(min = 10, max = 10)
     private String visitedDate;
-    @NotNull
+//    @NotNull
     private List<MultipartFile> files;
 }
