@@ -59,7 +59,8 @@ public class BoardCommentServiceImpl implements BoardCommentService {
 
         for(int i = 0; i < boardCommentList.size(); i++){
             BoardComment comment = boardCommentList.get(i);
-            boardCommentResponseList.add(new BoardCommentResponse(comment.getContent()));
+            String nickName = comment.getMember().getNickname();
+            boardCommentResponseList.add(new BoardCommentResponse(nickName, comment.getContent()));
         }
 
         return boardCommentResponseList;
