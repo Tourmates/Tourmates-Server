@@ -40,7 +40,7 @@ public class HotPlaceApiController {
 
     @ApiOperation(value = "핫플레이스 등록")
     @PostMapping("/register")
-    public Long registerHotPlace(@Valid @RequestBody AddHotPlaceRequest request) throws IOException {
+    public Long registerHotPlace(@Valid AddHotPlaceRequest request) throws IOException {
         String loginId = SecurityUtil.getCurrentLoginId();
         List<UploadFile> uploadFiles = fileStore.storeFiles(request.getFiles());
 

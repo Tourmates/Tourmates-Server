@@ -5,6 +5,7 @@ import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.TimeBaseEntity;
+import com.ssafy.tourmates.common.domain.UploadFile;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ssafy.tourmates.client.member.Active.*;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -71,6 +73,30 @@ public class HotPlace extends TimeBaseEntity {
         this.likes = likes;
     }
 
+    @Builder
+    public static HotPlace createHotPlace(ContentType tag, String title, String content, String visitedDate, Member member, Integer contentId, List<UploadFile> uploadFiles) {
+        HotPlace hotPlace = HotPlace.builder()
+                .tag(tag)
+                .title(title)
+                .content(content)
+                .visitedDate(visitedDate)
+                .active(ACTIVE)
+                .member(member)
+                .attractionInfo(AttractionInfo.builder().id(contentId).build())
+                .build();
+
+        List<HotPlaceImage> images = new ArrayList<>();
+        for (UploadFile uploadFile : uploadFiles) {
+            images.add(HotPlaceImage.builder()
+                    .uploadFile(uploadFile)
+                    .hotPlace(hotPlace)
+                    .build());
+        }
+
+        hotPlace.images = images;
+        return hotPlace;
+    }
+
     //== 비즈니스 로직 ==//
     public void changeHotPlace(ContentType tag, String title, String content, String visitedDate, List<HotPlaceImage> images) {
         this.tag = tag;
@@ -81,6 +107,6 @@ public class HotPlace extends TimeBaseEntity {
     }
 
     public void deActive() {
-        this.active = Active.DEACTIVE;
+        this.active = DEACTIVE;
     }
 }
