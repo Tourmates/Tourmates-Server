@@ -18,11 +18,11 @@ import java.util.List;
 @RequestMapping("/attraction")
 public class AttractionController {
 
-    private final AttractionQueryService attractionService;
+    private final AttractionQueryService attractionQueryService;
 
     @GetMapping("/search")
     public List<AttractionResponse> searchAttraction(@RequestBody AttractionSearchCondition attractionSearchCondition) {
-        return attractionService.searchByCondition(attractionSearchCondition);
+        return attractionQueryService.searchByCondition(attractionSearchCondition);
     }
 
 }
