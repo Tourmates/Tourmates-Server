@@ -1,11 +1,13 @@
 package com.ssafy.tourmates.client.api;
 
 import com.ssafy.tourmates.client.api.dto.member.request.*;
+import com.ssafy.tourmates.client.api.dto.member.response.MemberDetailResponse;
+import com.ssafy.tourmates.client.member.service.MemberService;
+import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
+import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.common.exception.EditException;
 import com.ssafy.tourmates.jwt.SecurityUtil;
-import com.ssafy.tourmates.client.member.service.MemberService;
-import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -95,6 +97,26 @@ public class MemberApiController {
         }
 
         return 1;
+    }
+
+    @ApiOperation(value = "회원 정보 조회")
+    @PostMapping("/detail")
+    public MemberDetailResponse getMemberDetail() {
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        MemberDetailDto memberDetailDto = memberService.getMemberDetail(loginId);
+
+        MemberDetailResponse response = MemberDetailResponse.builder()
+                .nickname(memberDetailDto.getNickname())
+                .birth(memberDetailDto.getBirth())
+                .emailId(memberDetailDto.getEmailId())
+                .emailDomain(memberDetailDto.getEmailDomain())
+                .startPhoneNumber(memberDetailDto.getStartPhoneNumber())
+                .middlePhoneNumber(memberDetailDto.getMiddlePhoneNumber())
+                .endPhoneNumber(memberDetailDto.getEndPhoneNumber())
+                .build();
+
+        return response;
     }
 
     @ApiOperation(value = "회원탈퇴")
