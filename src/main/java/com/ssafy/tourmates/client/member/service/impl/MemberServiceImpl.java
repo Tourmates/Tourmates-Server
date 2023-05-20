@@ -107,15 +107,15 @@ public class MemberServiceImpl implements MemberService {
         Member findMember = memberRepository.findByLoginId(loginId).orElseThrow(NoSuchElementException::new);
 
         String[] email = findMember.getEmail().split("@");
-        String tel = findMember.getTel();
+        String[] tel = findMember.getTel().split("-");
 
         MemberDetailDto dto = MemberDetailDto.builder()
                 .emailId(email[0])
                 .emailDomain(email[1])
                 .birth(findMember.getBirth())
-                .startPhoneNumber(tel.substring(0, 2))
-                .middlePhoneNumber(tel.substring(3, 5))
-                .endPhoneNumber(tel.substring(6, 8))
+                .startPhoneNumber(tel[0])
+                .middlePhoneNumber(tel[1])
+                .endPhoneNumber(tel[2])
                 .nickname(findMember.getNickname())
                 .build();
 
