@@ -110,6 +110,7 @@ public class MemberServiceImpl implements MemberService {
         String[] tel = findMember.getTel().split("-");
 
         MemberDetailDto dto = MemberDetailDto.builder()
+                .username(findMember.getUsername())
                 .emailId(email[0])
                 .emailDomain(email[1])
                 .birth(findMember.getBirth())
