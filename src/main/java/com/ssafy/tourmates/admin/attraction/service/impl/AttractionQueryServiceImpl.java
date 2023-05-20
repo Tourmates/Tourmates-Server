@@ -1,6 +1,5 @@
 package com.ssafy.tourmates.admin.attraction.service.impl;
 
-import com.ssafy.tourmates.admin.attraction.repository.AttractionRepository;
 import com.ssafy.tourmates.admin.attraction.repository.AttractionRepositoryCustom;
 import com.ssafy.tourmates.admin.attraction.repository.dto.AttractionSearchCondition;
 import com.ssafy.tourmates.admin.attraction.service.AttractionQueryService;
@@ -14,10 +13,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AttractionQueryServiceImpl implements AttractionQueryService {
 
-    private final AttractionRepository attractionRepository;
+    private final AttractionRepositoryCustom attractionRepositoryCustom;
 
     @Override
     public List<AttractionResponse> searchByCondition(AttractionSearchCondition attractionSearchCondition) {
-        return attractionRepository.searchByCondition(attractionSearchCondition);
+        return attractionRepositoryCustom.searchByCondition(attractionSearchCondition);
     }
 }
