@@ -1,4 +1,4 @@
-package com.ssafy.tourmates.admin.controller.dto.attraction.response;
+package com.ssafy.tourmates.admin.api.dto.attraction.response;
 
 import lombok.Data;
 
