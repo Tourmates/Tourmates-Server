@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class MemberDetailResponse {
 
+    private String username;
     private String nickname;
     private String birth;
     private String emailId;
@@ -15,7 +16,8 @@ public class MemberDetailResponse {
     private String endPhoneNumber;
 
     @Builder
-    public MemberDetailResponse(String nickname, String birth, String emailId, String emailDomain, String startPhoneNumber, String middlePhoneNumber, String endPhoneNumber) {
+    public MemberDetailResponse(String username, String nickname, String birth, String emailId, String emailDomain, String startPhoneNumber, String middlePhoneNumber, String endPhoneNumber) {
+        this.username = username;
         this.nickname = nickname;
         this.birth = birth;
         this.emailId = emailId;
