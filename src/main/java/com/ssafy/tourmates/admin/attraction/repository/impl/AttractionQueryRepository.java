@@ -10,14 +10,14 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.ssafy.tourmates.admin.attraction.QAttractionInfo.*;
+import static com.ssafy.tourmates.admin.attraction.QAttractionInfo.attractionInfo;
 
 @Repository
-public class AttractionRepositoryImpl implements AttractionRepositoryCustom {
+public class AttractionQueryRepository implements AttractionRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public AttractionRepositoryImpl(EntityManager em) {
+    public AttractionQueryRepository(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
