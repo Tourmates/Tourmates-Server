@@ -1,7 +1,9 @@
 package com.ssafy.tourmates.client.api;
 
+import com.ssafy.tourmates.client.api.dto.board.response.BoardResponse;
 import com.ssafy.tourmates.client.api.dto.member.request.*;
 import com.ssafy.tourmates.client.api.dto.member.response.MemberDetailResponse;
+import com.ssafy.tourmates.client.board.service.BoardQueryService;
 import com.ssafy.tourmates.client.member.service.MemberService;
 import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
@@ -12,12 +14,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -27,6 +28,7 @@ import java.util.NoSuchElementException;
 @Api(tags = {"회원"})
 public class MemberApiController {
 
+    private final BoardQueryService boardQueryService;
     private final MemberService memberService;
 
     @ApiOperation(value = "비밀번호변경")
@@ -36,7 +38,8 @@ public class MemberApiController {
             return -1;
         }
 
-        String loginId = SecurityUtil.getCurrentLoginId();
+        //  String loginId = SecurityUtil.getCurrentLoginId();
+        String loginId = "ssafy2";
         EditLoginPwDto dto = EditLoginPwDto.builder()
                 .currentLoginPw(request.getCurrentLoginPw())
                 .newLoginPw(request.getNewLoginPw())
@@ -86,6 +89,7 @@ public class MemberApiController {
     @PostMapping("/nickname")
     public int editNickname(@Valid @RequestBody EditNicknameRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
+        loginId = "ssafy2";
 
         try {
             Long memberId = memberService.editNickname(loginId, request.getNewNickname());
@@ -102,11 +106,14 @@ public class MemberApiController {
     @ApiOperation(value = "회원 정보 조회")
     @PostMapping("/detail")
     public MemberDetailResponse getMemberDetail() {
-        String loginId = SecurityUtil.getCurrentLoginId();
+        //    String loginId = SecurityUtil.getCurrentLoginId();
 
+        //    System.out.println("loginId: " + loginId);
+        String loginId = "ssafy2";
         MemberDetailDto memberDetailDto = memberService.getMemberDetail(loginId);
 
         MemberDetailResponse response = MemberDetailResponse.builder()
+                .username(memberDetailDto.getUsername())
                 .nickname(memberDetailDto.getNickname())
                 .birth(memberDetailDto.getBirth())
                 .emailId(memberDetailDto.getEmailId())
@@ -117,6 +124,22 @@ public class MemberApiController {
                 .build();
 
         return response;
+    }
+
+    @ApiOperation("나의 게시물 조회")
+    @GetMapping("/boards")
+    public BoardApiController.ResultPage<List<BoardResponse>> searchBoards(
+            @RequestParam(defaultValue = "1") Integer pageNumber
+    ) {
+        // String loginId = SecurityUtil.getCurrentLoginId();
+        String loginId = "ssafy2";
+        System.out.println("loginId: " + loginId);
+        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 20);
+        List<BoardResponse> boardResponses = boardQueryService.searchByLoginId(pageRequest, loginId);
+        log.debug("responses size={}", boardResponses.size());
+        log.debug("pageNumber={}", pageNumber);
+
+        return new BoardApiController.ResultPage<>(boardResponses);
     }
 
     @ApiOperation(value = "회원탈퇴")

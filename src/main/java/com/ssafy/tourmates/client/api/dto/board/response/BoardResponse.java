@@ -4,7 +4,6 @@ import com.ssafy.tourmates.common.domain.ContentType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Data
 public class BoardResponse {
@@ -22,6 +21,6 @@ public class BoardResponse {
         this.title = title;
         this.hit = hit;
         this.nickname = nickname;
-        this.createdDate = createdDate.format(DateTimeFormatter.ofPattern("yyy-MM-dd"));
+        this.createdDate = String.valueOf(createdDate);
     }
 }
