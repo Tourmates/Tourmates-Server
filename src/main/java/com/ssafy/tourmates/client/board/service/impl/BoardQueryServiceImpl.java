@@ -1,10 +1,10 @@
 package com.ssafy.tourmates.client.board.service.impl;
 
+import com.ssafy.tourmates.client.api.dto.board.response.BoardResponse;
+import com.ssafy.tourmates.client.api.dto.board.response.DetailBoardResponse;
 import com.ssafy.tourmates.client.board.repository.BoardQueryRepository;
 import com.ssafy.tourmates.client.board.repository.dto.BoardSearchCondition;
 import com.ssafy.tourmates.client.board.service.BoardQueryService;
-import com.ssafy.tourmates.client.api.dto.board.response.BoardResponse;
-import com.ssafy.tourmates.client.api.dto.board.response.DetailBoardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,5 +30,10 @@ public class BoardQueryServiceImpl implements BoardQueryService {
     @Override
     public DetailBoardResponse searchById(Long boardId) {
         return boardQueryRepository.searchBoard(boardId);
+    }
+
+    @Override
+    public List<BoardResponse> searchByLoginId(Pageable pageable, String loginId) {
+        return boardQueryRepository.searchByLoginId(pageable, loginId);
     }
 }
