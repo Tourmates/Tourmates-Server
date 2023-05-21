@@ -5,10 +5,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.tourmates.client.board.repository.dto.BoardSearchCondition;
-import com.ssafy.tourmates.client.board.repository.dto.Sort;
 import com.ssafy.tourmates.client.api.dto.board.response.BoardResponse;
 import com.ssafy.tourmates.client.api.dto.board.response.DetailBoardResponse;
+import com.ssafy.tourmates.client.board.repository.dto.BoardSearchCondition;
+import com.ssafy.tourmates.client.board.repository.dto.Sort;
 import com.ssafy.tourmates.common.domain.ContentType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -19,9 +19,10 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ssafy.tourmates.client.board.QBoard.*;
-import static com.ssafy.tourmates.client.member.Active.*;
-import static com.ssafy.tourmates.client.member.QMember.*;
+import static com.ssafy.tourmates.client.board.QBoard.board;
+import static com.ssafy.tourmates.client.board.repository.dto.Sort.CREATED_DATE;
+import static com.ssafy.tourmates.client.member.Active.ACTIVE;
+import static com.ssafy.tourmates.client.member.QMember.member;
 
 @Repository
 public class BoardQueryRepository {
@@ -46,7 +47,6 @@ public class BoardQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
 
 
         if (CollectionUtils.isEmpty(ids)) {
@@ -101,5 +101,40 @@ public class BoardQueryRepository {
 
     private OrderSpecifier sorted(Sort sort) {
         return sort == Sort.HIT ? board.hit.desc() : board.createdDate.desc();
+    }
+
+    public List<BoardResponse> searchByLoginId(Pageable pageable, String loginId) {
+
+        List<Long> ids = queryFactory
+                .select(board.id)
+                .from(board)
+                .where(
+                        board.active.eq(ACTIVE),
+                        board.member.loginId.eq(loginId)
+                )
+                .orderBy(
+                        sorted(CREATED_DATE)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        if (CollectionUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+
+        return queryFactory
+                .select(Projections.constructor(BoardResponse.class,
+                        board.id,
+                        Expressions.asEnum(ContentType.ATTRACTION),
+                        board.title,
+                        board.hit,
+                        board.member.nickname,
+                        board.createdDate))
+                .from(board)
+                .where(board.id.in(ids))
+                .orderBy(sorted(CREATED_DATE))
+                .fetch();
     }
 }
