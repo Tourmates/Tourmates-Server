@@ -1,7 +1,11 @@
 package com.ssafy.tourmates.admin.attraction.service.impl;
 
+import com.ssafy.tourmates.admin.api.dto.attraction.response.AttractionResponse;
 import com.ssafy.tourmates.admin.api.dto.attraction.response.AttractionSearchResponse;
+import com.ssafy.tourmates.admin.api.dto.attraction.response.GugunResponse;
+import com.ssafy.tourmates.admin.api.dto.attraction.response.SidoResponse;
 import com.ssafy.tourmates.admin.attraction.repository.AttractionQueryRepository;
+import com.ssafy.tourmates.admin.attraction.repository.dto.AttractionSearchCondition;
 import com.ssafy.tourmates.admin.attraction.service.AttractionQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +19,22 @@ public class AttractionQueryServiceImpl implements AttractionQueryService {
     private final AttractionQueryRepository attractionQueryRepository;
 
     @Override
+    public List<AttractionResponse> searchByCondition(AttractionSearchCondition condition) {
+        return attractionQueryRepository.searchByCondition(condition);
+    }
+
+    @Override
     public List<AttractionSearchResponse> searchAllTitle() {
         return attractionQueryRepository.searchAllTitle();
+    }
+
+    @Override
+    public List<SidoResponse> searchSido() {
+        return attractionQueryRepository.searchSido();
+    }
+
+    @Override
+    public List<GugunResponse> searchGugun(Integer sidoCode) {
+        return attractionQueryRepository.searchGugun(sidoCode);
     }
 }
