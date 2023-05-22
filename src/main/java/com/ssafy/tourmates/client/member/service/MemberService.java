@@ -1,8 +1,8 @@
 package com.ssafy.tourmates.client.member.service;
 
 import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
+import com.ssafy.tourmates.client.member.service.dto.EditMyPersonalDto;
 import com.ssafy.tourmates.client.member.service.dto.JoinMemberDto;
-
 import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +15,8 @@ public interface MemberService {
 
     Long editEmail(String loginId, String email);
 
+    Long editUsername(String loginId, String username);
+
     Long editTel(String loginId, String tel);
 
     Long editNickname(String loginId, String nickname);
@@ -22,4 +24,6 @@ public interface MemberService {
     Long withdrawal(String loginId, String loginPw);
 
     MemberDetailDto getMemberDetail(String loginId);
+
+    Long editMyPersonal(String loginId, EditMyPersonalDto dto);
 }

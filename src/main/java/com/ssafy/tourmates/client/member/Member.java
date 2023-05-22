@@ -84,6 +84,10 @@ public class Member extends TimeBaseEntity implements UserDetails {
         this.email = email;
     }
 
+    public void changeUsername(String username) {
+        this.name = username;
+    }
+
     public void changeTel(String tel) {
         this.tel = tel;
     }
@@ -114,7 +118,7 @@ public class Member extends TimeBaseEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return loginId;
+        return name;
     }
 
     @Override

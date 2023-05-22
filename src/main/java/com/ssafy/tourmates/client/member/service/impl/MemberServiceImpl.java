@@ -4,6 +4,7 @@ import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.repository.MemberRepository;
 import com.ssafy.tourmates.client.member.service.MemberService;
 import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
+import com.ssafy.tourmates.client.member.service.dto.EditMyPersonalDto;
 import com.ssafy.tourmates.client.member.service.dto.JoinMemberDto;
 import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
@@ -35,6 +36,7 @@ public class MemberServiceImpl implements MemberService {
         return savedMember.getId();
     }
 
+
     @Override
     public Long editLoginPw(String loginId, EditLoginPwDto dto) {
         Member findMember = memberValidator.findByLoginId(loginId);
@@ -43,10 +45,50 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Long editMyPersonal(String loginId, EditMyPersonalDto dto) {
+
+        Member findMember = memberRepository.findByLoginId(loginId).orElseThrow(NoSuchElementException::new);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(dto.getEmailId()).append("@").append(dto.getEmailDomain());
+        String email = sb.toString();
+
+        sb.setLength(0);
+        sb.append(dto.getStartPhoneNumber()).append("-").append(dto.getMiddlePhoneNumber()).append("-").append(dto.getEndPhoneNumber());
+        String tel = sb.toString();
+
+        if (!findMember.getEmail().equals(email)) {
+            System.out.println("--------------email 변경");
+            editEmail(loginId, email);
+        }
+        if (!findMember.getTel().equals(tel)) {
+            System.out.println("-------tel 변경");
+            editTel(loginId, tel);
+        }
+        if (!findMember.getNickname().equals(dto.getNickname())) {
+            editNickname(loginId, dto.getNickname());
+        }
+        if (!findMember.getUsername().equals(dto.getUsername())) {
+            System.out.println("--------------username 변경");
+            editUsername(loginId, dto.getUsername());
+        }
+
+        return findMember.getId();
+    }
+
+    @Override
     public Long editEmail(String loginId, String email) {
         Member findMember = memberValidator.findByLoginId(loginId);
         duplicateEmail(email);
         findMember.changeEmail(email);
+        return findMember.getId();
+    }
+
+    @Override
+    public Long editUsername(String loginId, String username) {
+        Member findMember = memberValidator.findByLoginId(loginId);
+        duplicateUsername(username);
+        findMember.changeUsername(username);
         return findMember.getId();
     }
 
@@ -94,6 +136,13 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    private void duplicateUsername(String username) {
+        Optional<Member> findMember = memberRepository.findByName(username);
+        if (findMember.isPresent()) {
+            throw new DuplicateException();
+        }
+    }
+
     private void duplicateNickname(String nickname) {
         Optional<Member> findMember = memberRepository.findByNickname(nickname);
         if (findMember.isPresent()) {
@@ -109,6 +158,8 @@ public class MemberServiceImpl implements MemberService {
         String[] email = findMember.getEmail().split("@");
         String[] tel = findMember.getTel().split("-");
 
+        System.out.println("######################################################username: " + findMember.getUsername());
+
         MemberDetailDto dto = MemberDetailDto.builder()
                 .username(findMember.getUsername())
                 .emailId(email[0])
@@ -122,6 +173,7 @@ public class MemberServiceImpl implements MemberService {
 
         return dto;
     }
+
 
     private static Member createMember(JoinMemberDto dto) {
         return Member.builder()
