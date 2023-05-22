@@ -47,7 +47,7 @@ public class AttractionQueryRepository {
                         attractionInfo.sido.code.eq(condition.getSidoCode()),
                         attractionInfo.gugun.code.eq(condition.getGugunCode()),
                         isKeyword(condition.getKeyword()),
-                        isContentTypeId(condition.getContentTypeId())
+                        isContentTypeId(condition.getContentTypeIds())
                 )
                 .fetch();
     }
@@ -77,7 +77,9 @@ public class AttractionQueryRepository {
         return queryFactory
                 .select(constructor(AttractionSearchResponse.class,
                         attractionInfo.id,
-                        attractionInfo.title))
+                        attractionInfo.title,
+                        attractionInfo.latitude,
+                        attractionInfo.longitude))
                 .from(attractionInfo)
                 .orderBy(attractionInfo.title.asc())
                 .fetch();
@@ -87,7 +89,7 @@ public class AttractionQueryRepository {
         return hasText(keyword) ? attractionInfo.title.like("%" + keyword + "%") : null;
     }
 
-    private BooleanExpression isContentTypeId(Integer contentTypeId) {
-        return contentTypeId > 0 ? attractionInfo.contentTypeId.eq(contentTypeId) : null;
+    private BooleanExpression isContentTypeId(List<Integer> contentTypeIds) {
+        return contentTypeIds.size() > 0 ? attractionInfo.contentTypeId.in(contentTypeIds) : null;
     }
 }
