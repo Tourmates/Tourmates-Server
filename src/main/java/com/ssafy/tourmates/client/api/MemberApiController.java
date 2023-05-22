@@ -6,6 +6,7 @@ import com.ssafy.tourmates.client.api.dto.member.response.MemberDetailResponse;
 import com.ssafy.tourmates.client.board.service.BoardQueryService;
 import com.ssafy.tourmates.client.member.service.MemberService;
 import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
+import com.ssafy.tourmates.client.member.service.dto.EditMyPersonalDto;
 import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.common.exception.EditException;
@@ -53,6 +54,33 @@ public class MemberApiController {
         }
         return 1;
     }
+
+    @ApiOperation("개인 정보 전체 변경")
+    @PostMapping("/personal/info")
+    public int editMyPersonal(@Valid @RequestBody EditMyPersonalRequest request){
+//        String loginId = SecurityUtil.getCurrentLoginId();
+        String loginId = "ssafy2";
+
+        EditMyPersonalDto dto = EditMyPersonalDto.builder()
+                .username(request.getUsername())
+                .nickname(request.getNickname())
+                .emailId(request.getEmailId())
+                .emailDomain(request.getEmailDomain())
+                .startPhoneNumber(request.getStartPhoneNumber())
+                .middlePhoneNumber(request.getMiddlePhoneNumber())
+                .endPhoneNumber(request.getEndPhoneNumber())
+                .build();
+
+        try {
+            System.out.println("###########################");
+            Long memberId = memberService.editMyPersonal(loginId, dto);
+        } catch (EditException e) {
+            return -1;
+        }
+
+        return 1;
+    }
+
 
     @ApiOperation(value = "이메일변경")
     @PostMapping("/email")
