@@ -61,6 +61,7 @@ public class MemberApiController {
 //        String loginId = SecurityUtil.getCurrentLoginId();
         String loginId = "ssafy2";
 
+
         EditMyPersonalDto dto = EditMyPersonalDto.builder()
                 .username(request.getUsername())
                 .nickname(request.getNickname())
