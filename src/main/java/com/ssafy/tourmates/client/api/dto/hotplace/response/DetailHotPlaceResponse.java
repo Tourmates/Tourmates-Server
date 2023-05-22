@@ -16,20 +16,29 @@ public class DetailHotPlaceResponse {
     private int hit;
     private String visitedDate;
 
+    private Boolean isMine;
     private String nickname;
     private List<String> images;
     private List<String> comments;
 
+    private String attractionTitle;
+    private Double latitude;
+    private Double longitude;
+
     @Builder
-    public DetailHotPlaceResponse(Long hotPlaceId, ContentType tag, String title, String content, int hit, String visitedDate, String nickname, List<String> images, List<String> comments) {
+    public DetailHotPlaceResponse(Long hotPlaceId, ContentType tag, String title, String content, int hit, String visitedDate, Boolean isMine, String nickname, List<String> images, List<String> comments, String attractionTitle, Double latitude, Double longitude) {
         this.hotPlaceId = hotPlaceId;
         this.tag = tag;
         this.title = title;
         this.content = content;
         this.hit = hit;
         this.visitedDate = visitedDate;
+        this.isMine = isMine;
         this.nickname = nickname;
         this.images = images;
         this.comments = comments;
+        this.attractionTitle = attractionTitle;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
