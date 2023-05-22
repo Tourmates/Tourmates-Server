@@ -81,9 +81,25 @@ public class HotPlaceApiController {
                 .title(title)
                 .content(content)
                 .build();
-        PageRequest pageRequest = PageRequest.of(pageNumber, 10);
+        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
         List<HotPlaceResponse> responses = hotPlaceQueryService.searchByCondition(condition, pageRequest);
+        log.debug("size={}", responses.size());
         return new ResultPage<>(responses);
+    }
+
+    @ApiOperation(value = "핫플레이스 총 갯수 조회")
+    @GetMapping("/totalCount")
+    public Long totalCount(
+            @RequestParam(defaultValue = "") ContentType tag,
+            @RequestParam(defaultValue = "") String title,
+            @RequestParam(defaultValue = "") String content
+    ) {
+        HotPlaceSearchCondition condition = HotPlaceSearchCondition.builder()
+                .tag(tag)
+                .title(title)
+                .content(content)
+                .build();
+        return hotPlaceQueryService.getTotalCount(condition);
     }
 
     @ApiOperation(value = "핫플레이스 상세조회")
