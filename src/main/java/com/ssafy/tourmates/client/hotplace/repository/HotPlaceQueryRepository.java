@@ -29,7 +29,7 @@ public class HotPlaceQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<HotPlaceResponse> searchByCondition(HotPlaceSearchCondition condition, Pageable pageable) {
+    public List<HotPlace> searchByCondition(HotPlaceSearchCondition condition, Pageable pageable) {
         List<Long> ids = queryFactory
                 .select(hotPlace.id)
                 .from(hotPlace)
@@ -48,19 +48,24 @@ public class HotPlaceQueryRepository {
         }
 
         return queryFactory
-                .select(
-                        Projections.fields(HotPlaceResponse.class,
-                                hotPlace.id,
-                                hotPlace.tag,
-                                hotPlace.title,
-                                hotPlace.content,
-                                hotPlace.hit,
-                                hotPlace.visitedDate,
-                                hotPlace.images.get(0).uploadFile.storeFileName))
+                .select(hotPlace)
                 .from(hotPlace)
                 .where(hotPlace.id.in(ids))
                 .orderBy(hotPlace.createdDate.desc())
                 .fetch();
+    }
+
+    public long totalCount(HotPlaceSearchCondition condition) {
+        return queryFactory
+                .select(hotPlace.id)
+                .from(hotPlace)
+                .where(
+                        isTag(condition.getTag()),
+                        isTitle(condition.getTitle()),
+                        isContent(condition.getContent())
+                )
+                .fetch()
+                .size();
     }
 
     public HotPlace searchById(Long hotPlaceId) {

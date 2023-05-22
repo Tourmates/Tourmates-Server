@@ -13,5 +13,7 @@ public interface HotPlaceQueryService {
 
     List<HotPlaceResponse> searchByCondition(HotPlaceSearchCondition condition, Pageable pageable);
 
+    Long getTotalCount(HotPlaceSearchCondition condition);
+
     DetailHotPlaceResponse searchById(Long hotPlaceId);
 }
