@@ -1,13 +1,9 @@
 package com.ssafy.tourmates.admin.api;
 
-import com.ssafy.tourmates.admin.api.dto.notice.request.EditNoticeRequest;
 import com.ssafy.tourmates.admin.api.dto.notice.response.DetailNoticeResponse;
-import com.ssafy.tourmates.admin.api.dto.notice.response.EditNoticeResponse;
 import com.ssafy.tourmates.admin.api.dto.notice.response.NoticeResponse;
 import com.ssafy.tourmates.admin.notice.repository.dto.NoticeSearchCondition;
 import com.ssafy.tourmates.admin.notice.service.NoticeQueryService;
-import com.ssafy.tourmates.admin.notice.service.NoticeService;
-import com.ssafy.tourmates.admin.notice.service.dto.EditNoticeDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
