@@ -1,9 +1,6 @@
 package com.ssafy.tourmates.admin.attraction.service.impl;
 
-import com.ssafy.tourmates.admin.api.dto.attraction.response.AttractionResponse;
-import com.ssafy.tourmates.admin.api.dto.attraction.response.AttractionSearchResponse;
-import com.ssafy.tourmates.admin.api.dto.attraction.response.GugunResponse;
-import com.ssafy.tourmates.admin.api.dto.attraction.response.SidoResponse;
+import com.ssafy.tourmates.admin.api.dto.attraction.response.*;
 import com.ssafy.tourmates.admin.attraction.repository.AttractionQueryRepository;
 import com.ssafy.tourmates.admin.attraction.repository.dto.AttractionSearchCondition;
 import com.ssafy.tourmates.admin.attraction.service.AttractionQueryService;
@@ -36,5 +33,10 @@ public class AttractionQueryServiceImpl implements AttractionQueryService {
     @Override
     public List<GugunResponse> searchGugun(Integer sidoCode) {
         return attractionQueryRepository.searchGugun(sidoCode);
+    }
+
+    @Override
+    public List<AttractionTripPlanResponse> searchTripPlanAttraction(String keyword) {
+        return attractionQueryRepository.searchTripPlanAttraction(keyword);
     }
 }
