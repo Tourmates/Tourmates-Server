@@ -1,15 +1,17 @@
 package com.ssafy.tourmates.client.member.service.impl;
 
-import com.ssafy.tourmates.client.member.service.MemberService;
-import com.ssafy.tourmates.client.member.validator.MemberValidator;
-import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.repository.MemberRepository;
+import com.ssafy.tourmates.client.member.service.MemberService;
 import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.tourmates.client.member.service.dto.JoinMemberDto;
+import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
+import com.ssafy.tourmates.client.member.validator.MemberValidator;
+import com.ssafy.tourmates.common.exception.DuplicateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -97,6 +99,28 @@ public class MemberServiceImpl implements MemberService {
         if (findMember.isPresent()) {
             throw new DuplicateException();
         }
+    }
+
+    @Override
+    public MemberDetailDto getMemberDetail(String loginId) {
+
+        Member findMember = memberRepository.findByLoginId(loginId).orElseThrow(NoSuchElementException::new);
+
+        String[] email = findMember.getEmail().split("@");
+        String[] tel = findMember.getTel().split("-");
+
+        MemberDetailDto dto = MemberDetailDto.builder()
+                .username(findMember.getUsername())
+                .emailId(email[0])
+                .emailDomain(email[1])
+                .birth(findMember.getBirth())
+                .startPhoneNumber(tel[0])
+                .middlePhoneNumber(tel[1])
+                .endPhoneNumber(tel[2])
+                .nickname(findMember.getNickname())
+                .build();
+
+        return dto;
     }
 
     private static Member createMember(JoinMemberDto dto) {
