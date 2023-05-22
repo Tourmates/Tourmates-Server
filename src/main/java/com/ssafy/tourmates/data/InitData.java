@@ -21,7 +21,7 @@ import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 import static com.ssafy.tourmates.client.member.Gender.*;
 import static com.ssafy.tourmates.client.question.QuestionType.*;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class InitData {
 
