@@ -1,14 +1,8 @@
 package com.ssafy.tourmates.admin.attraction.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.tourmates.admin.api.dto.attraction.response.AttractionResponse;
-import com.ssafy.tourmates.admin.api.dto.attraction.response.AttractionSearchResponse;
-import com.ssafy.tourmates.admin.api.dto.attraction.response.GugunResponse;
-import com.ssafy.tourmates.admin.api.dto.attraction.response.SidoResponse;
-import com.ssafy.tourmates.admin.attraction.QGugun;
-import com.ssafy.tourmates.admin.attraction.QSido;
+import com.ssafy.tourmates.admin.api.dto.attraction.response.*;
 import com.ssafy.tourmates.admin.attraction.repository.dto.AttractionSearchCondition;
 import org.springframework.stereotype.Repository;
 
@@ -82,6 +76,19 @@ public class AttractionQueryRepository {
                         attractionInfo.longitude))
                 .from(attractionInfo)
                 .orderBy(attractionInfo.title.asc())
+                .fetch();
+    }
+
+    public List<AttractionTripPlanResponse> searchTripPlanAttraction(String keyword) {
+        return queryFactory
+                .select(constructor(AttractionTripPlanResponse.class,
+                        attractionInfo.id,
+                        attractionInfo.title,
+                        attractionInfo.addr1,
+                        attractionInfo.latitude,
+                        attractionInfo.longitude))
+                .from(attractionInfo)
+                .where(attractionInfo.title.like("%" + keyword + "%"))
                 .fetch();
     }
 
