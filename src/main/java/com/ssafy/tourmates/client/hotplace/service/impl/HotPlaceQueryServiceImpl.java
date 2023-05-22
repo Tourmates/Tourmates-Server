@@ -7,10 +7,12 @@ import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceResponse;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
 import com.ssafy.tourmates.client.hotplace.repository.HotPlaceQueryRepository;
 import com.ssafy.tourmates.client.hotplace.repository.dto.HotPlaceSearchCondition;
+import com.ssafy.tourmates.common.FileStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +24,26 @@ public class HotPlaceQueryServiceImpl implements HotPlaceQueryService {
 
     @Override
     public List<HotPlaceResponse> searchByCondition(HotPlaceSearchCondition condition, Pageable pageable) {
-        return hotPlaceQueryRepository.searchByCondition(condition, pageable);
+        List<HotPlace> hotPlaces = hotPlaceQueryRepository.searchByCondition(condition, pageable);
+        List<HotPlaceResponse> responses = new ArrayList<>();
+        for (HotPlace hotPlace : hotPlaces) {
+            HotPlaceResponse hotPlaceResponse = HotPlaceResponse.builder()
+                    .hotPlaceId(hotPlace.getId())
+                    .tag(hotPlace.getTag())
+                    .title(hotPlace.getTitle())
+                    .content(hotPlace.getContent())
+                    .hit(hotPlace.getHit())
+                    .visitedDate(hotPlace.getVisitedDate())
+                    .storeFileName(hotPlace.getImages().get(0).getUploadFile().getStoreFileName())
+                    .build();
+            responses.add(hotPlaceResponse);
+        }
+        return responses;
+    }
+
+    @Override
+    public Long getTotalCount(HotPlaceSearchCondition condition) {
+        return hotPlaceQueryRepository.totalCount(condition);
     }
 
     @Override
