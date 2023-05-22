@@ -2,9 +2,13 @@ package com.ssafy.tourmates.client.hotplace.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.tourmates.admin.attraction.QAttractionInfo;
+import com.ssafy.tourmates.client.api.dto.hotplace.response.EditHotPlaceResponse;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
 import com.ssafy.tourmates.client.hotplace.repository.dto.HotPlaceSearchCondition;
+import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceResponse;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +20,10 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.querydsl.core.types.Projections.*;
+import static com.ssafy.tourmates.admin.attraction.QAttractionInfo.*;
 import static com.ssafy.tourmates.client.hotplace.QHotPlace.*;
+import static com.ssafy.tourmates.client.member.Active.*;
 import static com.ssafy.tourmates.client.member.QMember.*;
 import static org.springframework.util.StringUtils.*;
 
@@ -34,9 +41,9 @@ public class HotPlaceQueryRepository {
                 .select(hotPlace.id)
                 .from(hotPlace)
                 .where(
-                        isTag(condition.getTag()),
-                        isTitle(condition.getTitle()),
-                        isContent(condition.getContent())
+                        hotPlace.active.eq(ACTIVE),
+                        isTags(condition.getTags()),
+                        isKeyword(condition.getKeyword())
                 )
                 .orderBy(hotPlace.createdDate.desc())
                 .offset(pageable.getOffset())
@@ -60,9 +67,9 @@ public class HotPlaceQueryRepository {
                 .select(hotPlace.id)
                 .from(hotPlace)
                 .where(
-                        isTag(condition.getTag()),
-                        isTitle(condition.getTitle()),
-                        isContent(condition.getContent())
+                        hotPlace.active.eq(ACTIVE),
+                        isTags(condition.getTags()),
+                        isKeyword(condition.getKeyword())
                 )
                 .fetch()
                 .size();
@@ -73,19 +80,34 @@ public class HotPlaceQueryRepository {
                 .select(hotPlace)
                 .from(hotPlace)
                 .join(hotPlace.member, member).fetchJoin()
+                .join(hotPlace.attractionInfo, attractionInfo).fetchJoin()
                 .where(hotPlace.id.eq(hotPlaceId))
                 .fetchOne();
     }
 
-    private BooleanExpression isTag(ContentType tag) {
-        return tag != null ? hotPlace.tag.eq(tag) : null;
+    public EditHotPlaceResponse searchEditById(Long hotPlaceId) {
+        return queryFactory
+                .select(constructor(EditHotPlaceResponse.class,
+                        Expressions.asNumber(hotPlaceId),
+                        hotPlace.tag,
+                        hotPlace.title,
+                        hotPlace.visitedDate,
+                        hotPlace.content,
+                        hotPlace.attractionInfo.title,
+                        hotPlace.attractionInfo.latitude,
+                        hotPlace.attractionInfo.longitude))
+                .from(hotPlace)
+                .join(hotPlace.attractionInfo, attractionInfo)
+                .where(hotPlace.id.eq(hotPlaceId))
+                .fetchOne();
     }
 
-    private BooleanExpression isTitle(String title) {
-        return hasText(title) ? hotPlace.title.like("%" + title + "%") : null;
+    private BooleanExpression isTags(List<ContentType> tags) {
+        return tags.size() > 0 ? hotPlace.tag.in(tags) : null;
     }
 
-    private BooleanExpression isContent(String content) {
-        return hasText(content) ? hotPlace.content.eq("%" + content + "%") : null;
+    private BooleanExpression isKeyword(String keyword) {
+        return hasText(keyword) ? hotPlace.title.like("%" + keyword + "%")
+                .or(hotPlace.content.like("%" + keyword + "%")) : null;
     }
 }

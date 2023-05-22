@@ -22,6 +22,6 @@ public class EditHotPlaceRequest {
     @NotBlank
     @Size(min = 10, max = 10)
     private String visitedDate;
-    @NotNull
+//    @NotNull
     private List<MultipartFile> files;
 }

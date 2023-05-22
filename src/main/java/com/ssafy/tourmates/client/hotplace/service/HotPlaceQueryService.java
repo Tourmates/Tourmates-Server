@@ -1,6 +1,7 @@
 package com.ssafy.tourmates.client.hotplace.service;
 
 import com.ssafy.tourmates.client.api.dto.hotplace.response.DetailHotPlaceResponse;
+import com.ssafy.tourmates.client.api.dto.hotplace.response.EditHotPlaceResponse;
 import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceResponse;
 import com.ssafy.tourmates.client.hotplace.repository.dto.HotPlaceSearchCondition;
 import org.springframework.data.domain.Pageable;
@@ -15,5 +16,7 @@ public interface HotPlaceQueryService {
 
     Long getTotalCount(HotPlaceSearchCondition condition);
 
-    DetailHotPlaceResponse searchById(Long hotPlaceId);
+    DetailHotPlaceResponse searchById(String loginId, Long hotPlaceId);
+
+    EditHotPlaceResponse searchEditById(Long hotPlaceId);
 }

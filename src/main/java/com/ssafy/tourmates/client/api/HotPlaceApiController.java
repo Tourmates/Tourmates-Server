@@ -1,7 +1,6 @@
 package com.ssafy.tourmates.client.api;
 
-import com.ssafy.tourmates.client.api.dto.hotplace.request.AddHotplaceCommentRequest;
-import com.ssafy.tourmates.client.api.dto.hotplace.request.EditHotPlaceCommentRequest;
+import com.ssafy.tourmates.client.api.dto.hotplace.response.EditHotPlaceResponse;
 import com.ssafy.tourmates.client.hotplace.service.*;
 import com.ssafy.tourmates.client.hotplace.service.dto.*;
 import com.ssafy.tourmates.common.FileStore;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -70,49 +70,70 @@ public class HotPlaceApiController {
 
     @ApiOperation(value = "핫플레이스 조회")
     @GetMapping
-    public ResultPage<List<HotPlaceResponse>> searchHotPlaces(
-            @RequestParam(defaultValue = "") ContentType tag,
-            @RequestParam(defaultValue = "") String title,
-            @RequestParam(defaultValue = "") String content,
+    public Result<List<HotPlaceResponse>> searchHotPlaces(
+            @RequestParam(required = false) List<ContentType> tags,
+            @RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "1") Integer pageNumber
     ) {
+        List<ContentType> contentTypes = new ArrayList<>();
+        if (tags != null) {
+            contentTypes.addAll(tags);
+        }
+
         HotPlaceSearchCondition condition = HotPlaceSearchCondition.builder()
-                .tag(tag)
-                .title(title)
-                .content(content)
+                .tags(contentTypes)
+                .keyword(keyword)
                 .build();
+
         PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
         List<HotPlaceResponse> responses = hotPlaceQueryService.searchByCondition(condition, pageRequest);
         log.debug("size={}", responses.size());
-        return new ResultPage<>(responses);
+        return new Result<>(responses);
     }
 
     @ApiOperation(value = "핫플레이스 총 갯수 조회")
     @GetMapping("/totalCount")
     public Long totalCount(
-            @RequestParam(defaultValue = "") ContentType tag,
-            @RequestParam(defaultValue = "") String title,
-            @RequestParam(defaultValue = "") String content
+            @RequestParam(required = false) List<ContentType> tags,
+            @RequestParam(defaultValue = "") String keyword
     ) {
+        List<ContentType> contentTypes = new ArrayList<>();
+        if (tags != null) {
+            contentTypes.addAll(tags);
+        }
+
         HotPlaceSearchCondition condition = HotPlaceSearchCondition.builder()
-                .tag(tag)
-                .title(title)
-                .content(content)
+                .tags(contentTypes)
+                .keyword(keyword)
                 .build();
+
         return hotPlaceQueryService.getTotalCount(condition);
     }
 
     @ApiOperation(value = "핫플레이스 상세조회")
     @GetMapping("/{hotPlaceId}")
-    public Response searchHotPlace(@PathVariable Long hotPlaceId) {
-        DetailHotPlaceResponse response = hotPlaceQueryService.searchById(hotPlaceId);
-        ResponseData responseData = new ResponseData(response);
-        return new Response(responseData);
+    public Result<?> searchHotPlace(@PathVariable Long hotPlaceId) {
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
+        hotPlaceService.increaseHit(hotPlaceId);
+        DetailHotPlaceResponse response = hotPlaceQueryService.searchById(loginId, hotPlaceId);
+        log.debug("hotPlaceId={}", response.getHotPlaceId());
+        return new Result<>(response);
+    }
+
+    @ApiOperation(value = "핫플레이스 수정 조회")
+    @GetMapping("/{hotPlaceId}/edit")
+    public Result<?> editHotPlace(@PathVariable Long hotPlaceId) {
+        EditHotPlaceResponse response = hotPlaceQueryService.searchEditById(hotPlaceId);
+        log.debug("response={}", response.getHotPlaceId());
+        return new Result<>(response);
     }
 
     @ApiOperation(value = "핫플레이스 수정")
     @PostMapping("/{hotPlaceId}/edit")
-    public Long editHotPlace(@PathVariable Long hotPlaceId, @Valid @RequestBody EditHotPlaceRequest request) throws IOException {
+    public Long editHotPlace(
+            @PathVariable Long hotPlaceId,
+            @Valid EditHotPlaceRequest request) throws IOException {
         List<UploadFile> files = fileStore.storeFiles(request.getFiles());
 
         EditHotPlaceDto dto = EditHotPlaceDto.builder()
@@ -145,19 +166,7 @@ public class HotPlaceApiController {
 
     @Data
     @AllArgsConstructor
-    static class ResultPage<T> {
+    static class Result<T> {
         private T data;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Response {
-        private ResponseData data;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class ResponseData {
-        private DetailHotPlaceResponse detailHotPlaceResponse;
     }
 }

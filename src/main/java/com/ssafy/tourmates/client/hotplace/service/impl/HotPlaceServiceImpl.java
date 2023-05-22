@@ -44,6 +44,13 @@ public class HotPlaceServiceImpl implements HotPlaceService {
     }
 
     @Override
+    public Long increaseHit(Long hotPlaceId) {
+        HotPlace findHotPlace = hotPlaceValidator.findById(hotPlaceId);
+        findHotPlace.increaseHit();
+        return findHotPlace.getId();
+    }
+
+    @Override
     public Long removeHotPlace(Long hotPlaceId) {
         HotPlace findHotPlace = hotPlaceValidator.findById(hotPlaceId);
         findHotPlace.deActive();

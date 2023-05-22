@@ -1,13 +1,13 @@
 package com.ssafy.tourmates.client.hotplace.service.impl;
 
-import com.ssafy.tourmates.client.hotplace.HotPlaceComment;
-import com.ssafy.tourmates.client.hotplace.service.HotPlaceQueryService;
 import com.ssafy.tourmates.client.api.dto.hotplace.response.DetailHotPlaceResponse;
+import com.ssafy.tourmates.client.api.dto.hotplace.response.EditHotPlaceResponse;
 import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceResponse;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
+import com.ssafy.tourmates.client.hotplace.HotPlaceComment;
 import com.ssafy.tourmates.client.hotplace.repository.HotPlaceQueryRepository;
 import com.ssafy.tourmates.client.hotplace.repository.dto.HotPlaceSearchCondition;
-import com.ssafy.tourmates.common.FileStore;
+import com.ssafy.tourmates.client.hotplace.service.HotPlaceQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class HotPlaceQueryServiceImpl implements HotPlaceQueryService {
     }
 
     @Override
-    public DetailHotPlaceResponse searchById(Long hotPlaceId) {
+    public DetailHotPlaceResponse searchById(String loginId, Long hotPlaceId) {
         HotPlace hotPlace = hotPlaceQueryRepository.searchById(hotPlaceId);
         List<String> images = hotPlace.getImages().stream()
                 .map(image -> image.getUploadFile().getStoreFileName())
@@ -63,9 +63,18 @@ public class HotPlaceQueryServiceImpl implements HotPlaceQueryService {
                 .content(hotPlace.getContent())
                 .hit(hotPlace.getHit())
                 .visitedDate(hotPlace.getVisitedDate())
+                .isMine(hotPlace.getMember().getLoginId().equals(loginId))
                 .nickname(hotPlace.getMember().getNickname())
                 .images(images)
                 .comments(comments)
+                .attractionTitle(hotPlace.getAttractionInfo().getTitle())
+                .latitude(hotPlace.getAttractionInfo().getLatitude())
+                .longitude(hotPlace.getAttractionInfo().getLongitude())
                 .build();
+    }
+
+    @Override
+    public EditHotPlaceResponse searchEditById(Long hotPlaceId) {
+        return hotPlaceQueryRepository.searchEditById(hotPlaceId);
     }
 }
