@@ -1,9 +1,6 @@
 package com.ssafy.tourmates.admin.api;
 
-import com.ssafy.tourmates.admin.api.dto.attraction.response.AttractionResponse;
-import com.ssafy.tourmates.admin.api.dto.attraction.response.AttractionSearchResponse;
-import com.ssafy.tourmates.admin.api.dto.attraction.response.GugunResponse;
-import com.ssafy.tourmates.admin.api.dto.attraction.response.SidoResponse;
+import com.ssafy.tourmates.admin.api.dto.attraction.response.*;
 import com.ssafy.tourmates.admin.attraction.repository.dto.AttractionSearchCondition;
 import com.ssafy.tourmates.admin.attraction.service.AttractionQueryService;
 import com.ssafy.tourmates.common.domain.ContentType;
@@ -71,6 +68,15 @@ public class AttractionApiController {
         List<AttractionSearchResponse> attractionSearchResponses = attractionQueryService.searchAllTitle();
         log.debug("result.size={}", attractionSearchResponses.size());
         return new Result<>(attractionSearchResponses);
+    }
+
+    @GetMapping("/search/tripPlan")
+    public Result<?> searchTripPlanAttraction(
+            @RequestParam(defaultValue = "") String keyword
+    ) {
+        List<AttractionTripPlanResponse> responses = attractionQueryService.searchTripPlanAttraction(keyword);
+        log.debug("result.size={}", responses.size());
+        return new Result<>(responses);
     }
 
     @Data
