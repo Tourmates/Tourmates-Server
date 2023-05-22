@@ -6,6 +6,7 @@ import com.ssafy.tourmates.admin.api.dto.attraction.response.GugunResponse;
 import com.ssafy.tourmates.admin.api.dto.attraction.response.SidoResponse;
 import com.ssafy.tourmates.admin.attraction.repository.dto.AttractionSearchCondition;
 import com.ssafy.tourmates.admin.attraction.service.AttractionQueryService;
+import com.ssafy.tourmates.common.domain.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,13 +33,19 @@ public class AttractionApiController {
             @RequestParam String keyword,
             @RequestParam Integer sidoCode,
             @RequestParam Integer gugunCode,
-            @RequestParam(defaultValue = "0") Integer contentTypeId
+            @RequestParam(required = false) List<ContentType> contentTypes
     ) {
+        List<Integer> contentTypeIds = new ArrayList<>();
+        if (contentTypes != null) {
+            contentTypeIds = contentTypes.stream()
+                    .map(ContentType::getKey)
+                    .collect(Collectors.toList());
+        }
         AttractionSearchCondition condition = AttractionSearchCondition.builder()
                 .keyword(keyword)
                 .sidoCode(sidoCode)
                 .gugunCode(gugunCode)
-                .contentTypeId(contentTypeId)
+                .contentTypeIds(contentTypeIds)
                 .build();
         List<AttractionResponse> responses = attractionQueryService.searchByCondition(condition);
         log.debug("responses size={}", responses.size());
