@@ -25,16 +25,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
-//                .csrf().disable();
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/join", "/boards/**", "/notices/**", "/qna/**", "/swagger-ui.html", "/webjars/**", "/swagger-resources/**", "/v2/api-docs/**",
-                        "/check/**", "/hotPlaces", "/hotPlaces/totalCount", "/attractions/**",
+                .antMatchers("/", "/login", "/join", "/boards/**", "/notices/**", "/qna/**", "/swagger-ui.html", "/webjars/**", "/swagger-resources/**", "/v2/api-docs/**",
+                        "/check/**", "/hotPlaces", "/hotPlaces/totalCount", "/attractions/**", "/trips",
                         "/intranet/**", "/css/**", "/img/**", "/js/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/boards/register", "/hotPlaces/**").hasRole("MEMBER")
+                .antMatchers("/boards/register", "/hotPlaces/**", "/trips/**").hasRole("MEMBER")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

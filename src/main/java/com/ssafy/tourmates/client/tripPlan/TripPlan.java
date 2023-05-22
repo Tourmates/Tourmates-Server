@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.tripPlan;
 
+import com.ssafy.tourmates.admin.attraction.AttractionInfo;
 import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.common.domain.TimeBaseEntity;
@@ -8,8 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 import static com.ssafy.tourmates.client.member.Active.DEACTIVE;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -34,24 +37,44 @@ public class TripPlan extends TimeBaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(fetch = LAZY)
-    @JoinColumn(name = "detail_trip_plan_id")
-    private List<DetailTripPlan> detailTripPlanList;
+    @OneToMany(mappedBy = "tripPlan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetailTripPlan> detailTripPlans;
 
     @Builder
-    public TripPlan(Long id, String title, int hit, Active active, Member member, List<DetailTripPlan> detailTripPlanList) {
+    public TripPlan(Long id, String title, int hit, Active active, Member member, List<DetailTripPlan> detailTripPlans) {
         this.id = id;
         this.title = title;
         this.hit = hit;
         this.active = active;
         this.member = member;
-        this.detailTripPlanList = detailTripPlanList;
+        this.detailTripPlans = detailTripPlans;
+    }
+
+    //== 연관관계 메서드 ==//
+    public static TripPlan createTripPlan(String title, Long memberId, List<Integer> contentIds) {
+        TripPlan tripPlan = TripPlan.builder()
+                .title(title)
+                .hit(0)
+                .active(ACTIVE)
+                .member(Member.builder().id(memberId).build())
+                .build();
+
+        List<DetailTripPlan> detailTripPlans = new ArrayList<>();
+        for (Integer contentId : contentIds) {
+            detailTripPlans.add(DetailTripPlan.builder()
+                    .tripPlan(tripPlan)
+                    .attractionInfo(AttractionInfo.builder().id(contentId).build())
+                    .build());
+        }
+
+        tripPlan.detailTripPlans = detailTripPlans;
+        return tripPlan;
     }
 
     //==비즈니스 로직==//
     public void changeTripPlan(String title, List<DetailTripPlan> detailTripPlanList) {
         this.title = title;
-        this.detailTripPlanList = detailTripPlanList;
+        this.detailTripPlans = detailTripPlanList;
     }
 
     public void deActive() {

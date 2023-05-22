@@ -31,10 +31,11 @@ public class TripPlanApiController {
         String loginId = SecurityUtil.getCurrentLoginId();
         AddTripPlanDto dto = AddTripPlanDto.builder()
                 .title(request.getTitle())
+                .contentIds(request.getContentIds())
                 .build();
 
         Long savedTripPlanId = tripPlanService.registerTripPlan(loginId, dto);
-
+        log.debug("savedTripPlanId={}", savedTripPlanId);
         return savedTripPlanId;
     }
 
