@@ -4,17 +4,17 @@ import com.ssafy.tourmates.common.domain.ContentType;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class HotPlaceSearchCondition {
 
-    private ContentType tag;
-    private String title;
-    private String content;
+    private List<ContentType> tags;
+    private String keyword;
 
     @Builder
-    public HotPlaceSearchCondition(ContentType tag, String title, String content) {
-        this.tag = tag;
-        this.title = title;
-        this.content = content;
+    public HotPlaceSearchCondition(List<ContentType> tags, String keyword) {
+        this.tags = tags;
+        this.keyword = keyword;
     }
 }
