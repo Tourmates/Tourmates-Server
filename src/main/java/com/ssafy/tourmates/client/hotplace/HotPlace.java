@@ -103,7 +103,12 @@ public class HotPlace extends TimeBaseEntity {
         this.title = title;
         this.content = content;
         this.visitedDate = visitedDate;
+        this.images.clear();
         this.images = images;
+    }
+
+    public void increaseHit() {
+        this.hit += 1;
     }
 
     public void deActive() {
