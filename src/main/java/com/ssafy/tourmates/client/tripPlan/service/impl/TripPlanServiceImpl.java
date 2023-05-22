@@ -24,14 +24,7 @@ public class TripPlanServiceImpl implements TripPlanService {
     @Override
     public Long registerTripPlan(String loginId, AddTripPlanDto dto) {
         Member findMember = memberValidator.findByLoginId(loginId);
-
-        TripPlan tripPlan = TripPlan.builder()
-                .title(dto.getTitle())
-                .hit(0)
-                .active(ACTIVE)
-                .member(findMember)
-                .build();
-
+        TripPlan tripPlan = TripPlan.createTripPlan(dto.getTitle(), findMember.getId(), dto.getContentIds());
         TripPlan savedTripPlan = tripPlanRepository.save(tripPlan);
         return savedTripPlan.getId();
     }
@@ -39,7 +32,7 @@ public class TripPlanServiceImpl implements TripPlanService {
     @Override
     public Long editTripPlan(Long tripPlanId, EditTripPlanDto dto) {
         TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
-        findTripPlan.changeTripPlan(dto.getTitle(), findTripPlan.getDetailTripPlanList());
+        findTripPlan.changeTripPlan(dto.getTitle(), findTripPlan.getDetailTripPlans());
         return findTripPlan.getId();
     }
 
