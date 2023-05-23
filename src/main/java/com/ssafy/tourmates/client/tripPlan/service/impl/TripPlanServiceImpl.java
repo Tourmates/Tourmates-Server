@@ -7,9 +7,12 @@ import com.ssafy.tourmates.client.tripPlan.repository.TripPlanRepository;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
+import com.ssafy.tourmates.client.tripPlan.service.dto.ShareTripPlanDto;
 import com.ssafy.tourmates.client.tripPlan.validator.TripPlanValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import static com.ssafy.tourmates.client.member.Active.ACTIVE;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,21 @@ public class TripPlanServiceImpl implements TripPlanService {
     public Long registerTripPlan(String loginId, AddTripPlanDto dto) {
         Member findMember = memberValidator.findByLoginId(loginId);
         TripPlan tripPlan = TripPlan.createTripPlan(dto.getTitle(), findMember.getId(), dto.getContentIds());
+        TripPlan savedTripPlan = tripPlanRepository.save(tripPlan);
+        return savedTripPlan.getId();
+    }
+
+    @Override
+    public Long shareTripPlan(ShareTripPlanDto dto) {
+        Member friend = memberValidator.findByLoginId(dto.getFriendId());
+
+        TripPlan tripPlan = TripPlan.builder()
+                .member(friend)
+                .title(null)
+                .active(ACTIVE)
+                .hit(0)
+                .build();
+
         TripPlan savedTripPlan = tripPlanRepository.save(tripPlan);
         return savedTripPlan.getId();
     }
@@ -47,4 +65,6 @@ public class TripPlanServiceImpl implements TripPlanService {
         findTripPlan.deActive();
         return findTripPlan.getId();
     }
+
+
 }

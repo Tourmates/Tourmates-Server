@@ -2,6 +2,7 @@ package com.ssafy.tourmates.client.api;
 
 import com.ssafy.tourmates.client.api.dto.tripplan.request.AddTripPlanRequest;
 import com.ssafy.tourmates.client.api.dto.tripplan.request.EditTripPlanRequest;
+import com.ssafy.tourmates.client.api.dto.tripplan.request.ShareTripPlanRequest;
 import com.ssafy.tourmates.client.api.dto.tripplan.response.DetailPlanResponse;
 import com.ssafy.tourmates.client.api.dto.tripplan.response.PlanResponse;
 import com.ssafy.tourmates.client.tripPlan.repository.dto.PlanSearchCondition;
@@ -10,6 +11,7 @@ import com.ssafy.tourmates.client.tripPlan.service.TripPlanQueryService;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
+import com.ssafy.tourmates.client.tripPlan.service.dto.ShareTripPlanDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -79,6 +81,17 @@ public class TripPlanApiController {
 
         Long savedTripPlanId = tripPlanService.registerTripPlan(loginId, dto);
         log.debug("savedTripPlanId={}", savedTripPlanId);
+        return savedTripPlanId;
+    }
+
+    @ApiOperation(value = "여행계획 친구 공유")
+    @PostMapping("/share")
+    public Long shareTripPlan(@Valid @RequestBody ShareTripPlanRequest request) {
+        ShareTripPlanDto dto = ShareTripPlanDto.builder()
+                .friendId(request.getFriendId())
+                .build();
+
+        Long savedTripPlanId = tripPlanService.shareTripPlan(dto);
         return savedTripPlanId;
     }
 
