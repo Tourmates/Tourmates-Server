@@ -25,7 +25,20 @@ public class HotPlaceQueryServiceImpl implements HotPlaceQueryService {
     @Override
     public List<HotPlaceResponse> searchByCondition(HotPlaceSearchCondition condition, Pageable pageable) {
         List<HotPlace> hotPlaces = hotPlaceQueryRepository.searchByCondition(condition, pageable);
+        List<HotPlaceResponse> responses = toHotPlaceResponse(hotPlaces);
+        return responses;
+    }
+
+    @Override
+    public List<HotPlaceResponse> searchMyHotPlace(String loginId, Pageable pageable) {
+        List<HotPlace> hotPlaces = hotPlaceQueryRepository.searchByLoginId(loginId, pageable);
+        List<HotPlaceResponse> responses = toHotPlaceResponse(hotPlaces);
+        return responses;
+    }
+
+    private List<HotPlaceResponse> toHotPlaceResponse(List<HotPlace> hotPlaces){
         List<HotPlaceResponse> responses = new ArrayList<>();
+
         for (HotPlace hotPlace : hotPlaces) {
             HotPlaceResponse hotPlaceResponse = HotPlaceResponse.builder()
                     .hotPlaceId(hotPlace.getId())
@@ -77,4 +90,6 @@ public class HotPlaceQueryServiceImpl implements HotPlaceQueryService {
     public EditHotPlaceResponse searchEditById(Long hotPlaceId) {
         return hotPlaceQueryRepository.searchEditById(hotPlaceId);
     }
+
+
 }
