@@ -38,20 +38,18 @@ public class NoticeQueryRepository {
                 .where(
                         notice.pin.eq("0"),
                         notice.active.eq(ACTIVE),
-                        isKeyword(condition.getKeyword())
+                        isKeyword(condition.getKeyword(), condition.getType())
                 )
                 .orderBy(notice.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-
-
         if (CollectionUtils.isEmpty(ids)) {
             return new ArrayList<>();
         }
 
-        return queryFactory
+        List<NoticeResponse> noPinResponse = queryFactory
                 .select(Projections.constructor(NoticeResponse.class,
                         notice.id,
                         notice.pin,
@@ -61,6 +59,25 @@ public class NoticeQueryRepository {
                 .where(notice.id.in(ids))
                 .orderBy(notice.createdDate.desc())
                 .fetch();
+
+        List<NoticeResponse> pinResponse = queryFactory
+                .select(Projections.constructor(NoticeResponse.class,
+                        notice.id,
+                        notice.pin,
+                        notice.title,
+                        notice.createdDate))
+                .from(notice)
+                .where(
+                        notice.pin.eq("1"),
+                        notice.active.eq(ACTIVE)
+                )
+                .orderBy(notice.createdDate.desc())
+                .fetch();
+
+        List<NoticeResponse> responses = new ArrayList<>();
+        responses.addAll(pinResponse);
+        responses.addAll(noPinResponse);
+        return responses;
     }
 
     public long totalCount(NoticeSearchCondition condition) {
@@ -69,8 +86,7 @@ public class NoticeQueryRepository {
                 .from(notice)
                 .where(
                         notice.pin.eq("0"),
-                        notice.active.eq(ACTIVE),
-                        isKeyword(condition.getKeyword())
+                        notice.active.eq(ACTIVE)
                 )
                 .fetch()
                 .size();
@@ -136,8 +152,18 @@ public class NoticeQueryRepository {
                 .execute();
     }
 
-    private BooleanExpression isKeyword(String keyword) {
-        return hasText(keyword) ? notice.title.like("%" + keyword + "%")
-                .or(notice.content.like("%" + keyword + "%")) : null;
+    private BooleanExpression isKeyword(String keyword, Integer type) {
+        if (!hasText(keyword)) {
+            return null;
+        }
+        switch (type) {
+            case 1:
+                return notice.content.like("%" + keyword + "%");
+            case 2:
+                return notice.title.like("%" + keyword + "%")
+                        .or(notice.content.like("%" + keyword + "%"));
+            default:
+                return notice.title.like("%" + keyword + "%");
+        }
     }
 }
