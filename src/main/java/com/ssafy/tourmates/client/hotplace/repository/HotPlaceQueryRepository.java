@@ -62,6 +62,34 @@ public class HotPlaceQueryRepository {
                 .fetch();
     }
 
+    public List<HotPlace> searchByLoginId(String loginId, Pageable pageable) {
+
+        System.out.println("loginId: " + loginId);
+    //    System.out.println("hotplace loginId: " + hot);
+        List<Long> ids = queryFactory
+                .select(hotPlace.id)
+                .from(hotPlace)
+                .where(
+                        hotPlace.active.eq(ACTIVE),
+                        hotPlace.member.loginId.eq(loginId)
+                )
+                .orderBy(hotPlace.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        if (CollectionUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+
+        return queryFactory
+                .select(hotPlace)
+                .from(hotPlace)
+                .where(hotPlace.id.in(ids))
+                .orderBy(hotPlace.createdDate.desc())
+                .fetch();
+    }
+
     public long totalCount(HotPlaceSearchCondition condition) {
         return queryFactory
                 .select(hotPlace.id)
@@ -110,4 +138,6 @@ public class HotPlaceQueryRepository {
         return hasText(keyword) ? hotPlace.title.like("%" + keyword + "%")
                 .or(hotPlace.content.like("%" + keyword + "%")) : null;
     }
+
+
 }

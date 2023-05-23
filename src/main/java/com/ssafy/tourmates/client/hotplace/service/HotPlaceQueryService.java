@@ -19,4 +19,6 @@ public interface HotPlaceQueryService {
     DetailHotPlaceResponse searchById(String loginId, Long hotPlaceId);
 
     EditHotPlaceResponse searchEditById(Long hotPlaceId);
+
+    List<HotPlaceResponse> searchMyHotPlace(String loginId, Pageable pageable);
 }
