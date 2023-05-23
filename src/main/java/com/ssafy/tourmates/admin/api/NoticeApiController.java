@@ -27,20 +27,21 @@ public class NoticeApiController {
 
     @ApiOperation(value = "공지사항 조회")
     @GetMapping
-    public ResultPage<List<NoticeResponse>> searchNotices(
-            @RequestParam(defaultValue = "") String keyword,
-            @RequestParam(defaultValue = "1") Integer pageNumber
-    ) {
+    public Result<List<NoticeResponse>> searchNotices(
+            @RequestParam(defaultValue = "1") Integer pageNumber,
+            @RequestParam(defaultValue = "0") Integer type,
+            @RequestParam(defaultValue = "") String keyword
+            ) {
+
         NoticeSearchCondition condition = NoticeSearchCondition.builder()
+                .type(type)
                 .keyword(keyword)
                 .build();
-        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
-        List<NoticeResponse> pinResponses = noticeQueryService.searchPinNotices();
+
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, 10);
         List<NoticeResponse> responses = noticeQueryService.searchByCondition(condition, pageRequest);
-        List<NoticeResponse> res = new ArrayList<>();
-        res.addAll(pinResponses);
-        res.addAll(responses);
-        return new ResultPage<>(res);
+        log.debug("response count={}", responses.size());
+        return new Result<>(responses);
     }
 
     @GetMapping("/totalCount")
@@ -65,12 +66,6 @@ public class NoticeApiController {
     @Data
     @AllArgsConstructor
     static class Result<T> {
-        private T data;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class ResultPage<T> {
         private T data;
     }
 }

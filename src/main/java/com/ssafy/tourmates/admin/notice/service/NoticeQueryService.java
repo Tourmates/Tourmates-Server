@@ -15,8 +15,6 @@ public interface NoticeQueryService {
 
     List<NoticeResponse> searchByCondition(NoticeSearchCondition condition, Pageable pageable);
 
-    List<NoticeResponse> searchPinNotices();
-
     Long getTotalCount(NoticeSearchCondition condition);
 
     DetailNoticeResponse searchNotice(Long noticeId);
