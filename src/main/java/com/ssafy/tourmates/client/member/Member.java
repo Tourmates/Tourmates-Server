@@ -118,7 +118,7 @@ public class Member extends TimeBaseEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return loginId;
     }
 
     @Override
