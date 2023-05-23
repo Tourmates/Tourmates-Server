@@ -65,4 +65,9 @@ public class AttractionInfo {
         this.sido = sido;
         this.gugun = gugun;
     }
+
+    //== 비즈니스 로직 ==//
+    public void increaseReadcount() {
+        this.readcount += 1;
+    }
 }

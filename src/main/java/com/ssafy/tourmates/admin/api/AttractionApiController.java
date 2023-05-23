@@ -1,17 +1,16 @@
 package com.ssafy.tourmates.admin.api;
 
+import com.ssafy.tourmates.admin.api.dto.attraction.request.ReadcountAttractionRequest;
 import com.ssafy.tourmates.admin.api.dto.attraction.response.*;
 import com.ssafy.tourmates.admin.attraction.repository.dto.AttractionSearchCondition;
 import com.ssafy.tourmates.admin.attraction.service.AttractionQueryService;
+import com.ssafy.tourmates.admin.attraction.service.AttractionService;
 import com.ssafy.tourmates.common.domain.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/attractions")
 public class AttractionApiController {
 
+    private final AttractionService attractionService;
     private final AttractionQueryService attractionQueryService;
 
     @GetMapping
@@ -77,6 +77,13 @@ public class AttractionApiController {
         List<AttractionTripPlanResponse> responses = attractionQueryService.searchTripPlanAttraction(keyword);
         log.debug("result.size={}", responses.size());
         return new Result<>(responses);
+    }
+
+    @PostMapping("/readcount")
+    public Integer increaseReadcount(@RequestBody ReadcountAttractionRequest request) {
+        Integer contentId = attractionService.increaseReadcount(request.getContentId());
+        log.debug("contentId={}", contentId);
+        return contentId;
     }
 
     @Data
