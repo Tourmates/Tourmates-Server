@@ -11,5 +11,7 @@ public interface TripPlanService {
 
     Long editTripPlan(Long tripPlanId, EditTripPlanDto dto);
 
+    Long increaseHit(Long tripPlanId);
+
     Long removeTripPlan(Long tripPlanId);
 }

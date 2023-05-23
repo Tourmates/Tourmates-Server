@@ -11,8 +11,6 @@ import com.ssafy.tourmates.client.tripPlan.validator.TripPlanValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.ssafy.tourmates.client.member.Active.ACTIVE;
-
 @Service
 @RequiredArgsConstructor
 public class TripPlanServiceImpl implements TripPlanService {
@@ -33,6 +31,13 @@ public class TripPlanServiceImpl implements TripPlanService {
     public Long editTripPlan(Long tripPlanId, EditTripPlanDto dto) {
         TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
         findTripPlan.changeTripPlan(dto.getTitle(), findTripPlan.getDetailTripPlans());
+        return findTripPlan.getId();
+    }
+
+    @Override
+    public Long increaseHit(Long tripPlanId) {
+        TripPlan findTripPlan = tripPlanValidator.findById(tripPlanId);
+        findTripPlan.increaseHit();
         return findTripPlan.getId();
     }
 
