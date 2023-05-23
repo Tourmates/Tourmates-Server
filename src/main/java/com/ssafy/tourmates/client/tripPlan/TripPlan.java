@@ -77,6 +77,10 @@ public class TripPlan extends TimeBaseEntity {
         this.detailTripPlans = detailTripPlanList;
     }
 
+    public void increaseHit() {
+        this.hit += 1;
+    }
+
     public void deActive() {
         this.active = DEACTIVE;
     }
