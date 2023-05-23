@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/join", "/boards/**", "/notices/**", "/qna/**", "/swagger-ui.html", "/webjars/**", "/swagger-resources/**", "/v2/api-docs/**",
-                        "/check/**", "/hotPlaces", "/hotPlaces/totalCount", "/attractions/**", "/trips",
+                        "/check/**", "/hotPlaces", "/hotPlaces/totalCount", "/attractions/**", "/tripPlans", "/tripPlans/totalCount",
                         "/intranet/**", "/css/**", "/img/**", "/js/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/boards/register", "/hotPlaces/**", "/trips/**").hasRole("MEMBER")
