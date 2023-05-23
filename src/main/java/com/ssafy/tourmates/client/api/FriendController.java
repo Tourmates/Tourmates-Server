@@ -17,20 +17,23 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/freinds")
+@RequestMapping("/friends")
 @Api(tags = {"친구"})
 public class FriendController {
 
     private final FriendService friendService;
 
     @ApiOperation(value = "친구 등록")
-    @PostMapping("/friends/register")
+    @PostMapping("/register")
     public Long registerFriend(@Valid @RequestBody AddFriendRequest request){
+
         //    String loginId = SecurityUtil.getCurrentLoginId();
         String loginId = "ssafy2"; //TODO: SECURITY 접근 권한
+        System.out.println("--------------friends");
+//        console.log("=---------------friend");
 
         AddFriendDto dto = AddFriendDto.builder()
-                .targetId(request.getTargetId())
+                .targetLoginId(request.getTargetLoginId())
                 .build();
 
         Long savedFriendId = friendService.registerFriend(loginId, dto);

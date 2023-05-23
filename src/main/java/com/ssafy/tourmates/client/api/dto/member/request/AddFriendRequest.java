@@ -8,5 +8,5 @@ import javax.validation.constraints.NotBlank;
 public class AddFriendRequest {
 
     @NotBlank
-    private Long targetId;
+    private String targetLoginId;
 }

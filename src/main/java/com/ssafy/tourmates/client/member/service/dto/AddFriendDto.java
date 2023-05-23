@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 public class AddFriendDto {
 
-    private Long targetId;
+    private String targetLoginId;
 
     @Builder
-    public AddFriendDto(Long targetId){
-        this.targetId = targetId;
+    public AddFriendDto(String targetLoginId){
+        this.targetLoginId = targetLoginId;
     }
 }
