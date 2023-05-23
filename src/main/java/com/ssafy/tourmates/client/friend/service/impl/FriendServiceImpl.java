@@ -18,11 +18,13 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public Long registerFriend(String loginId, AddFriendDto dto) {
-        Member findMember = memberValidator.findByLoginId(loginId);
+        Member loginMember = memberValidator.findByLoginId(loginId);
+        Member targetMember = memberValidator.findByLoginId(dto.getTargetLoginId());
 
+        System.out.println("=-------------hi");
         Friend friend = Friend.builder()
-                .memberId(findMember.getId())
-                .targetId(dto.getTargetId())
+                .memberId(loginMember.getId())
+                .targetId(targetMember.getId())
                 .build();
 
         Friend savedFriend = friendRepository.save(friend);
