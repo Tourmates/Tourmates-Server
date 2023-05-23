@@ -25,11 +25,6 @@ public class NoticeQueryServiceImpl implements NoticeQueryService {
     }
 
     @Override
-    public List<NoticeResponse> searchPinNotices() {
-        return noticeQueryRepository.searchPinNotices();
-    }
-
-    @Override
     public Long getTotalCount(NoticeSearchCondition condition) {
         return noticeQueryRepository.totalCount(condition);
     }
