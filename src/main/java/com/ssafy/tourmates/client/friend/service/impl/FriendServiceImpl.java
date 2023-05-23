@@ -23,11 +23,18 @@ public class FriendServiceImpl implements FriendService {
 
         System.out.println("=-------------hi");
         Friend friend = Friend.builder()
-                .memberId(loginMember.getId())
-                .targetId(targetMember.getId())
+                .loginMember(loginMember)
+                .targetMember(targetMember)
+                .build();
+
+        Friend targetFriend = Friend.builder()
+                .loginMember(targetMember)
+                .targetMember(loginMember)
                 .build();
 
         Friend savedFriend = friendRepository.save(friend);
+        Friend savedTargetFriend = friendRepository.save(targetFriend);
+
         return savedFriend.getId();
     }
 }
