@@ -1,6 +1,5 @@
 package com.ssafy.tourmates.client.api;
 
-import com.ssafy.tourmates.client.api.dto.tripplan.request.AddDetailPlanRequest;
 import com.ssafy.tourmates.client.api.dto.tripplan.request.AddTripPlanRequest;
 import com.ssafy.tourmates.client.api.dto.tripplan.request.EditTripPlanRequest;
 import com.ssafy.tourmates.client.api.dto.tripplan.response.DetailPlanResponse;
@@ -9,7 +8,8 @@ import com.ssafy.tourmates.client.tripPlan.repository.dto.PlanSearchCondition;
 import com.ssafy.tourmates.client.tripPlan.service.DetailTripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanQueryService;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
-import com.ssafy.tourmates.client.tripPlan.service.dto.*;
+import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanDto;
+import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.ssafy.tourmates.client.tripPlan.repository.dto.PlanSearchCondition.*;
+import static com.ssafy.tourmates.client.tripPlan.repository.dto.PlanSearchCondition.PlanSearchConditionBuilder;
+import static com.ssafy.tourmates.client.tripPlan.repository.dto.PlanSearchCondition.builder;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,9 +40,9 @@ public class TripPlanApiController {
     @ApiOperation(value = "여행계획 조회")
     @GetMapping
     public Result<?> searchTripPlans(
-        @RequestParam(defaultValue = "") String keyword,
-        @RequestParam(defaultValue = "0") Integer type,
-        @RequestParam(defaultValue = "1") Integer pageNumber
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "0") Integer type,
+            @RequestParam(defaultValue = "1") Integer pageNumber
     ) {
         //0: 타이틀, 1: 닉네임, 2: 관광지이름
         PlanSearchConditionBuilder builder = builder();
@@ -88,6 +89,7 @@ public class TripPlanApiController {
     @GetMapping("/{tripPlanId}")
     public Result<?> searchTripPlan(@PathVariable Long tripPlanId) {
         DetailPlanResponse response = tripPlanQueryService.searchById(tripPlanId);
+        tripPlanService.increaseHit(tripPlanId);
         return new Result<>(response);
     }
 
