@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.tripPlan.service.impl;
 
+import com.ssafy.tourmates.client.api.dto.tripplan.response.DetailPlanResponse;
 import com.ssafy.tourmates.client.api.dto.tripplan.response.PlanResponse;
 import com.ssafy.tourmates.client.tripPlan.repository.TripPlanQueryRepository;
 import com.ssafy.tourmates.client.tripPlan.repository.dto.PlanSearchCondition;
@@ -24,5 +25,10 @@ public class TripPlanQueryServiceImpl implements TripPlanQueryService {
     @Override
     public Long getTotalCount() {
         return tripPlanQueryRepository.totalCount();
+    }
+
+    @Override
+    public DetailPlanResponse searchById(Long tripPlanId) {
+        return tripPlanQueryRepository.searchById(tripPlanId);
     }
 }
