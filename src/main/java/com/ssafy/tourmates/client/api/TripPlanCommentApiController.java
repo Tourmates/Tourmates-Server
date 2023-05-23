@@ -1,7 +1,7 @@
 package com.ssafy.tourmates.client.api;
 
-import com.ssafy.tourmates.client.api.dto.tripPlan.AddTripPlanCommentRequest;
-import com.ssafy.tourmates.client.api.dto.tripPlan.EditTripPlanCommentReqeust;
+import com.ssafy.tourmates.client.api.dto.tripplan.request.AddTripPlanCommentRequest;
+import com.ssafy.tourmates.client.api.dto.tripplan.request.EditTripPlanCommentReqeust;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanCommentService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanCommentDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanCommentDto;

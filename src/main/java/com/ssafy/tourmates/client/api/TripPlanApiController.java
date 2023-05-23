@@ -1,8 +1,9 @@
 package com.ssafy.tourmates.client.api;
 
-import com.ssafy.tourmates.client.api.dto.tripPlan.*;
+import com.ssafy.tourmates.client.api.dto.tripplan.request.AddDetailPlanRequest;
+import com.ssafy.tourmates.client.api.dto.tripplan.request.AddTripPlanRequest;
+import com.ssafy.tourmates.client.api.dto.tripplan.request.EditTripPlanRequest;
 import com.ssafy.tourmates.client.tripPlan.service.DetailTripPlanService;
-import com.ssafy.tourmates.client.tripPlan.service.TripPlanCommentService;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.*;
 import com.ssafy.tourmates.jwt.SecurityUtil;
@@ -24,6 +25,12 @@ public class TripPlanApiController {
 
     private final TripPlanService tripPlanService;
     private final DetailTripPlanService detailTripPlanService;
+
+    @ApiOperation(value = "여행계획 조회")
+    @GetMapping
+    public void searchTripPlans() {
+
+    }
 
     @ApiOperation(value = "여행계획 등록")
     @PostMapping("/register")
