@@ -1,24 +1,30 @@
 package com.ssafy.tourmates.client.api;
 
 import com.ssafy.tourmates.client.api.dto.board.response.BoardResponse;
+import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceResponse;
 import com.ssafy.tourmates.client.api.dto.member.request.*;
 import com.ssafy.tourmates.client.api.dto.member.response.MemberDetailResponse;
 import com.ssafy.tourmates.client.board.service.BoardQueryService;
+import com.ssafy.tourmates.client.hotplace.service.HotPlaceQueryService;
 import com.ssafy.tourmates.client.member.service.MemberService;
 import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.tourmates.client.member.service.dto.EditMyPersonalDto;
 import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
+import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.common.exception.EditException;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -31,6 +37,8 @@ public class MemberApiController {
 
     private final BoardQueryService boardQueryService;
     private final MemberService memberService;
+    private final HotPlaceQueryService hotPlaceQueryService;
+
 
     @ApiOperation(value = "비밀번호변경")
     @PostMapping("/loginPw")
@@ -171,6 +179,20 @@ public class MemberApiController {
         return new BoardApiController.ResultPage<>(boardResponses);
     }
 
+    @ApiOperation(value = "나의 핫플레이스 조회")
+    @GetMapping("/hotPlaces")
+    public Result<List<HotPlaceResponse>> myHotplaces(@RequestParam(defaultValue = "1") Integer pageNumber){
+  //      String loginId = SecurityUtil.getCurrentLoginId();
+
+        String loginId = "ssafy2";
+
+        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
+        List<HotPlaceResponse> responses = hotPlaceQueryService.searchMyHotPlace(loginId, pageRequest);
+
+        System.out.println("response.size: " + responses.size());
+        return new Result<>(responses);
+    }
+
     @ApiOperation(value = "회원탈퇴")
     @PostMapping("/withdrawal")
     public int withdrawal(@Valid @RequestBody WithdrawalRequest request) {
@@ -186,5 +208,12 @@ public class MemberApiController {
         }
 
         return 1;
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T data;
     }
 }
