@@ -3,6 +3,7 @@ package com.ssafy.tourmates.client.api;
 import com.ssafy.tourmates.client.api.dto.tripplan.request.AddDetailPlanRequest;
 import com.ssafy.tourmates.client.api.dto.tripplan.request.AddTripPlanRequest;
 import com.ssafy.tourmates.client.api.dto.tripplan.request.EditTripPlanRequest;
+import com.ssafy.tourmates.client.api.dto.tripplan.response.DetailPlanResponse;
 import com.ssafy.tourmates.client.api.dto.tripplan.response.PlanResponse;
 import com.ssafy.tourmates.client.tripPlan.repository.dto.PlanSearchCondition;
 import com.ssafy.tourmates.client.tripPlan.service.DetailTripPlanService;
@@ -83,16 +84,11 @@ public class TripPlanApiController {
         return savedTripPlanId;
     }
 
-    @ApiOperation(value = "세부 여행 계획 등록")
-    @PostMapping("/{tripPlanId}/detailPlan/register")
-    public List<Integer> registerDetailPlan(@PathVariable Long tripPlanId, @Valid @RequestBody AddDetailPlanRequest request) {
-
-        AddDetailTripPlanDto dto = AddDetailTripPlanDto.builder()
-                .contentIds(request.getContentIds())
-                .build();
-
-        List<Integer> contentIds = detailTripPlanService.registerDetailTripPlan(tripPlanId, dto);
-        return contentIds;
+    @ApiOperation(value = "여행계획 상세 조회")
+    @GetMapping("/{tripPlanId}")
+    public Result<?> searchTripPlan(@PathVariable Long tripPlanId) {
+        DetailPlanResponse response = tripPlanQueryService.searchById(tripPlanId);
+        return new Result<>(response);
     }
 
     @ApiOperation(value = "여행계획 수정")
@@ -111,13 +107,6 @@ public class TripPlanApiController {
     public Long removeTripPlan(@PathVariable Long tripPlanId) {
         Long removedTripPlanId = tripPlanService.removeTripPlan(tripPlanId);
         return removedTripPlanId;
-    }
-
-    @ApiOperation(value = "세부 여행 계획 삭제")
-    @PostMapping("/{tripPlanId}/detail/{detailTripPlanId}/remove")
-    public Integer removeDetailTripPlan(@PathVariable Long tripPlanId, @PathVariable Long detailTripPlanId) {
-        detailTripPlanService.removeDetailTripPlan(detailTripPlanId);
-        return 1;
     }
 
     @Data
