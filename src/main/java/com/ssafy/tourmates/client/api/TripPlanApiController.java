@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/trips")
+@RequestMapping("/tripPlans")
 @Api(tags = {"여행"})
 public class TripPlanApiController {
 
