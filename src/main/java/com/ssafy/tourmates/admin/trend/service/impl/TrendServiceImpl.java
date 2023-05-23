@@ -50,7 +50,7 @@ public class TrendServiceImpl implements TrendService {
             trend.increaseFemale();
         }
 
-        String birth = member.getBirth().split("\\.")[0];
+        String birth = member.getBirth().split("-")[0];
         int year = LocalDateTime.now().getYear();
         int age = year - Integer.parseInt(birth) + 1;
 
