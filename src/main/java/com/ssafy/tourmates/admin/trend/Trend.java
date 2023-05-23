@@ -39,4 +39,25 @@ public class Trend extends TimeBaseEntity {
         this.female = female;
         this.attractionInfo = attractionInfo;
     }
+
+    //== 비즈니스 로직 ==//
+    public void increaseTeenage() {
+        this.teenage += 1;
+    }
+
+    public void increaseTwenty() {
+        this.twenty += 1;
+    }
+
+    public void increaseThirty() {
+        this.thirty += 1;
+    }
+
+    public void increaseMale() {
+        this.male += 1;
+    }
+
+    public void increaseFemale() {
+        this.female += 1;
+    }
 }
