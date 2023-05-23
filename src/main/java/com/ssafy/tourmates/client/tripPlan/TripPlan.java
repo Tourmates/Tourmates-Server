@@ -32,6 +32,8 @@ public class TripPlan extends TimeBaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Active active;
+    @Column(nullable = true)
+    private Long parentTripPlanId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
