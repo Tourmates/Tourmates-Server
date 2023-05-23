@@ -6,4 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface TrendService {
 
     Long registerTrend(Integer contentId);
+
+    Long increaseTrend(String loginId, Integer contentId);
 }
