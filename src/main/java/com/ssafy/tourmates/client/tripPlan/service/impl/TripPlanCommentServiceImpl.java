@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.tripPlan.service.impl;
 
+import com.ssafy.tourmates.client.api.dto.tripplan.response.TripPlanCommentResponse;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import com.ssafy.tourmates.client.tripPlan.TripPlan;
@@ -11,6 +12,10 @@ import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanCommentDto;
 import com.ssafy.tourmates.client.tripPlan.validator.TripPlanCommentValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -46,5 +51,20 @@ public class TripPlanCommentServiceImpl implements TripPlanCommentService {
     public Long removeTripPlanComment(Long tripPlanCommentId) {
         tripPlanCommentRepository.deleteById(tripPlanCommentId);
         return tripPlanCommentId;
+    }
+
+    @Override
+    public List<TripPlanCommentResponse> searchAll(Long tripPlanId) {
+
+        List<TripPlanComment> tripPlanCommentList = tripPlanCommentValidator.findByTripPlanId(tripPlanId);
+
+        List<TripPlanCommentResponse> tripPlanCommentResponseList = new ArrayList<>();
+
+        for(TripPlanComment comment: tripPlanCommentList){
+            String nickname = comment.getMember().getNickname();
+            LocalDateTime createdTime = comment.getCreatedDate();
+            tripPlanCommentResponseList.add(new TripPlanCommentResponse(nickname,comment.getContent(), createdTime ));
+        }
+        return tripPlanCommentResponseList;
     }
 }
