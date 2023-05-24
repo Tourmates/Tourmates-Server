@@ -1,16 +1,17 @@
 package com.ssafy.tourmates.client.api;
 
-import com.ssafy.tourmates.client.api.dto.tripplan.request.AddTripPlanRequest;
-import com.ssafy.tourmates.client.api.dto.tripplan.request.EditTripPlanRequest;
-import com.ssafy.tourmates.client.api.dto.tripplan.request.ShareTripPlanRequest;
+import com.ssafy.tourmates.client.api.dto.tripplan.request.*;
 import com.ssafy.tourmates.client.api.dto.tripplan.response.DetailPlanResponse;
+import com.ssafy.tourmates.client.api.dto.tripplan.response.PlanAttractionResponse;
 import com.ssafy.tourmates.client.api.dto.tripplan.response.PlanResponse;
 import com.ssafy.tourmates.client.tripPlan.repository.dto.PlanSearchCondition;
 import com.ssafy.tourmates.client.tripPlan.service.DetailTripPlanService;
+import com.ssafy.tourmates.client.tripPlan.service.TripPlanOptimizeService;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanQueryService;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanDto;
+import com.ssafy.tourmates.client.tripPlan.service.dto.PlanAttractionDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.ShareTripPlanDto;
 import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
@@ -34,6 +35,7 @@ public class TripPlanApiController {
 
     private final TripPlanService tripPlanService;
     private final TripPlanQueryService tripPlanQueryService;
+    private final TripPlanOptimizeService tripPlanOptimizeService;
     private final DetailTripPlanService detailTripPlanService;
 
     @ApiOperation(value = "여행계획 조회")
@@ -62,6 +64,18 @@ public class TripPlanApiController {
         List<PlanResponse> responses = tripPlanQueryService.searchByCondition(condition, pageRequest);
         log.debug("size={}", responses.size());
         return new Result<>(responses);
+    }
+
+    @ApiOperation(value = "여행 계획 최적화")
+    @PostMapping("/optimize")
+    public void optimizeTripPlan(@Valid @RequestBody PlanAttractionRequest request){
+        System.out.println("trpiPlan!!!!!!!!!!");
+
+        PlanAttractionDto dto = PlanAttractionDto.builder()
+                        .plans(request.getPlans())
+                        .build();
+
+        List<PlanAttractionResponse> response = tripPlanOptimizeService.optimize(dto);
     }
 
     @ApiOperation(value = "여행계획 총 갯수 조회")
