@@ -2,6 +2,7 @@ package com.ssafy.tourmates.client.api;
 
 import com.ssafy.tourmates.client.api.dto.hotplace.request.AddHotplaceCommentRequest;
 import com.ssafy.tourmates.client.api.dto.hotplace.request.EditHotPlaceCommentRequest;
+import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceCommentResponse;
 import com.ssafy.tourmates.client.hotplace.service.HotPlaceCommentService;
 import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceCommentDto;
 import com.ssafy.tourmates.client.hotplace.service.dto.EditHotPlaceCommentDto;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +24,16 @@ import javax.validation.Valid;
 public class HotPlaceCommentApiController {
 
     private final HotPlaceCommentService hotPlaceCommentService;
+
+
+    @ApiOperation(value = "핫플레이스 댓글 목록")
+    @PostMapping("/list")
+    public List<HotPlaceCommentResponse> hotPlaceCommentList(@PathVariable Long hotPlaceId) {
+        List<HotPlaceCommentResponse> hotPlaceCommentResponseList =
+                hotPlaceCommentService.searchAll(hotPlaceId);
+
+        return hotPlaceCommentResponseList;
+    }
 
     @ApiOperation(value = "핫플레이스 댓글 등록")
     @PostMapping("/register")
