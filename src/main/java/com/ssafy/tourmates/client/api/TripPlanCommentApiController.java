@@ -2,10 +2,10 @@ package com.ssafy.tourmates.client.api;
 
 import com.ssafy.tourmates.client.api.dto.tripplan.request.AddTripPlanCommentRequest;
 import com.ssafy.tourmates.client.api.dto.tripplan.request.EditTripPlanCommentReqeust;
+import com.ssafy.tourmates.client.api.dto.tripplan.response.TripPlanCommentResponse;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanCommentService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanCommentDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanCommentDto;
-import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -13,15 +13,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/trips/{tripPlanId}/comments")
+@RequestMapping("/tripPlans/{tripPlanId}/comments")
 @Api(tags = {"여행 댓글"})
 public class TripPlanCommentApiController {
 
     private final TripPlanCommentService tripPlanCommentService;
+
+    @ApiOperation(value = "여행 댓글 목록")
+    @PostMapping("/list")
+    public List<TripPlanCommentResponse> boardCommentList(@PathVariable Long tripPlanId) {
+        List<TripPlanCommentResponse> tripCommentResponseList =
+                tripPlanCommentService.searchAll(tripPlanId);
+
+        return tripCommentResponseList;
+    }
 
     @ApiOperation(value = "여행 계획 댓글 등록")
     @PostMapping("/register")
@@ -29,7 +39,8 @@ public class TripPlanCommentApiController {
             @PathVariable Long tripPlanId,
             @Valid @RequestBody AddTripPlanCommentRequest request) {
 
-        String loginId = SecurityUtil.getCurrentLoginId();
+      //  String loginId = SecurityUtil.getCurrentLoginId();
+        String loginId = "ssafy2"; //TODO: SECUIRTY
 
         AddTripPlanCommentDto dto = AddTripPlanCommentDto.builder()
                 .content(request.getComment())
