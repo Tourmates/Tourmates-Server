@@ -6,5 +6,5 @@ import lombok.Data;
 public class ShareTripPlanRequest {
 
     private Long tripPlanId;
-    private String friendId;
+    private String targetId;
 }
