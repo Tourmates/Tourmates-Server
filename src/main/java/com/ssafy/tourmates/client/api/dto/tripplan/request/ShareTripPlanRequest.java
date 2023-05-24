@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class ShareTripPlanRequest {
 
-    private String friendId;
+    private Long tripPlanId;
+    private String targetId;
 }
