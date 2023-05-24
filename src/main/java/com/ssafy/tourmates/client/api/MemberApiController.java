@@ -10,7 +10,6 @@ import com.ssafy.tourmates.client.member.service.MemberService;
 import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.tourmates.client.member.service.dto.EditMyPersonalDto;
 import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
-import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.common.exception.EditException;
 import com.ssafy.tourmates.jwt.SecurityUtil;
@@ -24,7 +23,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -47,8 +45,7 @@ public class MemberApiController {
             return -1;
         }
 
-        //  String loginId = SecurityUtil.getCurrentLoginId();
-        String loginId = "ssafy2";
+        String loginId = SecurityUtil.getCurrentLoginId();
         EditLoginPwDto dto = EditLoginPwDto.builder()
                 .currentLoginPw(request.getCurrentLoginPw())
                 .newLoginPw(request.getNewLoginPw())
@@ -65,10 +62,9 @@ public class MemberApiController {
 
     @ApiOperation("개인 정보 전체 변경")
     @PostMapping("/personal/info")
-    public int editMyPersonal(@Valid @RequestBody EditMyPersonalRequest request){
-//        String loginId = SecurityUtil.getCurrentLoginId();
-        String loginId = "ssafy2";
-
+    public int editMyPersonal(@Valid @RequestBody EditMyPersonalRequest request) {
+        String loginId = SecurityUtil.getCurrentLoginId();
+        System.out.println("개인정보 loginId: " + loginId);
 
         EditMyPersonalDto dto = EditMyPersonalDto.builder()
                 .username(request.getUsername())
@@ -126,7 +122,6 @@ public class MemberApiController {
     @PostMapping("/nickname")
     public int editNickname(@Valid @RequestBody EditNicknameRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
-        loginId = "ssafy2";
 
         try {
             Long memberId = memberService.editNickname(loginId, request.getNewNickname());
@@ -143,10 +138,8 @@ public class MemberApiController {
     @ApiOperation(value = "회원 정보 조회")
     @PostMapping("/detail")
     public MemberDetailResponse getMemberDetail() {
-        //    String loginId = SecurityUtil.getCurrentLoginId();
-
-        //    System.out.println("loginId: " + loginId);
-        String loginId = "ssafy2";
+        String loginId = SecurityUtil.getCurrentLoginId();
+        System.out.println("회원 정보 조회: " + loginId);
         MemberDetailDto memberDetailDto = memberService.getMemberDetail(loginId);
 
         MemberDetailResponse response = MemberDetailResponse.builder()
@@ -168,8 +161,7 @@ public class MemberApiController {
     public BoardApiController.ResultPage<List<BoardResponse>> searchBoards(
             @RequestParam(defaultValue = "1") Integer pageNumber
     ) {
-        // String loginId = SecurityUtil.getCurrentLoginId();
-        String loginId = "ssafy2";
+        String loginId = SecurityUtil.getCurrentLoginId();
         System.out.println("loginId: " + loginId);
         PageRequest pageRequest = PageRequest.of(pageNumber / 10, 20);
         List<BoardResponse> boardResponses = boardQueryService.searchByLoginId(pageRequest, loginId);
@@ -182,9 +174,7 @@ public class MemberApiController {
     @ApiOperation(value = "나의 핫플레이스 조회")
     @GetMapping("/hotPlaces")
     public Result<List<HotPlaceResponse>> myHotplaces(@RequestParam(defaultValue = "1") Integer pageNumber){
-  //      String loginId = SecurityUtil.getCurrentLoginId();
-
-        String loginId = "ssafy2";
+        String loginId = SecurityUtil.getCurrentLoginId();
 
         PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
         List<HotPlaceResponse> responses = hotPlaceQueryService.searchMyHotPlace(loginId, pageRequest);
@@ -197,6 +187,7 @@ public class MemberApiController {
     @PostMapping("/withdrawal")
     public int withdrawal(@Valid @RequestBody WithdrawalRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
+        System.out.println("----------loginId: " + loginId);
 
         try {
             Long memberId = memberService.withdrawal(loginId, request.getLoginPw());
