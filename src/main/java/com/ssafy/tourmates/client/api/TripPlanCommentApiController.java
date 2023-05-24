@@ -6,6 +6,7 @@ import com.ssafy.tourmates.client.api.dto.tripplan.response.TripPlanCommentRespo
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanCommentService;
 import com.ssafy.tourmates.client.tripPlan.service.dto.AddTripPlanCommentDto;
 import com.ssafy.tourmates.client.tripPlan.service.dto.EditTripPlanCommentDto;
+import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,7 @@ public class TripPlanCommentApiController {
             @PathVariable Long tripPlanId,
             @Valid @RequestBody AddTripPlanCommentRequest request) {
 
-      //  String loginId = SecurityUtil.getCurrentLoginId();
-        String loginId = "ssafy2"; //TODO: SECUIRTY
+        String loginId = SecurityUtil.getCurrentLoginId();
 
         AddTripPlanCommentDto dto = AddTripPlanCommentDto.builder()
                 .content(request.getComment())
