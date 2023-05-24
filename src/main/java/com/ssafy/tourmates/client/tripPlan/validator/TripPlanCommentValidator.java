@@ -5,6 +5,7 @@ import com.ssafy.tourmates.client.tripPlan.repository.TripPlanCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Configuration
@@ -16,5 +17,9 @@ public class TripPlanCommentValidator {
     public TripPlanComment findById(Long id) {
         return tripPlanCommentRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    public List<TripPlanComment> findByTripPlanId(Long tripPlanId) {
+        return tripPlanCommentRepository.findAllByTripPlanId(tripPlanId);
     }
 }
