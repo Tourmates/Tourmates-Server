@@ -22,6 +22,7 @@ public class Board extends TimeBaseEntity {
     private Long id;
     @Column(nullable = false, length = 50)
     private String title;
+    @Lob
     @Column(nullable = false)
     private String content;
     private int hit;

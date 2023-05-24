@@ -1,20 +1,17 @@
 package com.ssafy.tourmates.client.hotplace.repository.dto;
 
-import com.ssafy.tourmates.common.domain.ContentType;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class HotPlaceSearchCondition {
 
-    private List<ContentType> tags;
+    private Integer type;
     private String keyword;
 
     @Builder
-    public HotPlaceSearchCondition(List<ContentType> tags, String keyword) {
-        this.tags = tags;
+    public HotPlaceSearchCondition(Integer type, String keyword) {
+        this.type = type;
         this.keyword = keyword;
     }
 }

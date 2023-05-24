@@ -14,8 +14,6 @@ public class AddHotPlaceRequest {
 
     @NotNull
     private Integer contentId;
-    @NotNull
-    private ContentType tag;
     @NotBlank
     @Size(max = 50)
     private String title;
@@ -24,6 +22,6 @@ public class AddHotPlaceRequest {
     @NotBlank
     @Size(min = 10, max = 10)
     private String visitedDate;
-//    @NotNull
     private List<MultipartFile> files;
+    private List<String> tags;
 }

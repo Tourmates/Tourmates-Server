@@ -11,16 +11,16 @@ import java.util.List;
 public class AddHotPlaceDto {
 
     private Integer contentId;
-    private ContentType tag;
+    private List<String> tagNames;
     private String title;
     private String content;
     private String visitedDate;
     private List<UploadFile> uploadFiles;
 
     @Builder
-    public AddHotPlaceDto(Integer contentId, ContentType tag, String title, String content, String visitedDate, List<UploadFile> uploadFiles) {
+    public AddHotPlaceDto(Integer contentId, List<String> tagNames, String title, String content, String visitedDate, List<UploadFile> uploadFiles) {
         this.contentId = contentId;
-        this.tag = tag;
+        this.tagNames = tagNames;
         this.title = title;
         this.content = content;
         this.visitedDate = visitedDate;
