@@ -43,13 +43,14 @@ public class TripPlan extends TimeBaseEntity {
     private List<DetailTripPlan> detailTripPlans;
 
     @Builder
-    public TripPlan(Long id, String title, int hit, Active active, Member member, List<DetailTripPlan> detailTripPlans) {
+    public TripPlan(Long id, String title, int hit, Active active, Member member, List<DetailTripPlan> detailTripPlans, Long parentTripPlanId) {
         this.id = id;
         this.title = title;
         this.hit = hit;
         this.active = active;
         this.member = member;
         this.detailTripPlans = detailTripPlans;
+        this.parentTripPlanId = parentTripPlanId;
     }
 
     //== 연관관계 메서드 ==//
