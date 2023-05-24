@@ -92,7 +92,7 @@ public class TripPlanApiController {
     public Long shareTripPlan(@Valid @RequestBody ShareTripPlanRequest request) {
         ShareTripPlanDto dto = ShareTripPlanDto.builder()
                 .tripPlanId(request.getTripPlanId())
-                .friendId(request.getFriendId())
+                .targetId(request.getTargetId())
                 .build();
 
         Long savedTripPlanId = tripPlanService.shareTripPlan(dto);
