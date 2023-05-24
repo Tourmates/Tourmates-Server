@@ -1,9 +1,10 @@
 package com.ssafy.tourmates.client.hotplace;
 
 import com.ssafy.tourmates.admin.attraction.AttractionInfo;
+import com.ssafy.tourmates.client.hashtag.Hashtag;
+import com.ssafy.tourmates.client.hashtag.HotPlaceHashtag;
 import com.ssafy.tourmates.client.member.Active;
 import com.ssafy.tourmates.client.member.Member;
-import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.domain.TimeBaseEntity;
 import com.ssafy.tourmates.common.domain.UploadFile;
 import lombok.Builder;
@@ -27,9 +28,6 @@ public class HotPlace extends TimeBaseEntity {
     @Id @GeneratedValue
     @Column(name = "hot_place_id")
     private Long id;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private ContentType tag;
     @Column(nullable = false, length = 50)
     private String title;
     @Lob
@@ -56,12 +54,12 @@ public class HotPlace extends TimeBaseEntity {
     private List<HotPlaceComment> comments = new ArrayList<>();
     @OneToMany(mappedBy = "hotPlace", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HotPlaceLike> likes = new ArrayList<>();
-
+    @OneToMany(mappedBy = "hotPlace", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HotPlaceHashtag> hashtags = new ArrayList<>();
 
     @Builder
-    public HotPlace(Long id, ContentType tag, String title, String content, int hit, String visitedDate, Active active, Member member, AttractionInfo attractionInfo, List<HotPlaceImage> images, List<HotPlaceLike> likes) {
+    public HotPlace(Long id, String title, String content, int hit, String visitedDate, Active active, Member member, AttractionInfo attractionInfo, List<HotPlaceImage> images, List<HotPlaceComment> comments, List<HotPlaceLike> likes, List<HotPlaceHashtag> hashtags) {
         this.id = id;
-        this.tag = tag;
         this.title = title;
         this.content = content;
         this.hit = hit;
@@ -70,13 +68,14 @@ public class HotPlace extends TimeBaseEntity {
         this.member = member;
         this.attractionInfo = attractionInfo;
         this.images = images;
+        this.comments = comments;
         this.likes = likes;
+        this.hashtags = hashtags;
     }
 
     @Builder
-    public static HotPlace createHotPlace(ContentType tag, String title, String content, String visitedDate, Member member, Integer contentId, List<UploadFile> uploadFiles) {
+    public static HotPlace createHotPlace(String title, String content, String visitedDate, Member member, Integer contentId, List<UploadFile> uploadFiles, List<Long> hashtagIds) {
         HotPlace hotPlace = HotPlace.builder()
-                .tag(tag)
                 .title(title)
                 .content(content)
                 .visitedDate(visitedDate)
@@ -93,13 +92,21 @@ public class HotPlace extends TimeBaseEntity {
                     .build());
         }
 
+        List<HotPlaceHashtag> hashtags = new ArrayList<>();
+        for (Long hashtagId : hashtagIds) {
+            hashtags.add(HotPlaceHashtag.builder()
+                    .hotPlace(hotPlace)
+                    .hashtag(Hashtag.builder().id(hashtagId).build())
+                    .build());
+        }
+
         hotPlace.images = images;
+        hotPlace.hashtags = hashtags;
         return hotPlace;
     }
 
     //== 비즈니스 로직 ==//
-    public void changeHotPlace(ContentType tag, String title, String content, String visitedDate, List<HotPlaceImage> images) {
-        this.tag = tag;
+    public void changeHotPlace(String title, String content, String visitedDate, List<HotPlaceImage> images) {
         this.title = title;
         this.content = content;
         this.visitedDate = visitedDate;

@@ -1,6 +1,7 @@
 package com.ssafy.tourmates.client.api;
 
 import com.ssafy.tourmates.client.api.dto.hotplace.response.EditHotPlaceResponse;
+import com.ssafy.tourmates.client.hashtag.service.HashtagService;
 import com.ssafy.tourmates.client.hotplace.service.*;
 import com.ssafy.tourmates.client.hotplace.service.dto.*;
 import com.ssafy.tourmates.common.FileStore;
@@ -36,17 +37,20 @@ public class HotPlaceApiController {
     private final HotPlaceService hotPlaceService;
     private final HotPlaceQueryService hotPlaceQueryService;
     private final HotPlaceLikeService hotPlaceLikeService;
+    private final HashtagService hashtagService;
     private final FileStore fileStore;
 
     @ApiOperation(value = "핫플레이스 등록")
     @PostMapping("/register")
     public Long registerHotPlace(@Valid AddHotPlaceRequest request) throws IOException {
         String loginId = SecurityUtil.getCurrentLoginId();
+        hashtagService.registerHashtag(request.getTags());
+
         List<UploadFile> uploadFiles = fileStore.storeFiles(request.getFiles());
 
         AddHotPlaceDto dto = AddHotPlaceDto.builder()
                 .contentId(request.getContentId())
-                .tag(request.getTag())
+                .tagNames(request.getTags())
                 .title(request.getTitle())
                 .content(request.getContent())
                 .visitedDate(request.getVisitedDate())
@@ -71,21 +75,16 @@ public class HotPlaceApiController {
     @ApiOperation(value = "핫플레이스 조회")
     @GetMapping
     public Result<List<HotPlaceResponse>> searchHotPlaces(
-            @RequestParam(required = false) List<ContentType> tags,
+            @RequestParam(defaultValue = "0") Integer type,
             @RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "1") Integer pageNumber
     ) {
-        List<ContentType> contentTypes = new ArrayList<>();
-        if (tags != null) {
-            contentTypes.addAll(tags);
-        }
-
         HotPlaceSearchCondition condition = HotPlaceSearchCondition.builder()
-                .tags(contentTypes)
+                .type(type)
                 .keyword(keyword)
                 .build();
 
-        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, 10);
         List<HotPlaceResponse> responses = hotPlaceQueryService.searchByCondition(condition, pageRequest);
         log.debug("size={}", responses.size());
         return new Result<>(responses);
@@ -94,16 +93,10 @@ public class HotPlaceApiController {
     @ApiOperation(value = "핫플레이스 총 갯수 조회")
     @GetMapping("/totalCount")
     public Long totalCount(
-            @RequestParam(required = false) List<ContentType> tags,
             @RequestParam(defaultValue = "") String keyword
     ) {
-        List<ContentType> contentTypes = new ArrayList<>();
-        if (tags != null) {
-            contentTypes.addAll(tags);
-        }
 
         HotPlaceSearchCondition condition = HotPlaceSearchCondition.builder()
-                .tags(contentTypes)
                 .keyword(keyword)
                 .build();
 

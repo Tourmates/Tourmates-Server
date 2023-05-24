@@ -5,7 +5,9 @@ import com.ssafy.tourmates.admin.api.dto.attraction.response.*;
 import com.ssafy.tourmates.admin.attraction.repository.dto.AttractionSearchCondition;
 import com.ssafy.tourmates.admin.attraction.service.AttractionQueryService;
 import com.ssafy.tourmates.admin.attraction.service.AttractionService;
+import com.ssafy.tourmates.admin.trend.service.TrendService;
 import com.ssafy.tourmates.common.domain.ContentType;
+import com.ssafy.tourmates.jwt.SecurityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class AttractionApiController {
 
     private final AttractionService attractionService;
     private final AttractionQueryService attractionQueryService;
+    private final TrendService trendService;
 
     @GetMapping
     public Result<List<AttractionResponse>> searchByCondition(
@@ -81,7 +84,10 @@ public class AttractionApiController {
 
     @PostMapping("/readcount")
     public Integer increaseReadcount(@RequestBody ReadcountAttractionRequest request) {
+        String loginId = SecurityUtil.getCurrentLoginId();
+        log.debug("loginId={}", loginId);
         Integer contentId = attractionService.increaseReadcount(request.getContentId());
+        trendService.increaseTrend(loginId, request.getContentId());
         log.debug("contentId={}", contentId);
         return contentId;
     }

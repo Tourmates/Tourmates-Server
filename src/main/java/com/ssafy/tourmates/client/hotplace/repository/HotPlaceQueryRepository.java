@@ -1,16 +1,12 @@
 package com.ssafy.tourmates.client.hotplace.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.tourmates.admin.attraction.QAttractionInfo;
 import com.ssafy.tourmates.client.api.dto.hotplace.response.EditHotPlaceResponse;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
 import com.ssafy.tourmates.client.hotplace.repository.dto.HotPlaceSearchCondition;
-import com.ssafy.tourmates.client.member.Active;
-import com.ssafy.tourmates.common.domain.ContentType;
-import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -22,12 +18,15 @@ import java.util.List;
 
 import static com.querydsl.core.types.Projections.*;
 import static com.ssafy.tourmates.admin.attraction.QAttractionInfo.*;
+import static com.ssafy.tourmates.client.hashtag.QHashtag.*;
+import static com.ssafy.tourmates.client.hashtag.QHotPlaceHashtag.*;
 import static com.ssafy.tourmates.client.hotplace.QHotPlace.*;
 import static com.ssafy.tourmates.client.member.Active.*;
 import static com.ssafy.tourmates.client.member.QMember.*;
 import static org.springframework.util.StringUtils.*;
 
 @Repository
+@Slf4j
 public class HotPlaceQueryRepository {
 
     private final JPAQueryFactory queryFactory;
@@ -42,10 +41,33 @@ public class HotPlaceQueryRepository {
                 .from(hotPlace)
                 .where(
                         hotPlace.active.eq(ACTIVE),
-                        isTags(condition.getTags()),
                         isKeyword(condition.getKeyword())
                 )
                 .orderBy(hotPlace.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        log.debug("id size={}", ids.size());
+        if (CollectionUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+
+        return queryFactory
+                .select(hotPlace)
+                .from(hotPlace)
+                .where(hotPlace.id.in(ids))
+                .orderBy(hotPlace.createdDate.desc())
+                .fetch();
+    }
+
+    public List<HotPlace> searchByHashtag(HotPlaceSearchCondition condition, Pageable pageable) {
+        List<Long> ids = queryFactory
+                .select(hotPlaceHashtag.hotPlace.id)
+                .from(hotPlaceHashtag)
+                .join(hotPlaceHashtag.hashtag, hashtag)
+                .join(hotPlaceHashtag.hotPlace, hotPlace)
+                .where(hotPlaceHashtag.hashtag.tagName.like("%" + condition.getKeyword() + "%"))
+                .orderBy(hotPlaceHashtag.hotPlace.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -63,9 +85,6 @@ public class HotPlaceQueryRepository {
     }
 
     public List<HotPlace> searchByLoginId(String loginId, Pageable pageable) {
-
-        System.out.println("loginId: " + loginId);
-    //    System.out.println("hotplace loginId: " + hot);
         List<Long> ids = queryFactory
                 .select(hotPlace.id)
                 .from(hotPlace)
@@ -96,7 +115,6 @@ public class HotPlaceQueryRepository {
                 .from(hotPlace)
                 .where(
                         hotPlace.active.eq(ACTIVE),
-                        isTags(condition.getTags()),
                         isKeyword(condition.getKeyword())
                 )
                 .fetch()
@@ -117,7 +135,6 @@ public class HotPlaceQueryRepository {
         return queryFactory
                 .select(constructor(EditHotPlaceResponse.class,
                         Expressions.asNumber(hotPlaceId),
-                        hotPlace.tag,
                         hotPlace.title,
                         hotPlace.visitedDate,
                         hotPlace.content,
@@ -128,10 +145,6 @@ public class HotPlaceQueryRepository {
                 .join(hotPlace.attractionInfo, attractionInfo)
                 .where(hotPlace.id.eq(hotPlaceId))
                 .fetchOne();
-    }
-
-    private BooleanExpression isTags(List<ContentType> tags) {
-        return tags.size() > 0 ? hotPlace.tag.in(tags) : null;
     }
 
     private BooleanExpression isKeyword(String keyword) {
