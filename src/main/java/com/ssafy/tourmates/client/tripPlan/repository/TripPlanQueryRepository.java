@@ -38,6 +38,7 @@ public class TripPlanQueryRepository {
                 .from(tripPlan)
                 .join(tripPlan.member, member)
                 .where(
+                        tripPlan.parentTripPlanId.isNull(),
                         tripPlan.active.eq(ACTIVE),
                         isTitle(condition.getTitle()),
                         isNickname(condition.getNickname())
