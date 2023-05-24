@@ -7,11 +7,11 @@ import lombok.Data;
 public class ShareTripPlanDto {
 
     private Long tripPlanId;
-    private String friendId;
+    private String targetId;
 
     @Builder
-    public ShareTripPlanDto(Long tripPlanId, String friendId) {
+    public ShareTripPlanDto(Long tripPlanId, String targetId) {
         this.tripPlanId = tripPlanId;
-        this.friendId = friendId;
+        this.targetId = targetId;
     }
 }
