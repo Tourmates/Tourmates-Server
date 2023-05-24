@@ -26,13 +26,13 @@ public class TripPlan extends TimeBaseEntity {
     @GeneratedValue
     @Column(name = "trip_plan_id")
     private Long id;
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String title;
     private int hit;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Active active;
-    @Column(nullable = true)
+    @Column
     private Long parentTripPlanId;
 
     @ManyToOne(fetch = LAZY)
