@@ -39,6 +39,7 @@ public class TripPlanServiceImpl implements TripPlanService {
                 .title(null)
                 .active(ACTIVE)
                 .hit(0)
+                .parentTripPlanId(dto.getTripPlanId())
                 .build();
 
         TripPlan savedTripPlan = tripPlanRepository.save(tripPlan);
