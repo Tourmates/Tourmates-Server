@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.hotplace.service.impl;
 
+import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceCommentResponse;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
 import com.ssafy.tourmates.client.hotplace.HotPlaceComment;
 import com.ssafy.tourmates.client.hotplace.repository.HotPlaceCommentRepository;
@@ -7,11 +8,14 @@ import com.ssafy.tourmates.client.hotplace.service.HotPlaceCommentService;
 import com.ssafy.tourmates.client.hotplace.service.dto.AddHotPlaceCommentDto;
 import com.ssafy.tourmates.client.hotplace.service.dto.EditHotPlaceCommentDto;
 import com.ssafy.tourmates.client.hotplace.validator.HotPlaceCommentValidator;
-import com.ssafy.tourmates.client.hotplace.validator.HotPlaceValidator;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +50,20 @@ public class HotPlaceCommentServiceImpl implements HotPlaceCommentService {
     public Long removeHotPlaceComment(Long hotPlaceCommentId) {
         hotplaceCommentRepository.deleteById(hotPlaceCommentId);
         return hotPlaceCommentId;
+    }
+
+    @Override
+    public List<HotPlaceCommentResponse> searchAll(Long hotPlaceId) {
+
+        List<HotPlaceComment> hotPlaceCommentList = hotPlaceCommentValidator.findByHotPlaceId(hotPlaceId);
+
+        List<HotPlaceCommentResponse> hotPlaceCommentResponseList = new ArrayList<>();
+
+        for(HotPlaceComment comment : hotPlaceCommentList ){
+            String nickname = comment.getMember().getNickname();
+            LocalDateTime createdTime = comment.getCreatedDate();
+            hotPlaceCommentResponseList.add(new HotPlaceCommentResponse(nickname,comment.getContent(), createdTime ));
+        }
+        return hotPlaceCommentResponseList;
     }
 }
