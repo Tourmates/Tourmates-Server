@@ -1,5 +1,6 @@
 package com.ssafy.tourmates.client.hotplace.service.impl;
 
+import com.ssafy.tourmates.client.hashtag.repository.HashtagQueryRepository;
 import com.ssafy.tourmates.client.hotplace.HotPlace;
 import com.ssafy.tourmates.client.hotplace.HotPlaceImage;
 import com.ssafy.tourmates.client.hotplace.repository.HotPlaceRepository;
@@ -10,6 +11,7 @@ import com.ssafy.tourmates.client.hotplace.validator.HotPlaceValidator;
 import com.ssafy.tourmates.client.member.Member;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class HotPlaceServiceImpl implements HotPlaceService {
 
     private final HotPlaceRepository hotPlaceRepository;
+    private final HashtagQueryRepository hashtagQueryRepository;
     private final HotPlaceValidator hotPlaceValidator;
     private final MemberValidator memberValidator;
 
@@ -27,7 +30,8 @@ public class HotPlaceServiceImpl implements HotPlaceService {
     public Long registerHotPlace(String loginId, AddHotPlaceDto dto) {
         Member findMember = memberValidator.findByLoginId(loginId);
 
-        HotPlace hotPlace = HotPlace.createHotPlace(dto.getTag(), dto.getTitle(), dto.getContent(), dto.getVisitedDate(), findMember, dto.getContentId(), dto.getUploadFiles());
+        List<Long> hashtagIds = hashtagQueryRepository.searchTagIds(dto.getTagNames());
+        HotPlace hotPlace = HotPlace.createHotPlace(dto.getTitle(), dto.getContent(), dto.getVisitedDate(), findMember, dto.getContentId(), dto.getUploadFiles(), hashtagIds);
         HotPlace savedHotPlace = hotPlaceRepository.save(hotPlace);
         return savedHotPlace.getId();
     }
@@ -39,7 +43,7 @@ public class HotPlaceServiceImpl implements HotPlaceService {
                 .map(uploadFile -> HotPlaceImage.builder()
                 .uploadFile(uploadFile)
                 .build()).collect(Collectors.toList());
-        findHotPlace.changeHotPlace(dto.getTag(), dto.getTitle(), dto.getContent(), dto.getVisitedDate(), files);
+        findHotPlace.changeHotPlace(dto.getTitle(), dto.getContent(), dto.getVisitedDate(), files);
         return findHotPlace.getId();
     }
 

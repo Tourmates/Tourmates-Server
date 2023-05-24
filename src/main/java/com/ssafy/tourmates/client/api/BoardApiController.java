@@ -87,6 +87,7 @@ public class BoardApiController {
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build();
+        log.debug("loginId={}", loginId);
         Long savedBoardId = boardService.registerBoard(loginId, dto);
         log.debug("request={}", request);
         log.debug("savedBoardId={}", savedBoardId);
