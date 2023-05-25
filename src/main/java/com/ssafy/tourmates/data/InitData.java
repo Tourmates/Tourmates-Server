@@ -63,8 +63,8 @@ public class InitData {
 
     private void initQuestion() {
         List<Question> questions = new ArrayList<>();
-        questions.add(Question.builder().type(NONE).title("공개 질문").content("공개 질문입니다.").password(null).active(ACTIVE).member(Member.builder().id(1L).build()).build());
-        questions.add(Question.builder().type(NONE).title("비공개 질문").content("비공개 질문입니다.").password("1234").active(ACTIVE).member(Member.builder().id(1L).build()).build());
+//        questions.add(Question.builder().type().title("공개 질문").content("공개 질문입니다.").password(null).active(ACTIVE).member(Member.builder().id(1L).build()).build());
+//        questions.add(Question.builder().type(NONE).title("비공개 질문").content("비공개 질문입니다.").password("1234").active(ACTIVE).member(Member.builder().id(1L).build()).build());
         questionRepository.saveAll(questions);
     }
 }

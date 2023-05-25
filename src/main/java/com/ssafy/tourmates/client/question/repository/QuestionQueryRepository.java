@@ -84,7 +84,7 @@ public class QuestionQueryRepository {
                         question.answer.createdDate
                         ))
                 .from(question)
-                .leftJoin(question, answer.question)
+                .leftJoin(question.answer, answer)
                 .where(question.id.eq(questionId))
                 .fetchOne();
     }

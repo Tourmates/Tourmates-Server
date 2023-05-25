@@ -43,7 +43,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardApiController {
 
     private final BoardService boardService;
-    private final BoardCommentService boardCommentService;
     private final BoardQueryService boardQueryService;
 
     @ApiOperation(value = "게시판 조회")

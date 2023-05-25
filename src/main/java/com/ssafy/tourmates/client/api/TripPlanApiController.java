@@ -87,10 +87,7 @@ public class TripPlanApiController {
     @ApiOperation(value = "여행계획 등록")
     @PostMapping("/register")
     public Long registerTripPlan(@Valid @RequestBody AddTripPlanRequest request) {
-
-        System.out.println("hiiiiiiiiiiiii");
         String loginId = SecurityUtil.getCurrentLoginId();
-        System.out.println("loginId: " + loginId);
         AddTripPlanDto dto = AddTripPlanDto.builder()
                 .title(request.getTitle())
                 .contentIds(request.getContentIds())
