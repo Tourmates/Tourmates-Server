@@ -27,7 +27,7 @@ public class HotPlaceCommentApiController {
 
 
     @ApiOperation(value = "핫플레이스 댓글 목록")
-    @PostMapping("/list")
+    @GetMapping("/list")
     public List<HotPlaceCommentResponse> hotPlaceCommentList(@PathVariable Long hotPlaceId) {
         List<HotPlaceCommentResponse> hotPlaceCommentResponseList =
                 hotPlaceCommentService.searchAll(hotPlaceId);
