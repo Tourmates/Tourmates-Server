@@ -4,13 +4,14 @@ import com.ssafy.tourmates.client.api.dto.board.response.BoardResponse;
 import com.ssafy.tourmates.client.api.dto.hotplace.response.HotPlaceResponse;
 import com.ssafy.tourmates.client.api.dto.member.request.*;
 import com.ssafy.tourmates.client.api.dto.member.response.MemberDetailResponse;
+import com.ssafy.tourmates.client.api.dto.tripplan.response.PlanResponse;
 import com.ssafy.tourmates.client.board.service.BoardQueryService;
 import com.ssafy.tourmates.client.hotplace.service.HotPlaceQueryService;
 import com.ssafy.tourmates.client.member.service.MemberService;
 import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.tourmates.client.member.service.dto.EditMyPersonalDto;
 import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
-import com.ssafy.tourmates.common.domain.ContentType;
+import com.ssafy.tourmates.client.tripPlan.service.TripPlanQueryService;
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.common.exception.EditException;
 import com.ssafy.tourmates.jwt.SecurityUtil;
@@ -24,7 +25,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -38,6 +38,7 @@ public class MemberApiController {
     private final BoardQueryService boardQueryService;
     private final MemberService memberService;
     private final HotPlaceQueryService hotPlaceQueryService;
+    private final TripPlanQueryService tripPlanQueryService;
 
 
     @ApiOperation(value = "비밀번호변경")
@@ -78,7 +79,6 @@ public class MemberApiController {
                 .build();
 
         try {
-            System.out.println("###########################");
             Long memberId = memberService.editMyPersonal(loginId, dto);
         } catch (EditException e) {
             return -1;
@@ -180,7 +180,18 @@ public class MemberApiController {
         PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
         List<HotPlaceResponse> responses = hotPlaceQueryService.searchMyHotPlace(loginId, pageRequest);
 
-        System.out.println("response.size: " + responses.size());
+        return new Result<>(responses);
+    }
+
+    @ApiOperation(value = "나의 여행 계획 조회")
+    @GetMapping("/tripPlans")
+    public Result<List<PlanResponse>> myTripPlans(@RequestParam(defaultValue = "1") Integer pageNumber){
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
+        List<PlanResponse> responses = tripPlanQueryService.searchMyTripPlan(loginId, pageRequest);
+        log.debug("response size: {}", responses.size());
+
         return new Result<>(responses);
     }
 

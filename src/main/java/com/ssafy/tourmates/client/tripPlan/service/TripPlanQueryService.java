@@ -16,4 +16,6 @@ public interface TripPlanQueryService {
     Long getTotalCount();
 
     DetailPlanResponse searchById(Long tripPlanId);
+
+    List<PlanResponse> searchMyTripPlan(String loginId, Pageable pageable);
 }

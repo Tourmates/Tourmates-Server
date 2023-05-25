@@ -31,4 +31,9 @@ public class TripPlanQueryServiceImpl implements TripPlanQueryService {
     public DetailPlanResponse searchById(Long tripPlanId) {
         return tripPlanQueryRepository.searchById(tripPlanId);
     }
+
+    @Override
+    public List<PlanResponse> searchMyTripPlan(String loginId, Pageable pageable) {
+        return tripPlanQueryRepository.searchByLoginId(loginId, pageable);
+    }
 }

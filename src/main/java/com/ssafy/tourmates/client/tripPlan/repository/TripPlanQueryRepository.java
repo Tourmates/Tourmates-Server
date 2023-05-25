@@ -115,4 +115,53 @@ public class TripPlanQueryRepository {
     private BooleanExpression isNickname(String nickname) {
         return hasText(nickname) ? tripPlan.member.nickname.like("%" + nickname + "%") : null;
     }
+
+    public List<PlanResponse> searchByLoginId(String loginId, Pageable pageable) {
+
+        List<Long> ids1 = queryFactory
+                .select(tripPlan.id)
+                .from(tripPlan)
+                .join(tripPlan.member, member)
+                .where(
+                        tripPlan.parentTripPlanId.isNull(),
+                        tripPlan.active.eq(ACTIVE),
+                        tripPlan.member.loginId.eq(loginId)
+                )
+                .orderBy(tripPlan.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<Long> ids2 = queryFactory
+                .select(tripPlan.id)
+                .from(tripPlan)
+                .join(tripPlan.member, member)
+                .where(
+                        tripPlan.parentTripPlanId.isNotNull(),
+                        tripPlan.active.eq(ACTIVE),
+                        tripPlan.member.loginId.eq(loginId)
+                )
+                .orderBy(tripPlan.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<Long> ids = new ArrayList<>();
+        ids.addAll(ids1);
+        ids.addAll(ids2);
+
+        return queryFactory
+                .select(constructor(PlanResponse.class,
+                        tripPlan.id,
+                        tripPlan.title,
+                        tripPlan.member.nickname,
+                        tripPlan.hit,
+                        tripPlan.createdDate))
+                .from(tripPlan)
+                .join(tripPlan.member, member)
+                .where(tripPlan.id.in(ids))
+                .orderBy(tripPlan.createdDate.desc())
+                .fetch();
+    }
+
 }
