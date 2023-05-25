@@ -67,7 +67,6 @@ public class MemberApiController {
     public int editMyPersonal(@Valid @RequestBody EditMyPersonalRequest request){
         String loginId = SecurityUtil.getCurrentLoginId();
 
-
         EditMyPersonalDto dto = EditMyPersonalDto.builder()
                 .username(request.getUsername())
                 .nickname(request.getNickname())
