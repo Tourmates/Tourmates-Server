@@ -204,6 +204,7 @@ public class MemberApiController {
 
         try {
             Long memberId = memberService.withdrawal(loginId, request.getLoginPw());
+
             log.debug("memberId={}, loginPw={}", memberId, request.getLoginPw());
         } catch (EditException e) {
             return -1;
