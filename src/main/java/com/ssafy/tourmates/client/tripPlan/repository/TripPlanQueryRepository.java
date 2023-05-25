@@ -133,7 +133,7 @@ public class TripPlanQueryRepository {
                 .fetch();
 
         List<Long> ids2 = queryFactory
-                .select(tripPlan.id)
+                .select(tripPlan.parentTripPlanId)
                 .from(tripPlan)
                 .join(tripPlan.member, member)
                 .where(
