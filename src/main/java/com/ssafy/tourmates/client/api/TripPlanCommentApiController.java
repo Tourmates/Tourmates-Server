@@ -26,7 +26,7 @@ public class TripPlanCommentApiController {
     private final TripPlanCommentService tripPlanCommentService;
 
     @ApiOperation(value = "여행 댓글 목록")
-    @PostMapping("/list")
+    @GetMapping("/list")
     public List<TripPlanCommentResponse> boardCommentList(@PathVariable Long tripPlanId) {
         List<TripPlanCommentResponse> tripCommentResponseList =
                 tripPlanCommentService.searchAll(tripPlanId);
