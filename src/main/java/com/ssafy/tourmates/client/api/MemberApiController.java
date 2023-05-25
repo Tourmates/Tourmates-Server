@@ -64,7 +64,6 @@ public class MemberApiController {
     @PostMapping("/personal/info")
     public int editMyPersonal(@Valid @RequestBody EditMyPersonalRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
-        System.out.println("개인정보 loginId: " + loginId);
 
         EditMyPersonalDto dto = EditMyPersonalDto.builder()
                 .username(request.getUsername())
