@@ -47,8 +47,7 @@ public class MemberApiController {
             return -1;
         }
 
-        //  String loginId = SecurityUtil.getCurrentLoginId();
-        String loginId = "ssafy2";
+        String loginId = SecurityUtil.getCurrentLoginId();
         EditLoginPwDto dto = EditLoginPwDto.builder()
                 .currentLoginPw(request.getCurrentLoginPw())
                 .newLoginPw(request.getNewLoginPw())
@@ -66,8 +65,7 @@ public class MemberApiController {
     @ApiOperation("개인 정보 전체 변경")
     @PostMapping("/personal/info")
     public int editMyPersonal(@Valid @RequestBody EditMyPersonalRequest request){
-//        String loginId = SecurityUtil.getCurrentLoginId();
-        String loginId = "ssafy2";
+        String loginId = SecurityUtil.getCurrentLoginId();
 
 
         EditMyPersonalDto dto = EditMyPersonalDto.builder()
@@ -126,7 +124,6 @@ public class MemberApiController {
     @PostMapping("/nickname")
     public int editNickname(@Valid @RequestBody EditNicknameRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
-        loginId = "ssafy2";
 
         try {
             Long memberId = memberService.editNickname(loginId, request.getNewNickname());
@@ -141,12 +138,10 @@ public class MemberApiController {
     }
 
     @ApiOperation(value = "회원 정보 조회")
-    @PostMapping("/detail")
+    @GetMapping("/detail")
     public MemberDetailResponse getMemberDetail() {
-        //    String loginId = SecurityUtil.getCurrentLoginId();
+        String loginId = SecurityUtil.getCurrentLoginId();
 
-        //    System.out.println("loginId: " + loginId);
-        String loginId = "ssafy2";
         MemberDetailDto memberDetailDto = memberService.getMemberDetail(loginId);
 
         MemberDetailResponse response = MemberDetailResponse.builder()
@@ -168,9 +163,7 @@ public class MemberApiController {
     public BoardApiController.ResultPage<List<BoardResponse>> searchBoards(
             @RequestParam(defaultValue = "1") Integer pageNumber
     ) {
-        // String loginId = SecurityUtil.getCurrentLoginId();
-        String loginId = "ssafy2";
-        System.out.println("loginId: " + loginId);
+        String loginId = SecurityUtil.getCurrentLoginId();
         PageRequest pageRequest = PageRequest.of(pageNumber / 10, 20);
         List<BoardResponse> boardResponses = boardQueryService.searchByLoginId(pageRequest, loginId);
         log.debug("responses size={}", boardResponses.size());
@@ -182,9 +175,7 @@ public class MemberApiController {
     @ApiOperation(value = "나의 핫플레이스 조회")
     @GetMapping("/hotPlaces")
     public Result<List<HotPlaceResponse>> myHotplaces(@RequestParam(defaultValue = "1") Integer pageNumber){
-  //      String loginId = SecurityUtil.getCurrentLoginId();
-
-        String loginId = "ssafy2";
+        String loginId = SecurityUtil.getCurrentLoginId();
 
         PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
         List<HotPlaceResponse> responses = hotPlaceQueryService.searchMyHotPlace(loginId, pageRequest);
