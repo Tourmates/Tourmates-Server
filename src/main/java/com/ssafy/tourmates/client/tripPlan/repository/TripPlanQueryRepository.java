@@ -32,6 +32,60 @@ public class TripPlanQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    public List<PlanResponse> searchByCondition(String loginId, PlanSearchCondition condition, Pageable pageable) {
+
+        List<Long> myTripPlanIds = queryFactory
+                .select(tripPlan.id)
+                .from(tripPlan)
+                .join(tripPlan.member, member)
+                .where(
+                        tripPlan.parentTripPlanId.isNull(),
+                        tripPlan.active.eq(ACTIVE),
+                        tripPlan.member.loginId.eq(loginId)
+                )
+                .orderBy(tripPlan.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<Long> friendSharedTripPlanIds = queryFactory
+                .select(tripPlan.parentTripPlanId)
+                .from(tripPlan)
+                .join(tripPlan.member, member)
+                .where(
+                        tripPlan.parentTripPlanId.isNotNull(),
+                        tripPlan.active.eq(ACTIVE),
+                        tripPlan.member.loginId.eq(loginId),
+                        isTitle(condition.getTitle()),
+                        isNickname(condition.getNickname())
+                )
+                .orderBy(tripPlan.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<Long> ids = new ArrayList<>();
+        ids.addAll(myTripPlanIds);
+        ids.addAll(friendSharedTripPlanIds);
+
+        if (CollectionUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+
+        return queryFactory
+                .select(constructor(PlanResponse.class,
+                        tripPlan.id,
+                        tripPlan.title,
+                        tripPlan.member.nickname,
+                        tripPlan.hit,
+                        tripPlan.createdDate))
+                .from(tripPlan)
+                .join(tripPlan.member, member)
+                .where(tripPlan.id.in(ids))
+                .orderBy(tripPlan.createdDate.desc())
+                .fetch();
+    }
+
     public List<PlanResponse> searchByCondition(PlanSearchCondition condition, Pageable pageable) {
         List<Long> ids = queryFactory
                 .select(tripPlan.id)
@@ -64,6 +118,16 @@ public class TripPlanQueryRepository {
                 .where(tripPlan.id.in(ids))
                 .orderBy(tripPlan.createdDate.desc())
                 .fetch();
+    }
+
+    public long totalCount(String loginId) {
+        return queryFactory
+                .select(tripPlan.id)
+                .from(tripPlan)
+                .where(tripPlan.active.eq(ACTIVE),
+                        tripPlan.member.loginId.eq(loginId))
+                .fetch()
+                .size();
     }
 
     public long totalCount() {
