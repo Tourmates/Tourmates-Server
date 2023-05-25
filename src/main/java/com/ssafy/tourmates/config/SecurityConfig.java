@@ -33,7 +33,7 @@ public class SecurityConfig {
                         "/check/**", "/hotPlaces", "/hotPlaces/totalCount", "/attractions/**", "/tripPlans/totalCount", "/trends/**",
                         "/intranet/**", "/css/**", "/img/**", "/js/**",  "/friends/**", "/tripPlans").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/boards/register", "/hotPlaces/**", "/tripPlans/**", "/my/**", "/my/**/**").hasRole("MEMBER")
+                .antMatchers("/boards/register", "/hotPlaces/**", "/hotPlaces/**/comments/list","/tripPlans/**", "/my/**", "/my/**/**").hasRole("MEMBER")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
