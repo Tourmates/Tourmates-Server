@@ -140,6 +140,7 @@ public class MemberApiController {
     @ApiOperation(value = "회원 정보 조회")
     @GetMapping("/detail")
     public MemberDetailResponse getMemberDetail() {
+
         String loginId = SecurityUtil.getCurrentLoginId();
 
         MemberDetailDto memberDetailDto = memberService.getMemberDetail(loginId);
