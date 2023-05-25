@@ -32,10 +32,11 @@ public class TripPlanServiceImpl implements TripPlanService {
 
     @Override
     public Long shareTripPlan(ShareTripPlanDto dto) {
-//        Member friend = memberValidator.findByLoginId(dto.getFriendId());
+
+        Member friend = memberValidator.findByLoginId(dto.getTargetId());
 
         TripPlan tripPlan = TripPlan.builder()
-//                .member(friend)
+                .member(friend)
                 .title(null)
                 .active(ACTIVE)
                 .hit(0)
