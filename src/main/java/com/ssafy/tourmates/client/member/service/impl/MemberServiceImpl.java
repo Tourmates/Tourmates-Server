@@ -114,6 +114,11 @@ public class MemberServiceImpl implements MemberService {
     public Long withdrawal(String loginId, String loginPw) {
         Member findMember = memberValidator.findByLoginId(loginId);
         log.debug("findMember={}", findMember);
+
+        if(!findMember.getPassword().equals(loginPw)){
+            log.debug("비밀번호 일치 실패");
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
         findMember.deActive(loginPw);
         return findMember.getId();
     }

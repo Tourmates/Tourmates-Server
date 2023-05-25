@@ -200,8 +200,11 @@ public class MemberApiController {
     public int withdrawal(@Valid @RequestBody WithdrawalRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
 
+        log.debug("loginId= {}", loginId);
+
         try {
             Long memberId = memberService.withdrawal(loginId, request.getLoginPw());
+
             log.debug("memberId={}, loginPw={}", memberId, request.getLoginPw());
         } catch (EditException e) {
             return -1;
