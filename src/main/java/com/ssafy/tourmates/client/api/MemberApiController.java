@@ -10,6 +10,7 @@ import com.ssafy.tourmates.client.member.service.MemberService;
 import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.tourmates.client.member.service.dto.EditMyPersonalDto;
 import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
+import com.ssafy.tourmates.common.domain.ContentType;
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.common.exception.EditException;
 import com.ssafy.tourmates.jwt.SecurityUtil;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -62,7 +64,7 @@ public class MemberApiController {
 
     @ApiOperation("개인 정보 전체 변경")
     @PostMapping("/personal/info")
-    public int editMyPersonal(@Valid @RequestBody EditMyPersonalRequest request) {
+    public int editMyPersonal(@Valid @RequestBody EditMyPersonalRequest request){
         String loginId = SecurityUtil.getCurrentLoginId();
 
         EditMyPersonalDto dto = EditMyPersonalDto.builder()
@@ -135,10 +137,11 @@ public class MemberApiController {
     }
 
     @ApiOperation(value = "회원 정보 조회")
-    @PostMapping("/detail")
+    @GetMapping("/detail")
     public MemberDetailResponse getMemberDetail() {
+
         String loginId = SecurityUtil.getCurrentLoginId();
-        System.out.println("회원 정보 조회: " + loginId);
+
         MemberDetailDto memberDetailDto = memberService.getMemberDetail(loginId);
 
         MemberDetailResponse response = MemberDetailResponse.builder()
@@ -161,7 +164,6 @@ public class MemberApiController {
             @RequestParam(defaultValue = "1") Integer pageNumber
     ) {
         String loginId = SecurityUtil.getCurrentLoginId();
-        System.out.println("loginId: " + loginId);
         PageRequest pageRequest = PageRequest.of(pageNumber / 10, 20);
         List<BoardResponse> boardResponses = boardQueryService.searchByLoginId(pageRequest, loginId);
         log.debug("responses size={}", boardResponses.size());
@@ -186,7 +188,6 @@ public class MemberApiController {
     @PostMapping("/withdrawal")
     public int withdrawal(@Valid @RequestBody WithdrawalRequest request) {
         String loginId = SecurityUtil.getCurrentLoginId();
-        System.out.println("----------loginId: " + loginId);
 
         try {
             Long memberId = memberService.withdrawal(loginId, request.getLoginPw());
