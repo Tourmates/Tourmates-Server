@@ -10,12 +10,14 @@ import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
 import com.ssafy.tourmates.client.member.validator.MemberValidator;
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
@@ -111,6 +113,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Long withdrawal(String loginId, String loginPw) {
         Member findMember = memberValidator.findByLoginId(loginId);
+        log.debug("findMember={}", findMember);
         findMember.deActive(loginPw);
         return findMember.getId();
     }
@@ -157,8 +160,6 @@ public class MemberServiceImpl implements MemberService {
 
         String[] email = findMember.getEmail().split("@");
         String[] tel = findMember.getTel().split("-");
-
-        System.out.println("######################################################username: " + findMember.getUsername());
 
         MemberDetailDto dto = MemberDetailDto.builder()
                 .username(findMember.getUsername())
