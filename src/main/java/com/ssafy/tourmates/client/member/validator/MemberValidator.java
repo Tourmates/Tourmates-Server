@@ -27,4 +27,9 @@ public class MemberValidator {
         return memberRepository.findByTel(tel)
                 .orElseThrow(NoSuchElementException::new);
     }
+
+    public Member findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname)
+                .orElseThrow(NoSuchElementException::new);
+    }
 }
