@@ -3,6 +3,7 @@ package com.ssafy.tourmates.client.api;
 import com.ssafy.tourmates.client.api.dto.member.request.AddFriendRequest;
 import com.ssafy.tourmates.client.friend.service.FriendService;
 import com.ssafy.tourmates.client.member.service.dto.AddFriendDto;
+import com.ssafy.tourmates.jwt.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +28,7 @@ public class FriendController {
     @PostMapping("/register")
     public Long registerFriend(@Valid @RequestBody AddFriendRequest request){
 
-        //    String loginId = SecurityUtil.getCurrentLoginId();
-        String loginId = "ssafy2"; //TODO: SECURITY 접근 권한
-        System.out.println("--------------friends");
-//        console.log("=---------------friend");
+        String loginId = SecurityUtil.getCurrentLoginId();
 
         AddFriendDto dto = AddFriendDto.builder()
                 .targetLoginId(request.getTargetLoginId())
