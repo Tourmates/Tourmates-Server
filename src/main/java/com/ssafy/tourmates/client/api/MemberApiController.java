@@ -11,6 +11,7 @@ import com.ssafy.tourmates.client.member.service.MemberService;
 import com.ssafy.tourmates.client.member.service.dto.EditLoginPwDto;
 import com.ssafy.tourmates.client.member.service.dto.EditMyPersonalDto;
 import com.ssafy.tourmates.client.member.service.dto.MemberDetailDto;
+import com.ssafy.tourmates.client.tripPlan.repository.dto.PlanSearchCondition;
 import com.ssafy.tourmates.client.tripPlan.service.TripPlanQueryService;
 import com.ssafy.tourmates.common.exception.DuplicateException;
 import com.ssafy.tourmates.common.exception.EditException;
@@ -39,6 +40,55 @@ public class MemberApiController {
     private final MemberService memberService;
     private final HotPlaceQueryService hotPlaceQueryService;
     private final TripPlanQueryService tripPlanQueryService;
+
+//    @ApiOperation(value = "나의 여행 계획 조회")
+//    public Result<List<PlanResponse>> myTripPlans(@RequestParam(defaultValue = "1") Integer pageNumber){
+//
+//        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
+//        List<PlanResponse> responses = tripPlanQueryService.searchMyTripPlan(loginId, pageRequest);
+//        log.debug("response size: {}", responses.size());
+//
+//        return new Result<>(responses);
+//    }
+
+
+
+    @ApiOperation(value = "여행계획 조회")
+    @GetMapping("/tripPlans")
+    public Result<List<PlanResponse>> myTripPlans(
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "0") Integer type,
+            @RequestParam(defaultValue = "1") Integer pageNumber
+    ) {
+        String loginId = SecurityUtil.getCurrentLoginId();
+
+        //0: 타이틀, 1: 닉네임, 2: 관광지이름
+//        PlanSearchConditionBuilder builder = builder();
+//        switch (type) {
+//            case 1:
+//                builder.nickname(keyword);
+//                break;
+//            case 2:
+//                builder.attractionTitle(keyword);
+//                break;
+//            default:
+//                builder.title(keyword);
+//                break;
+//        }
+        PlanSearchCondition condition = PlanSearchCondition.builder().build();
+        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
+
+        List<PlanResponse> responses = tripPlanQueryService.searchByCondition(loginId, condition, pageRequest);
+        log.debug("size={}", responses.size());
+        return new Result<>(responses);
+    }
+
+    @ApiOperation(value = "나의 여행계획 총 갯수 조회")
+    @GetMapping("/tripPlans/totalCount")
+    public Long totalCount() {
+        String loginId = SecurityUtil.getCurrentLoginId();
+        return tripPlanQueryService.getTotalCount(loginId);
+    }
 
 
     @ApiOperation(value = "비밀번호변경")
@@ -183,17 +233,6 @@ public class MemberApiController {
         return new Result<>(responses);
     }
 
-    @ApiOperation(value = "나의 여행 계획 조회")
-    @GetMapping("/tripPlans")
-    public Result<List<PlanResponse>> myTripPlans(@RequestParam(defaultValue = "1") Integer pageNumber){
-        String loginId = SecurityUtil.getCurrentLoginId();
-
-        PageRequest pageRequest = PageRequest.of(pageNumber / 10, 10);
-        List<PlanResponse> responses = tripPlanQueryService.searchMyTripPlan(loginId, pageRequest);
-        log.debug("response size: {}", responses.size());
-
-        return new Result<>(responses);
-    }
 
     @ApiOperation(value = "회원탈퇴")
     @PostMapping("/withdrawal")

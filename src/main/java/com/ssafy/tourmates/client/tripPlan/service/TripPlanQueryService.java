@@ -11,7 +11,11 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface TripPlanQueryService {
 
+    List<PlanResponse> searchByCondition(String loginId, PlanSearchCondition condition, Pageable pageable);
+
     List<PlanResponse> searchByCondition(PlanSearchCondition condition, Pageable pageable);
+
+    Long getTotalCount(String loginId);
 
     Long getTotalCount();
 

@@ -18,8 +18,18 @@ public class TripPlanQueryServiceImpl implements TripPlanQueryService {
     private final TripPlanQueryRepository tripPlanQueryRepository;
 
     @Override
+    public List<PlanResponse> searchByCondition(String loginId, PlanSearchCondition condition, Pageable pageable) {
+        return tripPlanQueryRepository.searchByCondition(loginId, condition, pageable);
+    }
+
+    @Override
     public List<PlanResponse> searchByCondition(PlanSearchCondition condition, Pageable pageable) {
         return tripPlanQueryRepository.searchByCondition(condition, pageable);
+    }
+
+    @Override
+    public Long getTotalCount(String loginId) {
+        return tripPlanQueryRepository.totalCount(loginId);
     }
 
     @Override
